@@ -5,7 +5,6 @@ namespace RedberryProducts\PageBuilderPlugin\Components\Forms;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Field;
-use Filament\Resources\Concerns\InteractsWithRelationshipTable;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
 
@@ -16,7 +15,7 @@ class PageBuilder extends Field
 
     public ?Closure $renderDeleteActionButtonUsing = null;
 
-    public array|Closure $blocks = [];
+    public array | Closure $blocks = [];
 
     public string $view = 'page-builder-plugin::forms.page-builder';
 
@@ -60,7 +59,7 @@ class PageBuilder extends Field
     }
 
     public function blocks(
-        array|Closure $blocks,
+        array | Closure $blocks,
     ) {
         $this->blocks = $blocks;
 
