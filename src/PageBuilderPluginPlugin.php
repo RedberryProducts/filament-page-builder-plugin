@@ -1,15 +1,15 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace RedberryProducts\PageBuilderPlugin;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class SkeletonPlugin implements Plugin
+class PageBuilderPluginPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'skeleton';
+        return 'page-builder-plugin';
     }
 
     public function register(Panel $panel): void

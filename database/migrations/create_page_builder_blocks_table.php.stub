@@ -8,11 +8,11 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('migration_table_name_table', function (Blueprint $table) {
+        Schema::create('page_builder_blocks', function (Blueprint $table) {
             $table->id();
-
-            // add fields
-
+            $table->string('block_type');
+            $table->morphs('page_builder_blockable');
+            $table->json('data')->nullable();
             $table->timestamps();
         });
     }

@@ -1,12 +1,13 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace RedberryProducts\PageBuilderPlugin\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class PageBuilderPluginCommand extends Command
 {
-    public $signature = 'skeleton';
+    // TODO: Implement scaffolding block class
+    public $signature = 'page-builder-plugin';
 
     public $description = 'My command';
 
