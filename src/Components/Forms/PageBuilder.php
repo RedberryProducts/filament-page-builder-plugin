@@ -56,7 +56,7 @@ class PageBuilder extends Field
     {
         $action = Action::make($this->getCreateActionName())
             ->successNotificationTitle(__(
-                "filament-panels::resources/pages/create-record.notifications.created.title"
+                'filament-panels::resources/pages/create-record.notifications.created.title'
             ))
             ->form(function ($arguments, Form $form, Action $action, PageBuilder $component, Page $livewire) {
                 $blockType = $arguments['block_type'];
@@ -115,7 +115,7 @@ class PageBuilder extends Field
                         ->native(false)
                         ->label('Block Type')
                         ->translateLabel()
-                        ->options($this->formatBlocksForSelect())
+                        ->options($this->formatBlocksForSelect()),
                 ]);
             })
             ->action(function ($data, EditRecord $livewire, Action $action) {
@@ -139,8 +139,8 @@ class PageBuilder extends Field
     // TODO: move this function to its own file for making reading easier.
     public function getEditAction(): Action
     {
-        $action =  Action::make($this->getEditActionName())
-            ->successNotificationTitle(__("filament-panels::resources/pages/edit-record.notifications.saved.title"))
+        $action = Action::make($this->getEditActionName())
+            ->successNotificationTitle(__('filament-panels::resources/pages/edit-record.notifications.saved.title'))
             ->disabled($this->isDisabled())
             ->form(function ($arguments, Form $form, Action $action, PageBuilder $component, Page $livewire) {
                 $block = $this->findPageBuilderBlock($arguments['item']);
@@ -360,12 +360,12 @@ class PageBuilder extends Field
         return $formatted;
     }
 
-    private function findPageBuilderBlock($id): Model|null
+    private function findPageBuilderBlock($id): ?Model
     {
         return $this->getRecord()->{$this->relationship}()->find($id);
     }
 
-    private function getBlockSchema(string $blockType, ?Model $record = null, Component $component, Page $livewire): array
+    private function getBlockSchema(string $blockType, ?Model $record, Component $component, Page $livewire): array
     {
         return $blockType::getBlockSchema(
             record: $record,
