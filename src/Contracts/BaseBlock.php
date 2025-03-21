@@ -49,7 +49,7 @@ abstract class BaseBlock
         return null;
     }
 
-    public static function getBlockLabel(array $state, int $index)
+    public static function getBlockLabel(array $state, ?int $index = null)
     {
         $key = static::getBlockTitleAttribute();
 
@@ -58,6 +58,10 @@ abstract class BaseBlock
             if ($label) {
                 return static::getBlockName() . ' - ' . $label . ':';
             }
+        }
+
+        if (is_null($index)) {
+            return static::getBlockName();
         }
 
         return static::getBlockName() . ' - ' . $index + 1;

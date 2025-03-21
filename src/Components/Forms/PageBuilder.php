@@ -14,11 +14,15 @@ use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\Computed;
+use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
+use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
+use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockAction;
+use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
 
 // TODO: make this reorder-able
 class PageBuilder extends Field
 {
-    protected ?string $relationship = null;
+    public ?string $relationship = null;
 
     protected ?Closure $renderDeleteActionButtonUsing = null;
 
@@ -54,43 +58,8 @@ class PageBuilder extends Field
 
     public function getCreateAction(): Action
     {
-        $action = Action::make($this->getCreateActionName())
-            ->successNotificationTitle(__(
-                'filament-panels::resources/pages/create-record.notifications.created.title'
-            ))
-            ->form(function ($arguments, Form $form, Action $action, PageBuilder $component, Page $livewire) {
-                $blockType = $arguments['block_type'];
-
-                return $form->schema(
-                    $this->getBlockSchema(
-                        $blockType,
-                        record: null,
-                        component: $component,
-                        livewire: $livewire,
-                    )
-                );
-            })
-            ->disabled($this->isDisabled())
-            ->slideOver()
-            ->cancelParentActions()
-            ->modalWidth(MaxWidth::Screen)
-            ->action(function ($arguments, $data, $action, PageBuilder $component) {
-                $blockType = $arguments['block_type'];
-
-                $block = $component->getRecord()->{$component->relationship}()->create([
-                    'block_type' => $blockType,
-                    'data' => $data,
-                ]);
-
-                $component->state([
-                    ...$component->getState(),
-                    $block->toArray(),
-                ]);
-
-                $action->sendSuccessNotification();
-
-                $component->callAfterStateUpdated();
-            });
+        $action = CreatePageBuilderBlockAction::make($this->getCreateActionName())
+            ->disabled($this->isDisabled());
 
         if ($this->modifyCreateActionUsing) {
             $action = $this->evaluate($this->modifyCreateActionUsing, [
@@ -103,29 +72,8 @@ class PageBuilder extends Field
 
     public function getSelectBlockAction(): Action
     {
-        $action = Action::make($this->getSelectBlockActionName())
-            ->button()
-            ->icon('heroicon-o-plus')
-            ->translateLabel()
-            ->disabled($this->isDisabled())
-            ->color('primary')
-            ->form(function (Form $form) {
-                return $form->schema([
-                    Select::make('block_type')
-                        ->native(false)
-                        ->label('Block Type')
-                        ->translateLabel()
-                        ->options($this->formatBlocksForSelect()),
-                ]);
-            })
-            ->action(function ($data, EditRecord $livewire, Action $action) {
-                $livewire->mountFormComponentAction(
-                    $this->getStatePath(),
-                    $this->getCreateActionName(),
-                    $data
-                );
-                $action->halt();
-            });
+        $action = SelectBlockAction::make($this->getSelectBlockActionName())
+            ->disabled($this->isDisabled());
 
         if ($this->modifySelectBlockActionUsing) {
             $action = $this->evaluate($this->modifySelectBlockActionUsing, [
@@ -136,43 +84,10 @@ class PageBuilder extends Field
         return $action;
     }
 
-    // TODO: move this function to its own file for making reading easier.
     public function getEditAction(): Action
     {
-        $action = Action::make($this->getEditActionName())
-            ->successNotificationTitle(__('filament-panels::resources/pages/edit-record.notifications.saved.title'))
-            ->disabled($this->isDisabled())
-            ->form(function ($arguments, Form $form, Action $action, PageBuilder $component, Page $livewire) {
-                $block = $this->findPageBuilderBlock($arguments['item']);
-
-                $action->fillForm($block->data);
-
-                return $form->schema(
-                    $this->getBlockSchema(
-                        $block->block_type,
-                        $block,
-                        $component,
-                        $livewire,
-                    )
-                );
-            })
-            ->slideOver()
-            ->modalWidth(MaxWidth::Screen)
-            ->action(function ($arguments, $data, $action) {
-                $block = $this->findPageBuilderBlock($arguments['item']);
-
-                $result = $block->update([
-                    'data' => $data,
-                ]);
-
-                if (! $result) {
-                    $action->failure();
-
-                    return;
-                }
-
-                $action->sendSuccessNotification();
-            });
+        $action =  EditPageBuilderBlockAction::make($this->getEditActionName())
+            ->disabled($this->isDisabled());
 
         if ($this->modifyEditActionUsing) {
             $action = $this->evaluate($this->modifyEditActionUsing, [
@@ -185,33 +100,8 @@ class PageBuilder extends Field
 
     public function getDeleteAction(): Action
     {
-        $action = Action::make($this->getDeleteActionName())
-            ->requiresConfirmation()
-            ->color('danger')
-            ->disabled($this->isDisabled())
-            ->hiddenLabel()
-            ->successNotificationTitle('Block deleted')
-            ->action(function ($arguments, Action $action, PageBuilder $component) {
-                $block = $this->findPageBuilderBlock($arguments['item']);
-
-                $result = $block->delete();
-
-                if (! $result) {
-                    $action->failure();
-
-                    return;
-                }
-
-                $items = $component->getState();
-                $itemKey = array_search($arguments['item'], array_column($items, 'id'));
-                unset($items[$itemKey]);
-
-                $component->state($items);
-
-                $action->sendSuccessNotification();
-
-                $component->callAfterStateUpdated();
-            });
+        $action = DeletePageBuilderBlockAction::make($this->getDeleteActionName())
+            ->disabled($this->isDisabled());
 
         if ($this->modifyDeleteActionUsing) {
             $action = $this->evaluate($this->modifyDeleteActionUsing, [
@@ -344,28 +234,13 @@ class PageBuilder extends Field
         return [];
     }
 
-    #[Computed(true)]
-    private function formatBlocksForSelect(): array
-    {
-        $blocks = $this->getBlocks();
 
-        $formatted = [];
-
-        foreach ($blocks as $block) {
-            $category = $block::getCategory();
-
-            $formatted[$category][$block] = $block::getBlockName();
-        }
-
-        return $formatted;
-    }
-
-    private function findPageBuilderBlock($id): ?Model
+    public function findPageBuilderBlock($id): Model|null
     {
         return $this->getRecord()->{$this->relationship}()->find($id);
     }
 
-    private function getBlockSchema(string $blockType, ?Model $record, Component $component, Page $livewire): array
+    public function getBlockSchema(string $blockType, ?Model $record = null, Component $component, Page $livewire): array
     {
         return $blockType::getBlockSchema(
             record: $record,
