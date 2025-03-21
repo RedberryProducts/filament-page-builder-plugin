@@ -1,11 +1,11 @@
 @php
     $blocks = $getBlocks();
     $state = $getState();
-
+    $selectBlockAction = $getAction($getSelectBlockActionName());
 @endphp
 
 
-<x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
+<x-dynamic-component :component="$getFieldWrapperView()" :hintActions="[$selectBlockAction]" :field="$field">
     @if (count($blocks) && $state)
         <ul>
             <x-filament::grid class="items-start gap-4">

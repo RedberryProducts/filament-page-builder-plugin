@@ -5,8 +5,10 @@ namespace RedberryProducts\PageBuilderPlugin\Components\Forms;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Field;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Components\Component;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,6 +26,10 @@ class PageBuilder extends Field
 
     protected ?Closure $modifyEditActionUsing = null;
 
+    protected ?Closure $modifyCreateActionUsing = null;
+
+    protected ?Closure $modifySelectBlockActionUsing = null;
+
     protected ?Closure $renderEditActionButtonUsing = null;
 
     public array | Closure $blocks = [];
@@ -39,16 +45,103 @@ class PageBuilder extends Field
         $this->relationship('pageBuilderBlocks');
 
         $this->registerActions([
-            fn (PageBuilder $component): Action => $component->getDeleteAction(),
-            fn (PageBuilder $component): Action => $component->getEditAction(),
+            fn (self $component): Action => $component->getDeleteAction(),
+            fn (self $component): Action => $component->getEditAction(),
+            fn (self $component): Action => $component->getSelectBlockAction(),
+            fn (self $component): Action => $component->getCreateAction(),
         ]);
+    }
+
+    public function getCreateAction(): Action
+    {
+        $action = Action::make($this->getCreateActionName())
+            ->successNotificationTitle(__(
+                "filament-panels::resources/pages/create-record.notifications.created.title"
+            ))
+            ->form(function ($arguments, Form $form, Action $action, PageBuilder $component, Page $livewire) {
+                $blockType = $arguments['block_type'];
+
+                return $form->schema(
+                    $this->getBlockSchema(
+                        $blockType,
+                        record: null,
+                        component: $component,
+                        livewire: $livewire,
+                    )
+                );
+            })
+            ->disabled($this->isDisabled())
+            ->slideOver()
+            ->cancelParentActions()
+            ->modalWidth(MaxWidth::Screen)
+            ->action(function ($arguments, $data, $action, PageBuilder $component) {
+                $blockType = $arguments['block_type'];
+
+                $block = $component->getRecord()->{$component->relationship}()->create([
+                    'block_type' => $blockType,
+                    'data' => $data,
+                ]);
+
+                $component->state([
+                    ...$component->getState(),
+                    $block->toArray(),
+                ]);
+
+                $action->sendSuccessNotification();
+
+                $component->callAfterStateUpdated();
+            });
+
+        if ($this->modifyCreateActionUsing) {
+            $action = $this->evaluate($this->modifyCreateActionUsing, [
+                'action' => $action,
+            ]);
+        }
+
+        return $action;
+    }
+
+    public function getSelectBlockAction(): Action
+    {
+        $action = Action::make($this->getSelectBlockActionName())
+            ->button()
+            ->icon('heroicon-o-plus')
+            ->translateLabel()
+            ->disabled($this->isDisabled())
+            ->color('primary')
+            ->form(function (Form $form) {
+                return $form->schema([
+                    Select::make('block_type')
+                        ->native(false)
+                        ->label('Block Type')
+                        ->translateLabel()
+                        ->options($this->formatBlocksForSelect())
+                ]);
+            })
+            ->action(function ($data, EditRecord $livewire, Action $action) {
+                $livewire->mountFormComponentAction(
+                    $this->getStatePath(),
+                    $this->getCreateActionName(),
+                    $data
+                );
+                $action->halt();
+            });
+
+        if ($this->modifySelectBlockActionUsing) {
+            $action = $this->evaluate($this->modifySelectBlockActionUsing, [
+                'action' => $action,
+            ]);
+        }
+
+        return $action;
     }
 
     // TODO: move this function to its own file for making reading easier.
     public function getEditAction(): Action
     {
-        $action = Action::make($this->getEditActionName())
-            ->successNotificationTitle('Block updated')
+        $action =  Action::make($this->getEditActionName())
+            ->successNotificationTitle(__("filament-panels::resources/pages/edit-record.notifications.saved.title"))
+            ->disabled($this->isDisabled())
             ->form(function ($arguments, Form $form, Action $action, PageBuilder $component, Page $livewire) {
                 $block = $this->findPageBuilderBlock($arguments['item']);
 
@@ -65,12 +158,20 @@ class PageBuilder extends Field
             })
             ->slideOver()
             ->modalWidth(MaxWidth::Screen)
-            ->action(function ($arguments, $data) {
+            ->action(function ($arguments, $data, $action) {
                 $block = $this->findPageBuilderBlock($arguments['item']);
 
-                $block->update([
+                $result = $block->update([
                     'data' => $data,
                 ]);
+
+                if (! $result) {
+                    $action->failure();
+
+                    return;
+                }
+
+                $action->sendSuccessNotification();
             });
 
         if ($this->modifyEditActionUsing) {
@@ -82,12 +183,12 @@ class PageBuilder extends Field
         return $action;
     }
 
-    #[Computed(true)]
     public function getDeleteAction(): Action
     {
         $action = Action::make($this->getDeleteActionName())
             ->requiresConfirmation()
             ->color('danger')
+            ->disabled($this->isDisabled())
             ->hiddenLabel()
             ->successNotificationTitle('Block deleted')
             ->action(function ($arguments, Action $action, PageBuilder $component) {
@@ -197,6 +298,16 @@ class PageBuilder extends Field
         return 'edit';
     }
 
+    public function getCreateActionName(): string
+    {
+        return 'create';
+    }
+
+    public function getSelectBlockActionName(): string
+    {
+        return 'select-block';
+    }
+
     public function deleteAction(
         Closure $modifyDeleteActionUsing,
     ) {
@@ -233,12 +344,28 @@ class PageBuilder extends Field
         return [];
     }
 
-    private function findPageBuilderBlock($id): ?Model
+    #[Computed(true)]
+    private function formatBlocksForSelect(): array
+    {
+        $blocks = $this->getBlocks();
+
+        $formatted = [];
+
+        foreach ($blocks as $block) {
+            $category = $block::getCategory();
+
+            $formatted[$category][$block] = $block::getBlockName();
+        }
+
+        return $formatted;
+    }
+
+    private function findPageBuilderBlock($id): Model|null
     {
         return $this->getRecord()->{$this->relationship}()->find($id);
     }
 
-    private function getBlockSchema(string $blockType, Model $record, Component $component, Page $livewire): array
+    private function getBlockSchema(string $blockType, ?Model $record = null, Component $component, Page $livewire): array
     {
         return $blockType::getBlockSchema(
             record: $record,
