@@ -2,15 +2,26 @@
 
 namespace RedberryProducts\PageBuilderPlugin\Contracts;
 
+use Closure;
+use Filament\Support\Concerns\EvaluatesClosures;
+
 abstract class BaseBlock
 {
+    use EvaluatesClosures;
+
     public static function getBlockName(): string
     {
         return class_basename(static::class);
     }
 
-    // TODO: consider allowing injecting of livewire/form/component/record for dynamic schemas.
-    abstract public static function getBlockSchema(): array;
+    public static function getBlockSchema(...$arguments): array
+    {
+        if (! method_exists(static::class, 'blockSchema')) {
+            throw new \Exception('Method blockSchema not found in ' . static::class);
+        }
+        $closure = Closure::fromCallable([static::class, 'blockSchema']);
+        return app()->call($closure, $arguments);
+    }
 
     public static function getCategory(): string
     {
@@ -48,6 +59,6 @@ abstract class BaseBlock
             }
         }
 
-        return static::getBlockName() . ' - ' . $index;
+        return static::getBlockName() . ' - ' . $index + 1;
     }
 }
