@@ -47,7 +47,7 @@ class PageBuilder extends Field
     // TODO: move this function to its own file for making reading easier.
     public function getEditAction(): Action
     {
-        $action =  Action::make($this->getEditActionName())
+        $action = Action::make($this->getEditActionName())
             ->successNotificationTitle('Block updated')
             ->form(function ($arguments, Form $form, Action $action, PageBuilder $component, Page $livewire) {
                 $block = $this->findPageBuilderBlock($arguments['item']);
@@ -85,7 +85,7 @@ class PageBuilder extends Field
     #[Computed(true)]
     public function getDeleteAction(): Action
     {
-        $action =  Action::make($this->getDeleteActionName())
+        $action = Action::make($this->getDeleteActionName())
             ->requiresConfirmation()
             ->color('danger')
             ->hiddenLabel()
@@ -134,7 +134,7 @@ class PageBuilder extends Field
             'disabled' => $deleteAction->isDisabled(),
             'attributes' => collect([
                 'wire:click' => "mountFormComponentAction('$statePath', '{$this->getDeleteActionName()}', { item: '$item' } )",
-           ]),
+            ]),
         ];
 
         if ($this->renderDeleteActionButtonUsing) {
@@ -160,7 +160,7 @@ class PageBuilder extends Field
             'color' => 'primary',
             'attributes' => collect([
                 'wire:click' => "mountFormComponentAction('$statePath', '{$this->getEditActionName()}', { item: '$item' } )",
-           ]),
+            ]),
         ];
 
         if ($this->renderEditActionButtonUsing) {
@@ -233,7 +233,7 @@ class PageBuilder extends Field
         return [];
     }
 
-    private function findPageBuilderBlock($id): Model|null
+    private function findPageBuilderBlock($id): ?Model
     {
         return $this->getRecord()->{$this->relationship}()->find($id);
     }

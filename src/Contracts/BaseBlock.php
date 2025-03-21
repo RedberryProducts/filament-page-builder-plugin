@@ -20,6 +20,7 @@ abstract class BaseBlock
             throw new \Exception('Method blockSchema not found in ' . static::class);
         }
         $closure = Closure::fromCallable([static::class, 'blockSchema']);
+
         return app()->call($closure, $arguments);
     }
 
