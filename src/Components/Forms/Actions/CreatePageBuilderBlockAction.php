@@ -17,7 +17,7 @@ class CreatePageBuilderBlockAction extends Action
     {
         parent::setUp();
 
-        $this->successNotificationTitle(__("filament-panels::resources/pages/create-record.notifications.created.title"));
+        $this->successNotificationTitle(__('filament-panels::resources/pages/create-record.notifications.created.title'));
 
         $this->form(function ($arguments, $form, PageBuilder $component, $livewire) {
             $blockType = $arguments['block_type'];

@@ -5,12 +5,8 @@ namespace RedberryProducts\PageBuilderPlugin\Components\Forms;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Field;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Form;
 use Filament\Pages\Page;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Components\Component;
-use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\Computed;
@@ -86,7 +82,7 @@ class PageBuilder extends Field
 
     public function getEditAction(): Action
     {
-        $action =  EditPageBuilderBlockAction::make($this->getEditActionName())
+        $action = EditPageBuilderBlockAction::make($this->getEditActionName())
             ->disabled($this->isDisabled());
 
         if ($this->modifyEditActionUsing) {
@@ -234,13 +230,12 @@ class PageBuilder extends Field
         return [];
     }
 
-
-    public function findPageBuilderBlock($id): Model|null
+    public function findPageBuilderBlock($id): ?Model
     {
         return $this->getRecord()->{$this->relationship}()->find($id);
     }
 
-    public function getBlockSchema(string $blockType, ?Model $record = null, Component $component, Page $livewire): array
+    public function getBlockSchema(string $blockType, ?Model $record, Component $component, Page $livewire): array
     {
         return $blockType::getBlockSchema(
             record: $record,

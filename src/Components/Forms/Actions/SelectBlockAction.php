@@ -30,7 +30,7 @@ class SelectBlockAction extends Action
                     ->native(false)
                     ->translateLabel()
                     ->translateLabel()
-                    ->options($this->formatBlocksForSelect($component))
+                    ->options($this->formatBlocksForSelect($component)),
             ]);
         });
 

@@ -19,9 +19,9 @@ class EditPageBuilderBlockAction extends Action
     {
         parent::setUp();
 
-        $this->successNotificationTitle(__("filament-panels::resources/pages/edit-record.notifications.saved.title"));
+        $this->successNotificationTitle(__('filament-panels::resources/pages/edit-record.notifications.saved.title'));
 
-        $this->form(function ($arguments, Form $form, PageBuilder  $component, Page $livewire) {
+        $this->form(function ($arguments, Form $form, PageBuilder $component, Page $livewire) {
             $block = $component->findPageBuilderBlock($arguments['item']);
 
             $this->fillForm($block->data);

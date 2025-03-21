@@ -29,7 +29,7 @@ class DeletePageBuilderBlockAction extends Action
 
             $label = $block->block_type::getBlockLabel($block->attributesToArray());
 
-            return  __('filament-actions::delete.single.modal.heading', ['label' =>$label]);
+            return __('filament-actions::delete.single.modal.heading', ['label' => $label]);
         });
 
         $this->modalSubmitActionLabel(__('filament-actions::delete.single.modal.actions.delete.label'));
