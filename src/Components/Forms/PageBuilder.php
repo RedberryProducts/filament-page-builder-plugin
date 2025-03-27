@@ -24,7 +24,7 @@ class PageBuilder extends Field
 {
     public ?string $relationship = null;
 
-    public bool|Closure $reorderable = false;
+    public bool | Closure $reorderable = false;
 
     protected ?Closure $renderDeleteActionButtonUsing = null;
 
@@ -66,7 +66,7 @@ class PageBuilder extends Field
     public function getReorderAction(): Action
     {
         $action = ReoraderPageBuilderBlockAction::make($this->getReorderActionName())
-            ->hidden(!$this->getReorderable())
+            ->hidden(! $this->getReorderable())
             ->disabled($this->isDisabled());
 
         if ($this->modifyReorderActionUsing) {
@@ -201,7 +201,7 @@ class PageBuilder extends Field
             'attributes' => collect([
                 'x-sortable-handle' => 'x-sortable-handle',
                 'x-on:click.stop' => 'x-on:click.stop',
-            ])
+            ]),
         ];
 
         if ($this->renderReorderActionButtonUsing) {
@@ -378,7 +378,7 @@ class PageBuilder extends Field
                     ->danger()
                     ->send();
 
-                throw new Halt();
+                throw new Halt;
             }
 
         });

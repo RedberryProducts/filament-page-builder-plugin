@@ -68,7 +68,7 @@ class CreatePageBuilderBlockAction extends Action
             $blockType = $arguments['block_type'];
             $state = $component->getState() ?? [];
 
-            $block =  app($component->getModel())->{$component->relationship}()->make([
+            $block = app($component->getModel())->{$component->relationship}()->make([
                 'block_type' => $blockType,
                 'data' => $data['data'],
                 'order' => count($state) + 1,
