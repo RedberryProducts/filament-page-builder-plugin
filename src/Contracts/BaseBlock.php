@@ -46,7 +46,7 @@ abstract class BaseBlock
         return Storage::url($path);
     }
 
-    public static function getUrlForFile(array|string|null $path = null): ?string
+    public static function getUrlForFile(array | string | null $path = null): ?string
     {
         if (! $path) {
             return null;
