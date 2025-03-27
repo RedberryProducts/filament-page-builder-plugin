@@ -4,6 +4,8 @@ namespace RedberryProducts\PageBuilderPlugin\Contracts;
 
 use Closure;
 use Filament\Support\Concerns\EvaluatesClosures;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 abstract class BaseBlock
 {
@@ -39,43 +41,38 @@ abstract class BaseBlock
         return self::formatForSinglePreview($data);
     }
 
-    // private static function generatedStorageUrl(string $path): string
-    // {
-    //     return Storage::temporaryUrl($path, now()->addMinutes(5));
-    // }
+    private static function generatedStorageUrl(string $path): string
+    {
+        return Storage::url($path);
+    }
 
-    // public static function getUrlForFile(array|string|null $path = null): ?string
-    // {
-    //     if (! $path) {
-    //         return null;
-    //     }
+    public static function getUrlForFile(array|string|null $path = null): ?string
+    {
+        if (! $path) {
+            return null;
+        }
 
-    //     if (is_string($path)) {
-    //         return static::generatedStorageUrl($path);
-    //     }
+        if (is_string($path)) {
+            return static::generatedStorageUrl($path);
+        }
 
-    //     if (count($path) > 0) {
-    //         $filePath = array_values($path)[0];
-    //         if (is_string($filePath)) {
-    //             return static::generatedStorageUrl($filePath);
-    //         }
-    //         if ($filePath instanceof TemporaryUploadedFile) {
-    //             $filePath = $filePath->path();
+        if (count($path) > 0) {
+            $filePath = array_values($path)[0];
+            if (is_string($filePath)) {
+                return static::generatedStorageUrl($filePath);
+            }
+            if ($filePath instanceof TemporaryUploadedFile) {
+                return $filePath->temporaryUrl();
+            }
+        }
 
-    //             return static::generatedStorageUrl($filePath);
-    //         }
-    //     }
-
-    //     return null;
-    // }
+        return null;
+    }
 
     public static function formatForSinglePreview(array $data): array
     {
-        ray($data);
         return $data;
     }
-
-    // public static function parse
 
     public static function getBlockTitleAttribute(): ?string
     {

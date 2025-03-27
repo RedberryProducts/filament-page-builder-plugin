@@ -269,6 +269,7 @@ class PageBuilder extends Field
         });
 
         $this->saveRelationshipsUsing(function (Model $record, $state) {
+            $state = $state ?? [];
             $query = $this->getConstrainAppliedQuery($record);
             $existingIds = $query->clone()->pluck('id');
 
@@ -315,13 +316,13 @@ class PageBuilder extends Field
 
         $this->createAction(function (CreatePageBuilderBlockAction $action) use ($createUrl) {
             return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($createUrl) {
-                return $field->iframeUrl($createUrl)->renderWithIframe();
+                return $field->iframeUrl($createUrl);
             });
         });
 
         $this->editAction(function (EditPageBuilderBlockAction $action) use ($updateUrl) {
             return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($updateUrl) {
-                return $field->iframeUrl($updateUrl)->renderWithIframe();
+                return $field->iframeUrl($updateUrl);
             });
         });
 
