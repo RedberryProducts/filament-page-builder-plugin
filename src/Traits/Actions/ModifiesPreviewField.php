@@ -7,7 +7,7 @@ use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
 
 trait ModifiesPreviewField
 {
-    public Closure|null $modifyPreviewUsing = null;
+    public ?Closure $modifyPreviewUsing = null;
 
     public function pageBuilderPreviewField(Closure $modifyPreviewUsing): static
     {

@@ -10,7 +10,6 @@ use Filament\Support\Enums\MaxWidth;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilder;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
 use RedberryProducts\PageBuilderPlugin\Traits\Actions\ModifiesPreviewField;
-use Illuminate\Support\Str;
 
 class CreatePageBuilderBlockAction extends Action
 {
@@ -51,7 +50,7 @@ class CreatePageBuilderBlockAction extends Action
                                             livewire: $livewire,
                                         ),
                                     )->live(),
-                                    ]
+                            ]
                         )->columnSpan(1),
                     Hidden::make('block_type')->default($blockType),
                     $preview,
@@ -67,7 +66,7 @@ class CreatePageBuilderBlockAction extends Action
 
         $this->action(function ($arguments, $data, $action, PageBuilder $component) {
             $blockType = $arguments['block_type'];
-            $block =  $component->getRecord()->{$component->relationship}()->make([
+            $block = $component->getRecord()->{$component->relationship}()->make([
                 'block_type' => $blockType,
                 'data' => $data['data'],
             ]);
@@ -83,5 +82,4 @@ class CreatePageBuilderBlockAction extends Action
             $component->callAfterStateUpdated();
         });
     }
-
 }

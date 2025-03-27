@@ -295,9 +295,9 @@ class PageBuilder extends Field
                     ->body($th->getMessage())
                     ->danger()
                     ->send();
-                throw new Halt();
-            }
 
+                throw new Halt;
+            }
 
         });
 
@@ -307,9 +307,9 @@ class PageBuilder extends Field
     }
 
     public function renderPreviewWithIframes(
-        bool|Closure $value = true,
-        string|Closure $createUrl,
-        string|Closure $updateUrl,
+        bool | Closure $value,
+        string | Closure $createUrl,
+        string | Closure $updateUrl,
     ) {
         $value = (bool) $this->evaluate($value);
 

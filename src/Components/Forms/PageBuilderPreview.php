@@ -8,11 +8,11 @@ use Filament\Forms\Components\Hidden;
 
 class PageBuilderPreview extends Field
 {
-    public string|null $pageBuilderField = null;
+    public ?string $pageBuilderField = null;
 
     public bool $renderWithIframe = false;
 
-    public string|Closure $iframeUrl = '';
+    public string | Closure $iframeUrl = '';
 
     public bool $singleItemPreview = false;
 
@@ -36,7 +36,7 @@ class PageBuilderPreview extends Field
         return $this;
     }
 
-    public function getPageBuilderField(): string|null
+    public function getPageBuilderField(): ?string
     {
         return $this->pageBuilderField;
     }
@@ -55,7 +55,7 @@ class PageBuilderPreview extends Field
         return $this;
     }
 
-    public function iframeUrl(string|Closure $iframeUrl): static
+    public function iframeUrl(string | Closure $iframeUrl): static
     {
         $this->iframeUrl = $iframeUrl;
         $this->renderWithIframe();
@@ -86,7 +86,7 @@ class PageBuilderPreview extends Field
             return $view;
         }
 
-        throw new \Exception('View not found for block ' . $class . " if you want to use view method of rendering you need to declare view for a block.");
+        throw new \Exception('View not found for block ' . $class . ' if you want to use view method of rendering you need to declare view for a block.');
     }
 
     public function getPageBuilderData(): array
@@ -102,6 +102,7 @@ class PageBuilderPreview extends Field
 
             if ($blockType) {
                 $formatted = $blockType::formatForSinglePreview($data['data']);
+
                 return [
                     'block_type' => $blockType,
                     'data' => $formatted,
@@ -111,7 +112,6 @@ class PageBuilderPreview extends Field
             return [];
         }
 
-
         $data = $data[$this->pageBuilderField] ?? [];
 
         return array_map(function ($item) {
@@ -119,6 +119,7 @@ class PageBuilderPreview extends Field
 
             if ($blockType) {
                 $formatted = $blockType::formatForSinglePreview($item['data']);
+
                 return [
                     'block_type' => $blockType,
                     'data' => $formatted,

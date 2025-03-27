@@ -30,7 +30,6 @@ class EditPageBuilderBlockAction extends Action
         $this->form(function ($arguments, Form $form, PageBuilder $component, Page $livewire) {
             $block = $component->getState()[$arguments['index']];
 
-
             $preview = PageBuilderPreview::make('preview')
                 ->singleItemPreview()
                 ->pageBuilderField('data');

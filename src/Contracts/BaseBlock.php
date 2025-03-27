@@ -49,7 +49,7 @@ abstract class BaseBlock
         return null;
     }
 
-    public static function getView(): string|null
+    public static function getView(): ?string
     {
         return null;
     }
