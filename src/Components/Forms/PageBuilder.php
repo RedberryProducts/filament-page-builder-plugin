@@ -69,6 +69,8 @@ class PageBuilder extends Field
     public function getSelectBlockAction(): Action
     {
         $action = SelectBlockAction::make($this->getSelectBlockActionName())
+            ->label('Add block')
+            ->translateLabel()
             ->disabled($this->isDisabled());
 
         if ($this->modifySelectBlockActionUsing) {
@@ -210,6 +212,14 @@ class PageBuilder extends Field
         return $this;
     }
 
+    public function createAction(
+        Closure $modifyCreateActionUsing,
+    ) {
+        $this->modifyCreateActionUsing = $modifyCreateActionUsing;
+
+        return $this;
+    }
+
     public function blocks(
         array | Closure $blocks,
     ) {
@@ -257,6 +267,25 @@ class PageBuilder extends Field
                 ->get();
 
             $component->state($blocks->toArray());
+        });
+
+        return $this;
+    }
+
+    public function renderPreviewWithIframes(
+        bool|Closure $value = true,
+        string|Closure $createUrl,
+        // TODO: implement this
+        string|Closure $updateUrl,
+        // TODO: implement this
+        string|Closure $listUrl,
+    ){
+        $value = (bool) $this->evaluate($value);
+
+        $this->createAction(function (CreatePageBuilderBlockAction $action) use ($createUrl) {
+            return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($createUrl) {
+                return $field->iframeUrl($createUrl)->renderWithIframe();
+            });
         });
 
         return $this;

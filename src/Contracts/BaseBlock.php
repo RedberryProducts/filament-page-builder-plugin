@@ -49,6 +49,11 @@ abstract class BaseBlock
         return null;
     }
 
+    public static function getView(): string|null
+    {
+        return null;
+    }
+
     public static function getBlockLabel(array $state, ?int $index = null)
     {
         $key = static::getBlockTitleAttribute();
