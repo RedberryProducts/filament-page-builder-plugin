@@ -269,22 +269,37 @@ class PageBuilder extends Field
             $component->state($blocks->toArray());
         });
 
+        $this->saveRelationshipsUsing(function (PageBuilder $component, Model $record, $state) {
+            $record->{$this->relationship}()->upsert(array_map(function ($item) {
+                return [
+                    'id' => $item['id'] ?? null,
+                    'block_type' => $item['block_type'],
+                    'data' => json_encode($item['data'] ?? []),
+                ];
+            }, $state), uniqueBy: ['id'], update: ['data']);
+        });
+
+        $this->dehydrated(false);
+
         return $this;
     }
 
     public function renderPreviewWithIframes(
         bool|Closure $value = true,
         string|Closure $createUrl,
-        // TODO: implement this
         string|Closure $updateUrl,
-        // TODO: implement this
-        string|Closure $listUrl,
-    ){
+    ) {
         $value = (bool) $this->evaluate($value);
 
         $this->createAction(function (CreatePageBuilderBlockAction $action) use ($createUrl) {
             return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($createUrl) {
                 return $field->iframeUrl($createUrl)->renderWithIframe();
+            });
+        });
+
+        $this->editAction(function (EditPageBuilderBlockAction $action) use ($updateUrl) {
+            return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($updateUrl) {
+                return $field->iframeUrl($updateUrl)->renderWithIframe();
             });
         });
 

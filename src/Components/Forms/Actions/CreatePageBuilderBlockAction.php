@@ -2,7 +2,6 @@
 
 namespace RedberryProducts\PageBuilderPlugin\Components\Forms\Actions;
 
-use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
@@ -10,10 +9,11 @@ use Filament\Forms\Form;
 use Filament\Support\Enums\MaxWidth;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilder;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
+use RedberryProducts\PageBuilderPlugin\Traits\Actions\ModifiesPreviewField;
 
 class CreatePageBuilderBlockAction extends Action
 {
-    public Closure|null $modifyPreviewUsing = null;
+    use ModifiesPreviewField;
 
     public static function getDefaultName(): ?string
     {
@@ -33,14 +33,7 @@ class CreatePageBuilderBlockAction extends Action
                 ->singleItemPreview()
                 ->pageBuilderField('data');
 
-            if ($this->modifyPreviewUsing) {
-                $preview = $this->evaluate($this->modifyPreviewUsing, [
-                    'field' => $preview,
-                    'action' => $this,
-                    'blockType' => $blockType,
-                ]) ?? $preview;
-            }
-
+            $preview = $this->getModifiedPreviewField($preview, $blockType);
 
             return $form->schema(
                 [
@@ -57,9 +50,9 @@ class CreatePageBuilderBlockAction extends Action
                                             livewire: $livewire,
                                         ),
                                     )->live(),
-                                Hidden::make('block_type')->default($blockType),
-                            ]
+                                    ]
                         )->columnSpan(1),
+                    Hidden::make('block_type')->default($blockType),
                     $preview,
                 ]
             )->columns(2);
@@ -74,9 +67,10 @@ class CreatePageBuilderBlockAction extends Action
         $this->action(function ($arguments, $data, $action, PageBuilder $component) {
             $blockType = $arguments['block_type'];
 
+            // TODO: DO NOT CREATE HERE!!!
             $block = $component->getRecord()->{$component->relationship}()->create([
                 'block_type' => $blockType,
-                'data' => $data,
+                'data' => $data['data'],
             ]);
 
             $component->state([
@@ -90,10 +84,4 @@ class CreatePageBuilderBlockAction extends Action
         });
     }
 
-    public function pageBuilderPreviewField(Closure $modifyPreviewUsing): static
-    {
-        $this->modifyPreviewUsing = $modifyPreviewUsing;
-
-        return $this;
-    }
 }

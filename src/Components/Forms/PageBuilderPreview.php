@@ -25,6 +25,8 @@ class PageBuilderPreview extends Field
         $this->schema([
             Hidden::make('ready')->default(false),
         ]);
+
+        $this->dehydrated(false);
     }
 
     public function pageBuilderField(string $pageBuilderField): static
@@ -83,7 +85,7 @@ class PageBuilderPreview extends Field
             return $view;
         }
 
-        throw new \Exception('View not found for block ' . $class . "if you want to use view method of rendering you need to declare view for a block.");
+        throw new \Exception('View not found for block ' . $class . " if you want to use view method of rendering you need to declare view for a block.");
     }
 
     public function getPageBuilderData(): array
@@ -95,7 +97,7 @@ class PageBuilderPreview extends Field
         $data = $this->getGetCallback()();
 
         if ($this->singleItemPreview) {
-            $blockType = $data['data']['block_type'] ?? null;
+            $blockType = $data['block_type'] ?? null;
 
             if ($blockType) {
                 $formatted = $blockType::formatForSinglePreview($data['data']);
@@ -108,7 +110,20 @@ class PageBuilderPreview extends Field
             return [];
         }
 
-        // TODO: implment multiple item preview
+
+        $data = $data[$this->pageBuilderField] ?? [];
+
+        return array_map(function ($item) {
+            $blockType = $item['block_type'] ?? null;
+
+            if ($blockType) {
+                $formatted = $blockType::formatForSinglePreview($item['data']);
+                return [
+                    'block_type' => $blockType,
+                    'data' => $formatted,
+                ];
+            }
+        }, $data);
 
         return [];
     }

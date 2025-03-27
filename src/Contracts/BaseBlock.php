@@ -36,7 +36,7 @@ abstract class BaseBlock
 
     public static function formatForListing(array $data): array
     {
-        return $data;
+        return self::formatForSinglePreview($data);
     }
 
     public static function formatForSinglePreview(array $data): array
