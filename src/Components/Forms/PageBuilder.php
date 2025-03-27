@@ -16,12 +16,15 @@ use Livewire\Attributes\Computed;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockAction;
+use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\ReoraderPageBuilderBlockAction;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
 
 // TODO: make this reorder-able
 class PageBuilder extends Field
 {
     public ?string $relationship = null;
+
+    public bool|Closure $reorderable = false;
 
     protected ?Closure $renderDeleteActionButtonUsing = null;
 
@@ -34,6 +37,10 @@ class PageBuilder extends Field
     protected ?Closure $modifySelectBlockActionUsing = null;
 
     protected ?Closure $renderEditActionButtonUsing = null;
+
+    protected ?Closure $modifyReorderActionUsing = null;
+
+    protected ?Closure $renderReorderActionButtonUsing = null;
 
     public array | Closure $blocks = [];
 
@@ -52,7 +59,23 @@ class PageBuilder extends Field
             fn (self $component): Action => $component->getEditAction(),
             fn (self $component): Action => $component->getSelectBlockAction(),
             fn (self $component): Action => $component->getCreateAction(),
+            fn (self $component): Action => $component->getReorderAction(),
         ]);
+    }
+
+    public function getReorderAction(): Action
+    {
+        $action = ReoraderPageBuilderBlockAction::make($this->getReorderActionName())
+            ->hidden(!$this->getReorderable())
+            ->disabled($this->isDisabled());
+
+        if ($this->modifyReorderActionUsing) {
+            $action = $this->evaluate($this->modifyReorderActionUsing, [
+                'action' => $action,
+            ]);
+        }
+
+        return $action;
     }
 
     public function getCreateAction(): Action
@@ -167,6 +190,31 @@ class PageBuilder extends Field
         return view('filament::components.button.index', $attributes);
     }
 
+    public function renderReorderActionButton(string $item, $index)
+    {
+        $reorderAction = $this->getReorderAction();
+
+        $attributes = [
+            'icon' => 'heroicon-o-arrows-up-down',
+            'disabled' => $reorderAction->isDisabled(),
+            'color' => 'gray',
+            'attributes' => collect([
+                'x-sortable-handle' => 'x-sortable-handle',
+                'x-on:click.stop' => 'x-on:click.stop',
+            ])
+        ];
+
+        if ($this->renderReorderActionButtonUsing) {
+            return $this->evaluate($this->renderReorderActionButtonUsing, [
+                'action' => $reorderAction,
+                'item' => $item,
+                'index' => $index,
+            ]);
+        }
+
+        return view('filament::components.icon-button', $attributes);
+    }
+
     public function deleteActionButton(Closure $renderDeleteActionButtonUsing)
     {
         $this->renderDeleteActionButtonUsing = $renderDeleteActionButtonUsing;
@@ -177,6 +225,13 @@ class PageBuilder extends Field
     public function editActionButton(Closure $renderEditActionButtonUsing)
     {
         $this->renderEditActionButtonUsing = $renderEditActionButtonUsing;
+
+        return $this;
+    }
+
+    public function reorderActionButton(Closure $renderReorderActionButtonUsing)
+    {
+        $this->renderReorderActionButtonUsing = $renderReorderActionButtonUsing;
 
         return $this;
     }
@@ -194,6 +249,11 @@ class PageBuilder extends Field
     public function getCreateActionName(): string
     {
         return 'create';
+    }
+
+    public function getReorderActionName(): string
+    {
+        return 'reorder';
     }
 
     public function getSelectBlockActionName(): string
@@ -225,12 +285,33 @@ class PageBuilder extends Field
         return $this;
     }
 
+    public function reorderAction(
+        Closure $modifyReorderActionUsing,
+    ) {
+        $this->modifyReorderActionUsing = $modifyReorderActionUsing;
+
+        return $this;
+    }
+
     public function blocks(
         array | Closure $blocks,
     ) {
         $this->blocks = $blocks;
 
         return $this;
+    }
+
+    public function reorderable(
+        bool | Closure $reorderable = true,
+    ) {
+        $this->reorderable = $reorderable;
+
+        return $this;
+    }
+
+    public function getReorderable(): bool
+    {
+        return (bool) $this->evaluate($this->reorderable);
     }
 
     #[Computed(true)]
@@ -263,6 +344,7 @@ class PageBuilder extends Field
         $this->loadStateFromRelationshipsUsing(function ($record, PageBuilder $component) {
             /** @var Collection */
             $blocks = $this->getConstrainAppliedQuery($record)
+                ->orderBy('order')
                 ->get();
 
             $component->state($blocks->toArray());
@@ -281,11 +363,10 @@ class PageBuilder extends Field
 
                 $record->{$this->relationship}()->upsert(array_map(function ($item) {
                     return [
-                        'id' => $item['id'] ?? null,
-                        'block_type' => $item['block_type'],
+                        ...$item,
                         'data' => json_encode($item['data'] ?? []),
                     ];
-                }, $state), uniqueBy: ['id'], update: ['data']);
+                }, $state), uniqueBy: ['id'], update: ['data', 'order']);
 
                 DB::commit();
 
@@ -297,7 +378,7 @@ class PageBuilder extends Field
                     ->danger()
                     ->send();
 
-                throw new Halt;
+                throw new Halt();
             }
 
         });

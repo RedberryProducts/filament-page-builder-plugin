@@ -7,6 +7,7 @@ use Filament\Support\Concerns\EvaluatesClosures;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
+// TODO: this should not be in contracts...
 abstract class BaseBlock
 {
     use EvaluatesClosures;

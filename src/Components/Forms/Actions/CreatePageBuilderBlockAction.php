@@ -66,14 +66,18 @@ class CreatePageBuilderBlockAction extends Action
 
         $this->action(function ($arguments, $data, $action, PageBuilder $component) {
             $blockType = $arguments['block_type'];
-            $block = app($component->getModel())->{$component->relationship}()->make([
+            $state = $component->getState() ?? [];
+
+            $block =  app($component->getModel())->{$component->relationship}()->make([
                 'block_type' => $blockType,
                 'data' => $data['data'],
+                'order' => count($state) + 1,
             ]);
+
             $block->id = $block->newUniqueId();
 
             $component->state([
-                ...$component->getState() ?? [],
+                ...$state,
                 $block->toArray(),
             ]);
 
