@@ -268,7 +268,7 @@ class PageBuilder extends Field
             $component->state($blocks->toArray());
         });
 
-        $this->saveRelationshipsUsing(function (PageBuilder $component, Model $record, $state, Page $livewire) {
+        $this->saveRelationshipsUsing(function (Model $record, $state) {
             $query = $this->getConstrainAppliedQuery($record);
             $existingIds = $query->clone()->pluck('id');
 
