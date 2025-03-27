@@ -5,10 +5,13 @@ namespace RedberryProducts\PageBuilderPlugin\Components\Forms;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Field;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Components\Component;
+use Filament\Support\Exceptions\Halt;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
@@ -110,7 +113,7 @@ class PageBuilder extends Field
         return $action;
     }
 
-    public function renderDeleteActionButton(string $item)
+    public function renderDeleteActionButton(string $item, int $index)
     {
         $statePath = $this->getStatePath();
         $deleteAction = $this->getDeleteAction();
@@ -122,7 +125,7 @@ class PageBuilder extends Field
             'color' => 'danger',
             'disabled' => $deleteAction->isDisabled(),
             'attributes' => collect([
-                'wire:click' => "mountFormComponentAction('$statePath', '{$this->getDeleteActionName()}', { item: '$item' } )",
+                'wire:click' => "mountFormComponentAction('$statePath', '{$this->getDeleteActionName()}', { item: '$item', index: '$index' } )",
             ]),
         ];
 
@@ -130,13 +133,14 @@ class PageBuilder extends Field
             return $this->evaluate($this->renderDeleteActionButtonUsing, [
                 'action' => $deleteAction,
                 'item' => $item,
+                'index' => $index,
             ]);
         }
 
         return view('filament::components.button.index', $attributes);
     }
 
-    public function renderEditActionButton(string $item)
+    public function renderEditActionButton(string $item, $index)
     {
         $statePath = $this->getStatePath();
         $editAction = $this->getEditAction();
@@ -148,7 +152,7 @@ class PageBuilder extends Field
             'disabled' => $editAction->isDisabled(),
             'color' => 'primary',
             'attributes' => collect([
-                'wire:click' => "mountFormComponentAction('$statePath', '{$this->getEditActionName()}', { item: '$item' } )",
+                'wire:click' => "mountFormComponentAction('$statePath', '{$this->getEditActionName()}', { item: '$item', index: '$index' } )",
             ]),
         ];
 
@@ -156,6 +160,7 @@ class PageBuilder extends Field
             return $this->evaluate($this->renderEditActionButtonUsing, [
                 'action' => $editAction,
                 'item' => $item,
+                'index' => $index,
             ]);
         }
 
@@ -240,11 +245,6 @@ class PageBuilder extends Field
         return [];
     }
 
-    public function findPageBuilderBlock($id): ?Model
-    {
-        return $this->getRecord()->{$this->relationship}()->find($id);
-    }
-
     public function getBlockSchema(string $blockType, ?Model $record, Component $component, Page $livewire): array
     {
         return $blockType::getBlockSchema(
@@ -262,21 +262,43 @@ class PageBuilder extends Field
 
         $this->loadStateFromRelationshipsUsing(function ($record, PageBuilder $component) {
             /** @var Collection */
-            $blocks = $record->{$this->relationship}()
-                ->whereIn('block_type', $component->getBlocks())
+            $blocks = $this->getConstrainAppliedQuery($record)
                 ->get();
 
             $component->state($blocks->toArray());
         });
 
-        $this->saveRelationshipsUsing(function (PageBuilder $component, Model $record, $state) {
-            $record->{$this->relationship}()->upsert(array_map(function ($item) {
-                return [
-                    'id' => $item['id'] ?? null,
-                    'block_type' => $item['block_type'],
-                    'data' => json_encode($item['data'] ?? []),
-                ];
-            }, $state), uniqueBy: ['id'], update: ['data']);
+        $this->saveRelationshipsUsing(function (PageBuilder $component, Model $record, $state, Page $livewire) {
+            $query = $this->getConstrainAppliedQuery($record);
+            $existingIds = $query->clone()->pluck('id');
+
+            $recordsNeedingDeletion = $existingIds->diff(collect($state)->pluck('id'));
+
+            try {
+                DB::beginTransaction();
+                $query->clone()->whereIn('id', $recordsNeedingDeletion)->delete();
+
+                $record->{$this->relationship}()->upsert(array_map(function ($item) {
+                    return [
+                        'id' => $item['id'] ?? null,
+                        'block_type' => $item['block_type'],
+                        'data' => json_encode($item['data'] ?? []),
+                    ];
+                }, $state), uniqueBy: ['id'], update: ['data']);
+
+                DB::commit();
+
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                Notification::make()
+                    ->title('failed saving page builder blocks')
+                    ->body($th->getMessage())
+                    ->danger()
+                    ->send();
+                throw new Halt();
+            }
+
+
         });
 
         $this->dehydrated(false);
@@ -304,5 +326,11 @@ class PageBuilder extends Field
         });
 
         return $this;
+    }
+
+    public function getConstrainAppliedQuery(Model $record)
+    {
+        return $record->{$this->relationship}()
+            ->whereIn('block_type', $this->getBlocks());
     }
 }

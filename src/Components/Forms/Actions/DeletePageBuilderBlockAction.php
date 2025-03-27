@@ -25,9 +25,9 @@ class DeletePageBuilderBlockAction extends Action
         $this->label(__('filament-actions::delete.single.label'));
 
         $this->modalHeading(function ($arguments, $component) {
-            $block = $component->findPageBuilderBlock($arguments['item']);
+            $block = $component->getState()[$arguments['index']];
 
-            $label = $block->block_type::getBlockLabel($block->attributesToArray());
+            $label = $block['block_type']::getBlockLabel($block['data']);
 
             return __('filament-actions::delete.single.modal.heading', ['label' => $label]);
         });
@@ -37,19 +37,8 @@ class DeletePageBuilderBlockAction extends Action
         $this->successNotificationTitle(__('filament-actions::delete.single.notifications.deleted.title'));
 
         $this->action(function ($arguments, Action $action, PageBuilder $component) {
-            $block = $component->findPageBuilderBlock($arguments['item']);
-
-            $result = $block->delete();
-
-            if (! $result) {
-                $action->failure();
-
-                return;
-            }
-
             $items = $component->getState();
-            $itemKey = array_search($arguments['item'], array_column($items, 'id'));
-            unset($items[$itemKey]);
+            unset($items[$arguments['index']]);
 
             $component->state($items);
 

@@ -58,6 +58,7 @@ class PageBuilderPreview extends Field
     public function iframeUrl(string|Closure $iframeUrl): static
     {
         $this->iframeUrl = $iframeUrl;
+        $this->renderWithIframe();
 
         return $this;
     }

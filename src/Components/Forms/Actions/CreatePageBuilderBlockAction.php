@@ -10,6 +10,7 @@ use Filament\Support\Enums\MaxWidth;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilder;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
 use RedberryProducts\PageBuilderPlugin\Traits\Actions\ModifiesPreviewField;
+use Illuminate\Support\Str;
 
 class CreatePageBuilderBlockAction extends Action
 {
@@ -66,12 +67,11 @@ class CreatePageBuilderBlockAction extends Action
 
         $this->action(function ($arguments, $data, $action, PageBuilder $component) {
             $blockType = $arguments['block_type'];
-
-            // TODO: DO NOT CREATE HERE!!!
-            $block = $component->getRecord()->{$component->relationship}()->create([
+            $block =  $component->getRecord()->{$component->relationship}()->make([
                 'block_type' => $blockType,
                 'data' => $data['data'],
             ]);
+            $block->id = $block->newUniqueId();
 
             $component->state([
                 ...$component->getState(),

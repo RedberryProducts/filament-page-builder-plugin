@@ -28,18 +28,18 @@ class EditPageBuilderBlockAction extends Action
         $this->successNotificationTitle(__('filament-panels::resources/pages/edit-record.notifications.saved.title'));
 
         $this->form(function ($arguments, Form $form, PageBuilder $component, Page $livewire) {
-            $block = $component->findPageBuilderBlock($arguments['item']);
+            $block = $component->getState()[$arguments['index']];
 
 
             $preview = PageBuilderPreview::make('preview')
                 ->singleItemPreview()
                 ->pageBuilderField('data');
 
-            $preview = $this->getModifiedPreviewField($preview, $block->block_type);
+            $preview = $this->getModifiedPreviewField($preview, $block['block_type']);
 
             $this->fillForm([
-                'data' => $block->data,
-                'block_type' => $block->block_type,
+                'data' => $block['data'],
+                'block_type' => $block['block_type'],
             ]);
 
             return $form->schema(
@@ -51,7 +51,7 @@ class EditPageBuilderBlockAction extends Action
                                 Grid::make(1)
                                     ->schema(
                                         $component->getBlockSchema(
-                                            $block->block_type,
+                                            $block['block_type'],
                                             record: null,
                                             component: $component,
                                             livewire: $livewire,
@@ -59,7 +59,7 @@ class EditPageBuilderBlockAction extends Action
                                     )->live(),
                             ]
                         )->columnSpan(1),
-                    Hidden::make('block_type')->default($block->block_type),
+                    Hidden::make('block_type')->default($block['block_type']),
                     $preview,
                 ]
             )->columns(2);
@@ -70,18 +70,16 @@ class EditPageBuilderBlockAction extends Action
         $this->modalWidth(MaxWidth::Screen);
 
         $this->action(function ($arguments, $data, $action, PageBuilder $component) {
-            // TODO: update only the block data not database record
-            $block = $component->findPageBuilderBlock($arguments['item']);
+            $newState = $component->getState();
 
-            $result = $block->update([
+            $newState[$arguments['index']] = [
+                ...$newState[$arguments['index']],
                 'data' => $data['data'],
-            ]);
+            ];
 
-            if (! $result) {
-                $action->failure();
+            $component->state($newState);
 
-                return;
-            }
+            $component->callAfterStateUpdated();
 
             $action->sendSuccessNotification();
         });

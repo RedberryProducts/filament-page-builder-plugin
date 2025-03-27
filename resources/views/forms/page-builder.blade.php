@@ -12,10 +12,10 @@
                 @foreach ($state as $item)
                     @php
                         $deleteAction = $getAction($getDeleteActionName());
-                        $deleteAction = $deleteAction(['item' => $item]);
+                        $deleteAction = $deleteAction(['item' => $item, 'index' => $loop->index]);
                         $deleteActionIsVisible = $deleteAction->isVisible();
                         $editAction = $getAction($getEditActionName());
-                        $editAction = $editAction(['item' => $item]);
+                        $editAction = $editAction(['item' => $item, 'index' => $loop->index]);
                         $editActionIsVisible = $editAction->isVisible();
                     @endphp
                     <li
@@ -25,10 +25,10 @@
                             {{ $item['block_type']::getBlockLabel($item, $loop->index) }}
                             <div class="flex gap-x-4 items-center">
                                 @if ($deleteActionIsVisible)
-                                    {{ $renderDeleteActionButton($item['id']) }}
+                                    {{ $renderDeleteActionButton($item['id'], $loop->index) }}
                                 @endif
                                 @if ($editActionIsVisible)
-                                    {{ $renderEditActionButton($item['id']) }}
+                                    {{ $renderEditActionButton($item['id'], $loop->index) }}
                                 @endif
                             </div>
                         </div>
