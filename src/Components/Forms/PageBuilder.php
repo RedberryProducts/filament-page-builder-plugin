@@ -366,7 +366,7 @@ class PageBuilder extends Field
     }
 
     public function renderPreviewWithIframes(
-        bool | Closure $condition = true,
+        bool | Closure $condition,
         string | Closure $createUrl,
         // TODO: make one of them optional
         string | Closure $updateUrl,

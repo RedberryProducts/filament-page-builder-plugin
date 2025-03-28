@@ -9,11 +9,11 @@ trait ListPreviewRendersWithIframe
 {
     public bool $renderWithIframe = false;
 
-    public array|Closure $iframeAttributes = [];
+    public array | Closure $iframeAttributes = [];
 
     public string | Closure $iframeUrl = '';
 
-    public bool|Closure $autoResizeIframe = false;
+    public bool | Closure $autoResizeIframe = false;
 
     public function renderWithIframe(bool $renderWithIframe = true): static
     {
