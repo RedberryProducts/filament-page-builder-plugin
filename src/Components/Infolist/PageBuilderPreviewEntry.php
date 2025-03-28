@@ -38,6 +38,7 @@ class PageBuilderPreviewEntry extends Entry
             $state->transform(function ($item) {
                 /** @var BaseBlock */
                 $blockClass = $item->block_type;
+
                 return [
                     ...$item->toArray(),
                     'data' => $blockClass::formatForListing($item->data),

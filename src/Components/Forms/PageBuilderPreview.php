@@ -9,7 +9,8 @@ use RedberryProducts\PageBuilderPlugin\Traits\PreviewRendersWithBlade;
 
 class PageBuilderPreview extends Field
 {
-    use ListPreviewRendersWithIframe, PreviewRendersWithBlade;
+    use ListPreviewRendersWithIframe;
+    use PreviewRendersWithBlade;
 
     public ?string $pageBuilderField = null;
 
@@ -65,6 +66,7 @@ class PageBuilderPreview extends Field
 
             if ($blockType) {
                 $formatted = $blockType::formatForSinglePreview($data['data']);
+
                 return [
                     'id' => app(config('page-builder-plugin.block_model_class'))->newUniqueId(),
                     ...$data,

@@ -38,5 +38,4 @@ trait ComponentLoadsPageBuilderBlocks
 
         return [];
     }
-
 }

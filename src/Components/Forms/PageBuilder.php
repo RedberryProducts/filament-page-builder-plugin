@@ -12,7 +12,6 @@ use Filament\Support\Exceptions\Halt;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Livewire\Attributes\Computed;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockAction;
@@ -41,7 +40,6 @@ class PageBuilder extends Field
     protected ?Closure $modifyReorderActionUsing = null;
 
     protected ?Closure $renderReorderActionButtonUsing = null;
-
 
     public string $view = 'page-builder-plugin::forms.page-builder';
 
@@ -368,7 +366,7 @@ class PageBuilder extends Field
     }
 
     public function renderPreviewWithIframes(
-        bool | Closure $condition = true,
+        bool | Closure $condition,
         string | Closure $createUrl,
         // TODO: make one of them optional
         string | Closure $updateUrl,

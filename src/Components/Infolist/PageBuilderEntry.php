@@ -2,7 +2,6 @@
 
 namespace RedberryProducts\PageBuilderPlugin\Components\Infolist;
 
-
 use Filament\Infolists\Components\Entry;
 use RedberryProducts\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 

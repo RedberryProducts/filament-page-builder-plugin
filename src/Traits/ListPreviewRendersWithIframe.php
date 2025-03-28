@@ -34,5 +34,4 @@ trait ListPreviewRendersWithIframe
     {
         return $this->renderWithIframe;
     }
-
 }
