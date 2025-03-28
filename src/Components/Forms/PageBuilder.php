@@ -18,11 +18,11 @@ use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilde
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockAction;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\ReoraderPageBuilderBlockAction;
 use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
+use RedberryProducts\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 
-// TODO: make this reorder-able
 class PageBuilder extends Field
 {
-    public ?string $relationship = null;
+    use ComponentLoadsPageBuilderBlocks;
 
     public bool | Closure $reorderable = false;
 
@@ -42,7 +42,6 @@ class PageBuilder extends Field
 
     protected ?Closure $renderReorderActionButtonUsing = null;
 
-    public array | Closure $blocks = [];
 
     public string $view = 'page-builder-plugin::forms.page-builder';
 
@@ -293,14 +292,6 @@ class PageBuilder extends Field
         return $this;
     }
 
-    public function blocks(
-        array | Closure $blocks,
-    ) {
-        $this->blocks = $blocks;
-
-        return $this;
-    }
-
     public function reorderable(
         bool | Closure $reorderable = true,
     ) {
@@ -312,18 +303,6 @@ class PageBuilder extends Field
     public function getReorderable(): bool
     {
         return (bool) $this->evaluate($this->reorderable);
-    }
-
-    #[Computed(true)]
-    public function getBlocks(): array
-    {
-        $evaluated = $this->evaluate($this->blocks);
-
-        if (is_array($evaluated)) {
-            return $evaluated;
-        }
-
-        return [];
     }
 
     public function getBlockSchema(string $blockType, ?Model $record, Component $component, Page $livewire): array
@@ -389,11 +368,12 @@ class PageBuilder extends Field
     }
 
     public function renderPreviewWithIframes(
-        bool | Closure $value,
+        bool | Closure $condition = true,
         string | Closure $createUrl,
+        // TODO: make one of them optional
         string | Closure $updateUrl,
     ) {
-        $value = (bool) $this->evaluate($value);
+        $condition = (bool) $this->evaluate($condition);
 
         $this->createAction(function (CreatePageBuilderBlockAction $action) use ($createUrl) {
             return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($createUrl) {
@@ -408,11 +388,5 @@ class PageBuilder extends Field
         });
 
         return $this;
-    }
-
-    public function getConstrainAppliedQuery(Model $record)
-    {
-        return $record->{$this->relationship}()
-            ->whereIn('block_type', $this->getBlocks());
     }
 }

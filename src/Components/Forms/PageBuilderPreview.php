@@ -2,17 +2,16 @@
 
 namespace RedberryProducts\PageBuilderPlugin\Components\Forms;
 
-use Closure;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Hidden;
+use RedberryProducts\PageBuilderPlugin\Traits\ListPreviewRendersWithIframe;
+use RedberryProducts\PageBuilderPlugin\Traits\PreviewRendersWithBlade;
 
 class PageBuilderPreview extends Field
 {
+    use ListPreviewRendersWithIframe, PreviewRendersWithBlade;
+
     public ?string $pageBuilderField = null;
-
-    public bool $renderWithIframe = false;
-
-    public string | Closure $iframeUrl = '';
 
     public bool $singleItemPreview = false;
 
@@ -48,45 +47,9 @@ class PageBuilderPreview extends Field
         return $this;
     }
 
-    public function renderWithIframe(bool $renderWithIframe = true): static
-    {
-        $this->renderWithIframe = $renderWithIframe;
-
-        return $this;
-    }
-
-    public function iframeUrl(string | Closure $iframeUrl): static
-    {
-        $this->iframeUrl = $iframeUrl;
-        $this->renderWithIframe();
-
-        return $this;
-    }
-
-    public function getIframeUrl(): string
-    {
-        return (string) $this->evaluate($this->iframeUrl);
-    }
-
-    public function getRenderWithIframe(): bool
-    {
-        return $this->renderWithIframe;
-    }
-
     public function getSingleItemPreview(): bool
     {
         return $this->singleItemPreview;
-    }
-
-    public function getViewForBlock(string $class)
-    {
-        $view = $class::getView();
-
-        if ($view) {
-            return $view;
-        }
-
-        throw new \Exception('View not found for block ' . $class . ' if you want to use view method of rendering you need to declare view for a block.');
     }
 
     public function getPageBuilderData(): array
@@ -102,9 +65,10 @@ class PageBuilderPreview extends Field
 
             if ($blockType) {
                 $formatted = $blockType::formatForSinglePreview($data['data']);
-
                 return [
-                    'block_type' => $blockType,
+                    'id' => app(config('page-builder-plugin.block_model_class'))->newUniqueId(),
+                    ...$data,
+                    'block_name' => $blockType::getBlockName(),
                     'data' => $formatted,
                 ];
             }
@@ -121,7 +85,8 @@ class PageBuilderPreview extends Field
                 $formatted = $blockType::formatForSinglePreview($item['data']);
 
                 return [
-                    'block_type' => $blockType,
+                    ...$item,
+                    'block_name' => $blockType::getBlockName(),
                     'data' => $formatted,
                 ];
             }
