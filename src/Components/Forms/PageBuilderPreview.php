@@ -24,6 +24,7 @@ class PageBuilderPreview extends Field
 
         $this->schema([
             Hidden::make('ready')->default(false),
+            Hidden::make('height')->default(0),
         ]);
 
         $this->dehydrated(false);
