@@ -32,11 +32,6 @@ abstract class BaseBlock
         return '';
     }
 
-    public static function getThumbnail(): string
-    {
-        return '';
-    }
-
     public static function formatForListing(array $data): array
     {
         return self::formatForSinglePreview($data);

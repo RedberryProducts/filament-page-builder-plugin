@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ namespace }};
+
+use RedberryProducts\PageBuilderPlugin\Contracts\BaseBlock;
+
+class {{ class }} extends BaseBlock
+{
+    public static function blockSchema(): array
+    {
+        return [
+            // schema
+        ];
+    }
+
+    public static function getView(): ?string
+    {
+        return 'blocks.{{ viewName }}';
+    }
+}

@@ -1,0 +1,15 @@
+<?php
+
+namespace {{ namespace }};
+
+use RedberryProducts\PageBuilderPlugin\Contracts\BaseBlock;
+
+class {{ class }} extends BaseBlock
+{
+    public static function blockSchema(): array
+    {
+        return [
+
+        ];
+    }
+}

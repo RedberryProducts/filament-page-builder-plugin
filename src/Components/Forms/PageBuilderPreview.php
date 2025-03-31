@@ -67,7 +67,7 @@ class PageBuilderPreview extends Field
             $id = $data['block_id'];
 
             if ($blockType) {
-                $formatted = $blockType::formatForSinglePreview($data['data']);
+                $formatted = $blockType::formatForSinglePreview($data['data'] ?? []);
 
                 return [
                     'id' => $id,
