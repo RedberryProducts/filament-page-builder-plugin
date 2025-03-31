@@ -64,13 +64,13 @@ class PageBuilderPreview extends Field
 
         if ($this->singleItemPreview) {
             $blockType = $data['block_type'] ?? null;
+            $id = $data['block_id'];
 
             if ($blockType) {
                 $formatted = $blockType::formatForSinglePreview($data['data']);
 
                 return [
-                    'id' => app(config('page-builder-plugin.block_model_class'))->newUniqueId(),
-                    ...$data,
+                    'id' => $id,
                     'block_name' => $blockType::getBlockName(),
                     'data' => $formatted,
                 ];

@@ -370,20 +370,25 @@ class PageBuilder extends Field
     public function renderPreviewWithIframes(
         bool | Closure $condition,
         string | Closure $createUrl,
-        // TODO: make one of them optional
-        string | Closure $updateUrl,
+        string | Closure | null $updateUrl = null,
+        bool | Closure $autoResize = true,
     ) {
         $condition = (bool) $this->evaluate($condition);
+        $autoResize = (bool) $this->evaluate($autoResize);
 
-        $this->createAction(function (CreatePageBuilderBlockAction $action) use ($createUrl) {
-            return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($createUrl) {
-                return $field->iframeUrl($createUrl);
+        if (! $updateUrl) {
+            $updateUrl = $createUrl;
+        }
+
+        $this->createAction(function (CreatePageBuilderBlockAction $action) use ($createUrl, $autoResize) {
+            return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($createUrl, $autoResize) {
+                return $field->iframeUrl($createUrl)->autoResizeIframe($autoResize);
             });
         });
 
-        $this->editAction(function (EditPageBuilderBlockAction $action) use ($updateUrl) {
-            return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($updateUrl) {
-                return $field->iframeUrl($updateUrl);
+        $this->editAction(function (EditPageBuilderBlockAction $action) use ($updateUrl, $autoResize) {
+            return $action->pageBuilderPreviewField(function (PageBuilderPreview $field) use ($updateUrl, $autoResize) {
+                return $field->iframeUrl($updateUrl)->autoResizeIframe($autoResize);
             });
         });
 

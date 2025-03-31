@@ -39,6 +39,7 @@ class EditPageBuilderBlockAction extends Action
             $this->fillForm([
                 'data' => $block['data'],
                 'block_type' => $block['block_type'],
+                'block_id' => $block['id'],
             ]);
 
             return $form->schema(
@@ -58,7 +59,8 @@ class EditPageBuilderBlockAction extends Action
                                     )->live(),
                             ]
                         )->columnSpan(1),
-                    Hidden::make('block_type')->default($block['block_type']),
+                    Hidden::make('block_type'),
+                    Hidden::make('block_id'),
                     $preview,
                 ]
             )->columns(2);

@@ -53,6 +53,7 @@ class CreatePageBuilderBlockAction extends Action
                             ]
                         )->columnSpan(1),
                     Hidden::make('block_type')->default($blockType),
+                    Hidden::make('block_id')->default(app(config('page-builder-plugin.block_model_class'))->newUniqueId()),
                     $preview,
                 ]
             )->columns(2);
