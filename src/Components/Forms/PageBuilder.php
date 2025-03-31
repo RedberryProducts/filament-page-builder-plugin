@@ -314,7 +314,7 @@ class PageBuilder extends Field
     }
 
     public function relationship(
-        string $relationship = "pageBuilderBlocks",
+        string $relationship = 'pageBuilderBlocks',
         ?Closure $modifyRelationshipQueryUsing = null,
     ) {
         $this->relationship = $relationship;

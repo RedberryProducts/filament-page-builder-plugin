@@ -22,7 +22,7 @@ class PageBuilderEntry extends Entry
     }
 
     public function relationship(
-        string $relationship = "pageBuilderBlocks",
+        string $relationship = 'pageBuilderBlocks',
         ?Closure $modifyRelationshipQueryUsing = null,
     ): self {
         $this->relationship = $relationship;

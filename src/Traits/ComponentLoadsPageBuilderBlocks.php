@@ -17,7 +17,7 @@ trait ComponentLoadsPageBuilderBlocks
 
     public function getConstrainAppliedQuery(Model $record)
     {
-        $query =  $record->{$this->relationship}()
+        $query = $record->{$this->relationship}()
             ->whereIn('block_type', $this->getBlocks());
 
         if ($this->modifyRelationshipQueryUsing) {
@@ -35,6 +35,7 @@ trait ComponentLoadsPageBuilderBlocks
     ) {
         $this->blocks = $blocks;
         Select::class;
+
         return $this;
     }
 
