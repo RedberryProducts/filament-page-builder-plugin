@@ -49,7 +49,7 @@ class PageBuilder extends Field
 
         $this->columnSpanFull();
 
-        $this->relationship('pageBuilderBlocks');
+        $this->relationship();
 
         $this->registerActions([
             fn (self $component): Action => $component->getDeleteAction(),
@@ -314,9 +314,11 @@ class PageBuilder extends Field
     }
 
     public function relationship(
-        string $relationship,
+        string $relationship = "pageBuilderBlocks",
+        ?Closure $modifyRelationshipQueryUsing = null,
     ) {
         $this->relationship = $relationship;
+        $this->modifyRelationshipQueryUsing = $modifyRelationshipQueryUsing;
 
         $this->loadStateFromRelationshipsUsing(function ($record, PageBuilder $component) {
             /** @var Collection */

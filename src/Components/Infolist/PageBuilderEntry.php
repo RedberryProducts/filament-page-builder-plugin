@@ -2,6 +2,7 @@
 
 namespace RedberryProducts\PageBuilderPlugin\Components\Infolist;
 
+use Closure;
 use Filament\Infolists\Components\Entry;
 use RedberryProducts\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 
@@ -17,16 +18,20 @@ class PageBuilderEntry extends Entry
 
         $this->columnSpanFull();
 
-        $this->relationship('pageBuilderBlocks');
+        $this->relationship();
     }
 
     public function relationship(
-        string $relationship,
-    ) {
+        string $relationship = "pageBuilderBlocks",
+        ?Closure $modifyRelationshipQueryUsing = null,
+    ): self {
         $this->relationship = $relationship;
+        $this->modifyRelationshipQueryUsing = $modifyRelationshipQueryUsing;
 
         $this->getStateUsing(function () {
             return $this->getConstrainAppliedQuery($this->getRecord())->get()->toArray();
         });
+
+        return $this;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace RedberryProducts\PageBuilderPlugin\Components\Infolist;
 
+use Closure;
 use Filament\Infolists\Components\Entry;
 use Illuminate\Database\Eloquent\Collection;
 use RedberryProducts\PageBuilderPlugin\Contracts\BaseBlock;
@@ -23,13 +24,15 @@ class PageBuilderPreviewEntry extends Entry
 
         $this->columnSpanFull();
 
-        $this->relationship('pageBuilderBlocks');
+        $this->relationship();
     }
 
     public function relationship(
-        string $relationship,
+        string $relationship = "pageBuilderBlocks",
+        ?Closure $modifyRelationshipQueryUsing = null,
     ) {
         $this->relationship = $relationship;
+        $this->modifyRelationshipQueryUsing = $modifyRelationshipQueryUsing;
 
         $this->getStateUsing(function () {
             /** @var Collection */
