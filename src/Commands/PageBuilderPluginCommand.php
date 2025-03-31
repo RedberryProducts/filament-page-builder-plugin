@@ -87,20 +87,20 @@ class PageBuilderPluginCommand extends Command
                 'block',
                 $this->appClassToPath($blockClass),
                 [
-                    "{{ class }}" => str($blockClass)->afterLast('\\')->replace('\\', ''),
-                    "{{ namespace }}" => str($blockClass)->beforeLast('\\'),
+                    '{{ class }}' => str($blockClass)->afterLast('\\')->replace('\\', ''),
+                    '{{ namespace }}' => str($blockClass)->beforeLast('\\'),
                 ]
             );
         }
 
         if ($blockType === 'view') {
-            $viewName = str($block)->replace("\\", ".")->kebab()->replace(".-", ".");
+            $viewName = str($block)->replace('\\', '.')->kebab()->replace('.-', '.');
             $this->createFileFromStub(
                 'block.view',
                 $this->appClassToPath($blockClass),
                 [
-                    "{{ class }}" => str($block)->afterLast('\\')->replace('\\', ''),
-                    "{{ namespace }}" => str($blockClass)->beforeLast('\\'),
+                    '{{ class }}' => str($block)->afterLast('\\')->replace('\\', ''),
+                    '{{ namespace }}' => str($blockClass)->beforeLast('\\'),
                     '{{ viewName }}' => $viewName,
                 ]
             );
@@ -110,7 +110,7 @@ class PageBuilderPluginCommand extends Command
                 resource_path(
                     $viewName
                         ->replace('.', '/')
-                        ->prepend("views/blocks/")
+                        ->prepend('views/blocks/')
                         ->append('.blade.php')
                 ),
             );
