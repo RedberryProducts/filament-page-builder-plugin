@@ -3,8 +3,8 @@
 namespace Redberry\PageBuilderPlugin\Traits;
 
 use Closure;
-use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Livewire\Attributes\Computed;
 
 trait ComponentLoadsPageBuilderBlocks
@@ -15,7 +15,7 @@ trait ComponentLoadsPageBuilderBlocks
 
     public array | Closure $blocks = [];
 
-    public function getConstrainAppliedQuery(Model $record)
+    public function getConstrainAppliedQuery(Model $record): Relation
     {
         $query = $record->{$this->relationship}()
             ->whereIn('block_type', $this->getBlocks());
@@ -34,7 +34,6 @@ trait ComponentLoadsPageBuilderBlocks
         array | Closure $blocks,
     ) {
         $this->blocks = $blocks;
-        Select::class;
 
         return $this;
     }

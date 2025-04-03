@@ -94,7 +94,5 @@ class PageBuilderPreview extends Field
                 ];
             }
         }, $data);
-
-        return [];
     }
 }

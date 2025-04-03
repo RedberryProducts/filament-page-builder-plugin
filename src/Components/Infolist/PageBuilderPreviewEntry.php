@@ -4,8 +4,7 @@ namespace Redberry\PageBuilderPlugin\Components\Infolist;
 
 use Closure;
 use Filament\Infolists\Components\Entry;
-use Illuminate\Database\Eloquent\Collection;
-use Redberry\PageBuilderPlugin\Contracts\BaseBlock;
+use Redberry\PageBuilderPlugin\Models\PageBuilderBlock;
 use Redberry\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 use Redberry\PageBuilderPlugin\Traits\ListPreviewRendersWithIframe;
 use Redberry\PageBuilderPlugin\Traits\PreviewRendersWithBlade;
@@ -35,11 +34,9 @@ class PageBuilderPreviewEntry extends Entry
         $this->modifyRelationshipQueryUsing = $modifyRelationshipQueryUsing;
 
         $this->getStateUsing(function () {
-            /** @var Collection */
             $state = $this->getConstrainAppliedQuery($this->getRecord())->get();
 
-            $state->transform(function ($item) {
-                /** @var BaseBlock */
+            $state->transform(function (PageBuilderBlock $item) {
                 $blockClass = $item->block_type;
 
                 return [

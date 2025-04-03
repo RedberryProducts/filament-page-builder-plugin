@@ -1,13 +1,12 @@
 <?php
 
-namespace Redberry\PageBuilderPlugin\Contracts;
+namespace Redberry\PageBuilderPlugin\Abstracts;
 
 use Closure;
 use Filament\Support\Concerns\EvaluatesClosures;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
-// TODO: this should not be in contracts...
 abstract class BaseBlock
 {
     use EvaluatesClosures;
@@ -37,7 +36,7 @@ abstract class BaseBlock
         return self::formatForSinglePreview($data);
     }
 
-    private static function generatedStorageUrl(string $path): string
+    public static function generatedStorageUrl(string $path): string
     {
         return Storage::url($path);
     }
@@ -52,7 +51,7 @@ abstract class BaseBlock
             return static::generatedStorageUrl($path);
         }
 
-        if (count($path) > 0) {
+        if (is_array($path) && count($path) > 0) {
             $filePath = array_values($path)[0];
             if (is_string($filePath)) {
                 return static::generatedStorageUrl($filePath);
@@ -95,6 +94,6 @@ abstract class BaseBlock
             return static::getBlockName();
         }
 
-        return static::getBlockName() . ' - ' . $index + 1;
+        return static::getBlockName() . ' - ' . ($index + 1);
     }
 }

@@ -134,8 +134,6 @@ class PageBuilderPluginCommand extends Command
             pathinfo($path, PATHINFO_DIRNAME)
         );
 
-        ray($path, $contents);
-
         $filesystem->put($path, $contents);
     }
 
