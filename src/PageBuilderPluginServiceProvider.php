@@ -2,10 +2,7 @@
 
 namespace Redberry\PageBuilderPlugin;
 
-use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
-use Filament\Support\Assets\Css;
-use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
@@ -24,11 +21,6 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
 
     public function configurePackage(Package $package): void
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
         $package->name(static::$name)
             ->hasCommands($this->getCommands())
             ->hasInstallCommand(function (InstallCommand $command) {
@@ -100,9 +92,6 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            // AlpineComponent::make('page-builder-plugin', __DIR__ . '/../resources/dist/components/page-builder-plugin.js'),
-            // Css::make('page-builder-plugin-styles', __DIR__ . '/../resources/dist/page-builder-plugin.css'),
-            // Js::make('page-builder-plugin-scripts', __DIR__ . '/../resources/dist/page-builder-plugin.js'),
         ];
     }
 
