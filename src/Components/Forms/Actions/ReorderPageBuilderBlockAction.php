@@ -5,7 +5,7 @@ namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 
-class ReoraderPageBuilderBlockAction extends Action
+class ReorderPageBuilderBlockAction extends Action
 {
     public static function getDefaultName(): ?string
     {

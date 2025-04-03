@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockAction;
-use Redberry\PageBuilderPlugin\Components\Forms\Actions\ReoraderPageBuilderBlockAction;
+use Redberry\PageBuilderPlugin\Components\Forms\Actions\ReorderPageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
 use Redberry\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 
@@ -62,7 +62,7 @@ class PageBuilder extends Field
 
     public function getReorderAction(): Action
     {
-        $action = ReoraderPageBuilderBlockAction::make($this->getReorderActionName())
+        $action = ReorderPageBuilderBlockAction::make($this->getReorderActionName())
             ->hidden(! $this->getReorderable())
             ->disabled($this->isDisabled());
 
@@ -154,6 +154,7 @@ class PageBuilder extends Field
                 'action' => $deleteAction,
                 'item' => $item,
                 'index' => $index,
+                'attributes' => $attributes,
             ]);
         }
 
@@ -181,6 +182,7 @@ class PageBuilder extends Field
                 'action' => $editAction,
                 'item' => $item,
                 'index' => $index,
+                'attributes' => $attributes,
             ]);
         }
 
@@ -206,6 +208,7 @@ class PageBuilder extends Field
                 'action' => $reorderAction,
                 'item' => $item,
                 'index' => $index,
+                'attributes' => $attributes,
             ]);
         }
 
