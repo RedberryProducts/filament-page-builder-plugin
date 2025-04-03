@@ -1,9 +1,9 @@
 # Page builder plugin
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/redberryproducts/page-builder-plugin.svg?style=flat-square)](https://packagist.org/packages/redberry/page-builder-plugin)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/redberryproducts/page-builder-plugin/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/RedberryProducts/filament-page-builder-plugin/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/redberryproducts/page-builder-plugin/fix-php-code-styling.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/RedberryProducts/filament-page-builder-plugin/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/redberryproducts/page-builder-plugin.svg?style=flat-square)](https://packagist.org/packages/redberry/page-builder-plugin)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/redberry/page-builder-plugin.svg?style=flat-square)](https://packagist.org/packages/redberry/page-builder-plugin)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/RedberryProducts/filament-page-builder-plugin/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/RedberryProducts/filament-page-builder-plugin/actions?query=workflow%3Arun-tests+branch%3Amain)
+
+[![Total Downloads](https://img.shields.io/packagist/dt/redberry/page-builder-plugin.svg?style=flat-square)](https://packagist.org/packages/redberry/page-builder-plugin)
 
 - [Page builder plugin](#page-builder-plugin)
 - [Introduction](#introduction)
