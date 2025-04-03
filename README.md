@@ -46,8 +46,8 @@ return [
 ## Usage
 
 ```php
-$pageBuilderPlugin = new RedberryProducts\PageBuilderPlugin();
-echo $pageBuilderPlugin->echoPhrase('Hello, RedberryProducts!');
+$pageBuilderPlugin = new Redberry\PageBuilderPlugin();
+echo $pageBuilderPlugin->echoPhrase('Hello, Redberry!');
 ```
 
 ## Testing
@@ -70,7 +70,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [RedberryProducts](https://github.com/RedberryProducts)
+- [Redberry](https://github.com/Redberry)
 - [All Contributors](../../contributors)
 
 ## License

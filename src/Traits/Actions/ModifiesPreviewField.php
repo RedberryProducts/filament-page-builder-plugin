@@ -1,9 +1,9 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Traits\Actions;
+namespace Redberry\PageBuilderPlugin\Traits\Actions;
 
 use Closure;
-use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
+use Redberry\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
 
 trait ModifiesPreviewField
 {

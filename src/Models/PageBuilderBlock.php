@@ -1,6 +1,6 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Models;
+namespace Redberry\PageBuilderPlugin\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;

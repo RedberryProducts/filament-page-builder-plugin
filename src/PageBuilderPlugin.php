@@ -1,5 +1,5 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin;
+namespace Redberry\PageBuilderPlugin;
 
 class PageBuilderPlugin {}

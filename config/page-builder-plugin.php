@@ -1,7 +1,7 @@
 <?php
 
-// config for RedberryProducts/PageBuilderPlugin
+// config for Redberry/PageBuilderPlugin
 
 return [
-    'block_model_class' => RedberryProducts\PageBuilderPlugin\Models\PageBuilderBlock::class,
+    'block_model_class' => Redberry\PageBuilderPlugin\Models\PageBuilderBlock::class,
 ];

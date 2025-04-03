@@ -1,6 +1,6 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin;
+namespace Redberry\PageBuilderPlugin;
 
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
@@ -10,8 +10,8 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
-use RedberryProducts\PageBuilderPlugin\Commands\PageBuilderPluginCommand;
-use RedberryProducts\PageBuilderPlugin\Testing\TestsPageBuilderPlugin;
+use Redberry\PageBuilderPlugin\Commands\PageBuilderPluginCommand;
+use Redberry\PageBuilderPlugin\Testing\TestsPageBuilderPlugin;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -36,7 +36,7 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub('RedberryProducts/filament-page-builder-plugin');
+                    ->askToStarRepoOnGitHub('Redberry/filament-page-builder-plugin');
             });
 
         $configFileName = $package->shortName();

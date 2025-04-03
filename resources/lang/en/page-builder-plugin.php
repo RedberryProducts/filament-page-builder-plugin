@@ -1,6 +1,6 @@
 <?php
 
-// translations for RedberryProducts/PageBuilderPlugin
+// translations for Redberry/PageBuilderPlugin
 return [
     //
 ];

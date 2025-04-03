@@ -1,6 +1,6 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Components\Forms\Actions;
+namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
@@ -8,9 +8,9 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
-use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilder;
-use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
-use RedberryProducts\PageBuilderPlugin\Traits\Actions\ModifiesPreviewField;
+use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
+use Redberry\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
+use Redberry\PageBuilderPlugin\Traits\Actions\ModifiesPreviewField;
 
 class EditPageBuilderBlockAction extends Action
 {

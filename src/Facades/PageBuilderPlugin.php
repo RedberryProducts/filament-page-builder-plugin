@@ -1,16 +1,16 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Facades;
+namespace Redberry\PageBuilderPlugin\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \RedberryProducts\PageBuilderPlugin\PageBuilderPlugin
+ * @see \Redberry\PageBuilderPlugin\PageBuilderPlugin
  */
 class PageBuilderPlugin extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \RedberryProducts\PageBuilderPlugin\PageBuilderPlugin::class;
+        return \Redberry\PageBuilderPlugin\PageBuilderPlugin::class;
     }
 }

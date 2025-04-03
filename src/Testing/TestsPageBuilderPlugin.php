@@ -1,6 +1,6 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Testing;
+namespace Redberry\PageBuilderPlugin\Testing;
 
 use Livewire\Features\SupportTesting\Testable;
 

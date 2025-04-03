@@ -1,10 +1,10 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Components\Infolist;
+namespace Redberry\PageBuilderPlugin\Components\Infolist;
 
 use Closure;
 use Filament\Infolists\Components\Entry;
-use RedberryProducts\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
+use Redberry\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 
 class PageBuilderEntry extends Entry
 {

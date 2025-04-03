@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) RedberryProducts <hello@redberry.ge>
+Copyright (c) Redberry Products <hello@redberry.ge>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

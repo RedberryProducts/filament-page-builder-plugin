@@ -1,6 +1,6 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin;
+namespace Redberry\PageBuilderPlugin;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;

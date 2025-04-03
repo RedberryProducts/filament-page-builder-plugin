@@ -1,6 +1,6 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Traits;
+namespace Redberry\PageBuilderPlugin\Traits;
 
 use Closure;
 use Filament\Forms\Components\Select;

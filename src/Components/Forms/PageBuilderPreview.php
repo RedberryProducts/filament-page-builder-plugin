@@ -1,11 +1,11 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Components\Forms;
+namespace Redberry\PageBuilderPlugin\Components\Forms;
 
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Hidden;
-use RedberryProducts\PageBuilderPlugin\Traits\ListPreviewRendersWithIframe;
-use RedberryProducts\PageBuilderPlugin\Traits\PreviewRendersWithBlade;
+use Redberry\PageBuilderPlugin\Traits\ListPreviewRendersWithIframe;
+use Redberry\PageBuilderPlugin\Traits\PreviewRendersWithBlade;
 
 class PageBuilderPreview extends Field
 {

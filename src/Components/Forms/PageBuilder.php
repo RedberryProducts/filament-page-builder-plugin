@@ -1,6 +1,6 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Components\Forms;
+namespace Redberry\PageBuilderPlugin\Components\Forms;
 
 use Closure;
 use Filament\Forms\Components\Actions\Action;
@@ -12,12 +12,12 @@ use Filament\Support\Exceptions\Halt;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
-use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
-use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockAction;
-use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\ReoraderPageBuilderBlockAction;
-use RedberryProducts\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
-use RedberryProducts\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
+use Redberry\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
+use Redberry\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
+use Redberry\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockAction;
+use Redberry\PageBuilderPlugin\Components\Forms\Actions\ReoraderPageBuilderBlockAction;
+use Redberry\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
+use Redberry\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 
 class PageBuilder extends Field
 {

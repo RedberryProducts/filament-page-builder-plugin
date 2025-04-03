@@ -1,6 +1,6 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Database\Factories;
+namespace Redberry\PageBuilderPlugin\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

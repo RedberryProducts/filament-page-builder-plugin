@@ -1,8 +1,9 @@
 {
-    "name": "redberryproducts/page-builder-plugin",
+    "name": "redberry/page-builder-plugin",
     "description": "This is my package page-builder-plugin",
     "keywords": [
-        "RedberryProducts",
+        "redberry",
+        "Redberry",
         "laravel",
         "page-builder-plugin"
     ],
@@ -14,7 +15,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "RedberryProducts",
+            "name": "redberry",
             "email": "hello@redberry.ge",
             "role": "Developer"
         }
@@ -39,13 +40,13 @@
     },
     "autoload": {
         "psr-4": {
-            "RedberryProducts\\PageBuilderPlugin\\": "src/",
-            "RedberryProducts\\PageBuilderPlugin\\Database\\Factories\\": "database/factories/"
+            "Redberry\\PageBuilderPlugin\\": "src/",
+            "Redberry\\PageBuilderPlugin\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RedberryProducts\\PageBuilderPlugin\\Tests\\": "tests/"
+            "Redberry\\PageBuilderPlugin\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -65,10 +66,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "RedberryProducts\\PageBuilderPlugin\\PageBuilderPluginServiceProvider"
+                "Redberry\\PageBuilderPlugin\\PageBuilderPluginServiceProvider"
             ],
             "aliases": {
-                "PageBuilderPlugin": "RedberryProducts\\PageBuilderPlugin\\Facades\\PageBuilderPlugin"
+                "PageBuilderPlugin": "Redberry\\PageBuilderPlugin\\Facades\\PageBuilderPlugin"
             }
         }
     },

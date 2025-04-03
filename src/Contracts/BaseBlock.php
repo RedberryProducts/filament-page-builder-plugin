@@ -1,6 +1,6 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Contracts;
+namespace Redberry\PageBuilderPlugin\Contracts;
 
 use Closure;
 use Filament\Support\Concerns\EvaluatesClosures;

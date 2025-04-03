@@ -2,7 +2,7 @@
 
 namespace {{ namespace }};
 
-use RedberryProducts\PageBuilderPlugin\Contracts\BaseBlock;
+use Redberry\PageBuilderPlugin\Contracts\BaseBlock;
 
 class {{ class }} extends BaseBlock
 {

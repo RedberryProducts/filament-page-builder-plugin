@@ -1,9 +1,9 @@
 <?php
 
-namespace RedberryProducts\PageBuilderPlugin\Components\Forms\Actions;
+namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
 use Filament\Forms\Components\Actions\Action;
-use RedberryProducts\PageBuilderPlugin\Components\Forms\PageBuilder;
+use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 
 class DeletePageBuilderBlockAction extends Action
 {
