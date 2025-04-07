@@ -14,6 +14,9 @@
   - [additional configuration options](#additional-configuration-options)
     - [enable reorders](#enable-reorders)
     - [previewing in real time with iframe](#previewing-in-real-time-with-iframe)
+    - [formatting page builder data for preview](#formatting-page-builder-data-for-preview)
+    - [formatting block label](#formatting-block-label)
+    - [grouping blocks](#grouping-blocks)
     - [iframe resizing](#iframe-resizing)
     - [conditional schemas](#conditional-schemas)
     - [rendering page builder items on infolist](#rendering-page-builder-items-on-infolist)
@@ -31,12 +34,12 @@ preview changes in real-time via iframe or view files, and manage your content w
 
 # Features
 
-- predefined form and infolist component which can be fully customized
-- previewing changes in real-time via iframes or view files
-- easily customizable page builder block components
-- ability to use every filamentphp field inside component blocks
-- ability to fully customize formatting of page builder blocks
-- predefined table and trait for easily adding page builder functionality to your resources
+- Predefined form and infolist component which can be fully customized
+- Previewing changes in real-time via iframes or view files
+- Easily customizable page builder block components
+- Ability to use every filamentphp field inside component blocks
+- Ability to fully customize formatting of page builder blocks
+- Predefined table and trait for easily adding page builder functionality to your resources
 
 
 # Installation
@@ -111,7 +114,7 @@ for example:
 ```php
 <?php
 
-class Description extends Block
+class Description extends BaseBlock
 {
     public static function blockSchema(): array
     {
@@ -202,6 +205,81 @@ window.addEventListener("message", (event) => console.log(event.data));
 
 and that it. now website rendered via iframe will receive data from filament in real time.
 
+### formatting page builder data for preview
+
+sometimes there might be a case where you will have the need to format  the data before sending it to frontend for example retrieving full url for the image, this can be done by declaring `formatForSinglePreview` or `formatForListing`  on a block like this:
+
+```php
+<?php
+
+class Description extends BaseBlock
+{
+    // ...
+
+    public static function formatForSinglePreview(array $data): array
+    {
+        $data['text'] = url($data['text']);
+        $data['image'] = self::getUrlForFile($data['image']);
+
+        return $data;
+    }
+}
+```
+
+`formatForListing` also calls this function so no need to duplicate the code, data is the same.
+
+note that im using getUrlForFile, this is done because sometimes image can be  temporary upload, this is just helper for properly parsing url and returning it, so i would recommend using it.
+
+### formatting block label
+
+there are multiple ways to change label of the block on on page builder.
+if you just want to auto generate label based on one of the block attributes you can do so by declaring `getBlockTitleAttribute` and returning name of the attribute you want to use as a label, like this:
+
+```php
+<?php
+
+class Description extends BaseBlock
+{
+    // ...
+
+    public static function getBlockTitleAttribute(): string
+    {
+        return "logo.name";
+    }
+}
+```
+
+or if you want to completely customize label structure you can do so by declaring `getBlockLabel` function on base block class, like this:
+
+```php
+<?php
+
+class Description extends BaseBlock
+{
+    // ...
+
+    public static function getBlockLabel(array $state, ?int $index = null)
+    {
+        return data_get($state, $key) . $index;
+    }
+}
+```
+
+### grouping blocks
+
+many times you will have too many blocks and will have the need to group them, this can be done by declaring 
+`getCategory` method on BaseBlock class like so:
+
+```php
+class Description extends BaseBlock
+{
+    public static function getCategory(): string
+    {
+        return 'About';
+    }
+}
+```
+ 
 ### iframe resizing
 
 iframe height can not be adjusted based on content of iframe because of CORS issues, because of this there are two ways to size iframe height to not cause components to hide.
@@ -265,7 +343,7 @@ example of how to use this feature:
 ```php
 <?php
 
-class Description extends Block
+class Description extends BaseBlock
 {
     public static function blockSchema($record): array
     {
@@ -381,6 +459,7 @@ PageBuilder::make('website_content')
 # Credits
 
 - [Redberry](https://github.com/RedberryProducts)
+- [GigaGiorgadze](https://github.com/GigaGiorgadze)
 
 # License
 

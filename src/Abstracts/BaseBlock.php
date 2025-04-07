@@ -79,7 +79,7 @@ abstract class BaseBlock
         return null;
     }
 
-    public static function getBlockLabel(array $state, ?int $index = null)
+    public static function getBlockLabel(array $state, ?int $index = null): mixed
     {
         $key = static::getBlockTitleAttribute();
 
