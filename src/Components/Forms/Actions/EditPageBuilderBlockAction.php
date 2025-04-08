@@ -52,9 +52,6 @@ class EditPageBuilderBlockAction extends Action
                                     ->schema(
                                         $component->getBlockSchema(
                                             $block['block_type'],
-                                            record: null,
-                                            component: $component,
-                                            livewire: $livewire,
                                         ),
                                     )->live(),
                             ]

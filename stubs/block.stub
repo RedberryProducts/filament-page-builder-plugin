@@ -6,7 +6,7 @@ use Redberry\PageBuilderPlugin\Abstracts\BaseBlock;
 
 class {{ class }} extends BaseBlock
 {
-    public static function blockSchema(): array
+    public static function getBlockSchema(): array
     {
         return [
 

@@ -2,6 +2,7 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms;
 
+use Closure;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Hidden;
 use Redberry\PageBuilderPlugin\Traits\ListPreviewRendersWithIframe;
@@ -67,7 +68,10 @@ class PageBuilderPreview extends Field
             $id = $data['block_id'];
 
             if ($blockType) {
-                $formatted = $blockType::formatForSinglePreview($data['data'] ?? []);
+                $closure = Closure::fromCallable([$blockType, 'formatForSingleView']);
+                $formatted = $this->evaluate($closure, [
+                    'data' => $data['data'] ?? [],
+                ]);
 
                 return [
                     'id' => $id,
@@ -85,7 +89,10 @@ class PageBuilderPreview extends Field
             $blockType = $item['block_type'] ?? null;
 
             if ($blockType) {
-                $formatted = $blockType::formatForSinglePreview($item['data']);
+                $closure = Closure::fromCallable([$blockType, 'formatForListingView']);
+                $formatted = $this->evaluate($closure, [
+                    'data' => $item['data'] ?? [],
+                ]);
 
                 return [
                     ...$item,

@@ -39,9 +39,13 @@ class PageBuilderPreviewEntry extends Entry
             $state->transform(function (PageBuilderBlock $item) {
                 $blockClass = $item->block_type;
 
+                $closure = Closure::fromCallable([$blockClass, 'formatForListingView']);
+
                 return [
                     ...$item->toArray(),
-                    'data' => $blockClass::formatForListing($item->data),
+                    'data' => $this->evaluate($closure, [
+                        'data' => $item->data ?? [],
+                    ]),
                 ];
             });
 

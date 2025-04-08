@@ -2,6 +2,7 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
+use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 
@@ -27,7 +28,9 @@ class DeletePageBuilderBlockAction extends Action
         $this->modalHeading(function ($arguments, $component) {
             $block = $component->getState()[$arguments['index']];
 
-            $label = $block['block_type']::getBlockLabel($block['data']);
+            $closure = Closure::fromCallable([$block['block_type'], 'getBlockLabel']);
+
+            $label = (string) $this->evaluate($closure);
 
             return __('filament-actions::delete.single.modal.heading', ['label' => $label]);
         });

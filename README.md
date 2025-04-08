@@ -17,7 +17,7 @@
     - [Formatting block label](#formatting-block-label)
     - [grouping blocks](#grouping-blocks)
     - [iframe resizing](#iframe-resizing)
-    - [Conditional schemas](#conditional-schemas)
+    - [Parameter injection](#parameter-injection)
     - [Rendering page builder items on infolist](#rendering-page-builder-items-on-infolist)
     - [Rendering page builder item previews on forms](#rendering-page-builder-item-previews-on-forms)
     - [Customizing actions and button rendering](#customizing-actions-and-button-rendering)
@@ -106,9 +106,9 @@ php artisan page-builder-plugin:make-block --type=view
 ```
 this command will create a block class in the `app/Filament/{id of admin panel}/Blocks` directory and also create a view file in the `resources/views/blocks/` directory.
 
-in block class that you just created you will notice function `blockSchema`.
+in block class that you just created you will notice function `getBlockSchema`.
 
-in `blockSchema` function you must return schema of the block, this blocks are rendered just like filament forms, so you can use any filament form field and their features inside the block.
+in `getBlockSchema` function you must return schema of the block, this blocks are rendered just like filament forms, so you can use any filament form field and their features inside the block.
 
 for example:
 ```php
@@ -116,7 +116,7 @@ for example:
 
 class Description extends BaseBlock
 {
-    public static function blockSchema(): array
+    public static function getBlockSchema(): array
     {
         return [
             RichEditor::make('text')
@@ -207,7 +207,7 @@ and that it. now website rendered via iframe will receive data from filament in 
 
 ### Formatting page builder data for preview
 
-sometimes there might be a case where you will have the need to format  the data before sending it to frontend for example retrieving full url for the image, this can be done by declaring `formatForSinglePreview` or `formatForListing`  on a block like this:
+sometimes there might be a case where you will have the need to format  the data before sending it to frontend for example retrieving full url for the image, this can be done by declaring `formatForSingleView` or `formatForListingView`  on a block like this:
 
 ```php
 <?php
@@ -216,7 +216,7 @@ class Description extends BaseBlock
 {
     // ...
 
-    public static function formatForSinglePreview(array $data): array
+    public static function formatForSingleView(array $data): array
     {
         $data['text'] = url($data['text']);
         $data['image'] = self::getUrlForFile($data['image']);
@@ -226,7 +226,7 @@ class Description extends BaseBlock
 }
 ```
 
-`formatForListing` also calls this function so no need to duplicate the code, data is the same.
+`formatForListingView` also calls this function so no need to duplicate the code, data is the same.
 
 Note that I'm using getUrlForFile. This is done because sometimes the image can be a temporary upload. This is just a helper for properly parsing the URL and returning it, so I would recommend using it.
 
@@ -357,16 +357,15 @@ we recommend doing this on page load and on height change of the document, you c
 
 whenever this event is received by filament it will resize iframe height to the height that is provided in the message.
 
-### Conditional schemas
-there will be cases where you will need to change schema of the block based on some condition, of course this can be done normally by using closures and their own parameters, but for sake of convenience we provide same parameter injection for `blockSchema` function on a block class, this function gets injected with following parameters: `$record`, `$action`, `$component`, `$livewire`. value of parameters work the same as they do in filament forms. 
+### Parameter injection
+there will be cases when you will need to modify data, schema, label based on some condition, because of this we provide parameter injection for `getBlockSchema`, `formatForListingView`, `formatForSingleView` and `getBlockLabel` methods. parameter injection refers to declaring `$record` parameter for function and it getting injected with record that is being used on page similar to how filament works, for example:
 
-example of how to use this feature:
 ```php
 <?php
 
 class Description extends BaseBlock
 {
-    public static function blockSchema($record): array
+    public static function getBlockSchema($record): array
     {
         return [
             RichEditor::make('text')
@@ -376,7 +375,12 @@ class Description extends BaseBlock
     }
 }
 ```
-all of this parameters are optional and you can use only the ones you need. 
+
+this will inject record that is being used on page into `getBlockSchema` function, this works for all of the above mentioned functions.
+
+injections that are provided depends on where this function is used, if this is used on infolist for example same parameters that can be injected in normal FilamentPHP can also be injected in one of the above functions, refer to FilamentPHP documentation about what parameters are available for injection.
+
+one thing to note is that because `formatForListingView` uses `formatForSingleView` internally if you wish to inject something in `formatForSingleView` you will need to inject it in `formatForListingView` as well, otherwise it will not work.
 
 ### Rendering page builder items on infolist
 outside of form you might want to render page builder items on infolist, for this we provide two prebuilt entries:

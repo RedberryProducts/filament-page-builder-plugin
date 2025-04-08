@@ -32,7 +32,7 @@
                                 {{ $renderReorderActionButton($item['id'], $loop->index) }}
                             @endif
                             <div class="flex justify-between w-full items-center">
-                                {{ $item['block_type']::getBlockLabel($item, $loop->index) }}
+                                {{ $getBlockLabel($item['block_type'], $item, $loop->index) }}
                                 <div class="flex gap-x-4 items-center">
                                     @if ($deleteActionIsVisible)
                                         {{ $renderDeleteActionButton($item['id'], $loop->index) }}

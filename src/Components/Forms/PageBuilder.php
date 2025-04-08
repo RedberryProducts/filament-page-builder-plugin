@@ -6,8 +6,6 @@ use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Field;
 use Filament\Notifications\Notification;
-use Filament\Pages\Page;
-use Filament\Support\Components\Component;
 use Filament\Support\Exceptions\Halt;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -18,10 +16,12 @@ use Redberry\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockActi
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\ReorderPageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
 use Redberry\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
+use Redberry\PageBuilderPlugin\Traits\FormatsBlockLabelWithContext;
 
 class PageBuilder extends Field
 {
     use ComponentLoadsPageBuilderBlocks;
+    use FormatsBlockLabelWithContext;
 
     public bool | Closure $reorderable = false;
 
@@ -306,14 +306,10 @@ class PageBuilder extends Field
         return (bool) $this->evaluate($this->reorderable);
     }
 
-    public function getBlockSchema(string $blockType, ?Model $record, Component $component, Page $livewire): array
+    public function getBlockSchema(string $blockType): array
     {
-        return $blockType::getBlockSchema(
-            record: $record,
-            action: $this,
-            component: $component,
-            livewire: $livewire
-        );
+        $closure = Closure::fromCallable([$blockType, 'getBlockSchema']);
+        return (array) $this->evaluate($closure);
     }
 
     public function relationship(

@@ -45,9 +45,6 @@ class CreatePageBuilderBlockAction extends Action
                                     ->schema(
                                         $component->getBlockSchema(
                                             $blockType,
-                                            record: null,
-                                            component: $component,
-                                            livewire: $livewire,
                                         ),
                                     )->live(),
                             ]

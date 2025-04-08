@@ -2,38 +2,31 @@
 
 namespace Redberry\PageBuilderPlugin\Abstracts;
 
-use Closure;
-use Filament\Support\Concerns\EvaluatesClosures;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 abstract class BaseBlock
 {
-    use EvaluatesClosures;
-
     public static function getBlockName(): string
     {
         return class_basename(static::class);
     }
 
-    public static function getBlockSchema(...$arguments): array
-    {
-        if (! method_exists(static::class, 'blockSchema')) {
-            throw new \Exception('Method blockSchema not found in ' . static::class);
-        }
-        $closure = Closure::fromCallable([static::class, 'blockSchema']);
-
-        return app()->call($closure, $arguments);
-    }
+    public abstract static function getBlockSchema(): array;
 
     public static function getCategory(): string
     {
         return '';
     }
 
-    public static function formatForListing(array $data): array
+    public static function formatForListingView(array $data): array
     {
-        return self::formatForSinglePreview($data);
+        return static::formatForSingleView($data);
+    }
+
+    public static function formatForSingleView(array $data): array
+    {
+        return $data;
     }
 
     public static function generatedStorageUrl(string $path): string
@@ -62,11 +55,6 @@ abstract class BaseBlock
         }
 
         return null;
-    }
-
-    public static function formatForSinglePreview(array $data): array
-    {
-        return $data;
     }
 
     public static function getBlockTitleAttribute(): ?string
