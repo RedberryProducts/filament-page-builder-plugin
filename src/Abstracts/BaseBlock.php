@@ -12,7 +12,7 @@ abstract class BaseBlock
         return class_basename(static::class);
     }
 
-    public abstract static function getBlockSchema(): array;
+    abstract public static function getBlockSchema(): array;
 
     public static function getCategory(): string
     {

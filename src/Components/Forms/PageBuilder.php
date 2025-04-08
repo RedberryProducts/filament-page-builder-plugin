@@ -309,6 +309,7 @@ class PageBuilder extends Field
     public function getBlockSchema(string $blockType): array
     {
         $closure = Closure::fromCallable([$blockType, 'getBlockSchema']);
+
         return (array) $this->evaluate($closure);
     }
 
