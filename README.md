@@ -230,8 +230,7 @@ class Description extends BaseBlock
 
 `formatForListing` also calls this function so no need to duplicate the code, data is the same.
 
-note that im using getUrlForFile, this is done because sometimes image can be  temporary upload, this is just helper for properly parsing url and returning it, so i would recommend using it.
-
+Note that I'm using getUrlForFile. This is done because sometimes the image can be a temporary upload. This is just a helper for properly parsing the URL and returning it, so I would recommend using it.
 ### formatting block label
 
 there are multiple ways to change label of the block on on page builder.
