@@ -1,0 +1,22 @@
+name: "Update Packagist"
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Update Packagist
+        uses: mnavarrocarter/packagist-update@v1.0.0
+        with:
+          username: "Redberry LTD"
+          api_token: ${{ secrets.PACKAGIST_TOKEN }}
+
+

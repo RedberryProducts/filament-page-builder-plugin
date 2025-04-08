@@ -167,6 +167,7 @@ $form->schema([
     PageBuilder::make('website_content')
         ->reorderable(),
 ]);
+
 ```
 
 ### Previewing in real time with iframe
