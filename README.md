@@ -30,7 +30,9 @@
 # Introduction
 
 this filamentphp plugin is aimed at allowing you to seamlessly integrate page builder functionality into your filament admin panel,
-preview changes in real-time via iframe or view files, and manage your content with ease.
+preview changes in real-time via iframe or view files, and manage your content with ease using filamentphp form fields.
+
+<video controls src="./assets/live-preview-small-demo.mp4" title="Title"></video>
 
 # Features
 
@@ -279,6 +281,9 @@ class Description extends BaseBlock
     }
 }
 ```
+
+result look will like this:
+![block grouping demo](./assets/block-grouping-demo.png)
  
 ### iframe resizing
 
