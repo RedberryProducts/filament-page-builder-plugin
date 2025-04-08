@@ -1,5 +1,4 @@
 # Page builder plugin
-
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/redberry/page-builder-plugin.svg?style=flat-square)](https://packagist.org/packages/redberry/page-builder-plugin)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/RedberryProducts/filament-page-builder-plugin/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/RedberryProducts/filament-page-builder-plugin/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/redberry/page-builder-plugin.svg?style=flat-square)](https://packagist.org/packages/redberry/page-builder-plugin)
@@ -10,27 +9,26 @@
 - [Installation](#installation)
   - [Pre-requisites](#pre-requisites)
 - [Usage](#usage)
-  - [command for generating blocks](#command-for-generating-blocks)
-  - [additional configuration options](#additional-configuration-options)
-    - [enable reorders](#enable-reorders)
-    - [previewing in real time with iframe](#previewing-in-real-time-with-iframe)
-    - [formatting page builder data for preview](#formatting-page-builder-data-for-preview)
-    - [formatting block label](#formatting-block-label)
+  - [Command for generating blocks](#command-for-generating-blocks)
+  - [Additional configuration options](#additional-configuration-options)
+    - [Enable reorders](#enable-reorders)
+    - [Previewing in real time with iframe](#previewing-in-real-time-with-iframe)
+    - [Formatting page builder data for preview](#formatting-page-builder-data-for-preview)
+    - [Formatting block label](#formatting-block-label)
     - [grouping blocks](#grouping-blocks)
     - [iframe resizing](#iframe-resizing)
-    - [conditional schemas](#conditional-schemas)
-    - [rendering page builder items on infolist](#rendering-page-builder-items-on-infolist)
-    - [rendering page builder item previews on forms](#rendering-page-builder-item-previews-on-forms)
-    - [customizing actions and button rendering](#customizing-actions-and-button-rendering)
-      - [customizing buttons for actions](#customizing-buttons-for-actions)
+    - [Conditional schemas](#conditional-schemas)
+    - [Rendering page builder items on infolist](#rendering-page-builder-items-on-infolist)
+    - [Rendering page builder item previews on forms](#rendering-page-builder-item-previews-on-forms)
+    - [Customizing actions and button rendering](#customizing-actions-and-button-rendering)
+      - [Customizing buttons for actions](#customizing-buttons-for-actions)
 - [Credits](#credits)
 - [License](#license)
 
 
 # Introduction
 
-this filamentphp plugin is aimed at allowing you to seamlessly integrate page builder functionality into your filament admin panel,
-preview changes in real-time via iframe or view files, and manage your content with ease using filamentphp form fields.
+This FilamentPHP plugin is aimed at allowing you to seamlessly integrate page builder functionality into your Filament admin panel, preview changes in real-time via iframe or view files, and manage your content with ease using FilamentPHP form fields.
 
 <video controls src="./assets/live-preview-small-demo.mp4" title="Title"></video>
 
@@ -39,7 +37,7 @@ preview changes in real-time via iframe or view files, and manage your content w
 - Predefined form and infolist component which can be fully customized
 - Previewing changes in real-time via iframes or view files
 - Easily customizable page builder block components
-- Ability to use every filamentphp field inside component blocks
+- Ability to use every FilamentPHP field inside component blocks
 - Ability to fully customize formatting of page builder blocks
 - Predefined table and trait for easily adding page builder functionality to your resources
 
@@ -101,7 +99,7 @@ $form->schema([
         ->blocks([]),
 ]);
 ```
-when blocks are empty it will not show any blocks, thankfully blocks can be created via command.
+when blocks are empty it will not show any blocks, blocks can be created by running command:
 
 ```bash
 php artisan page-builder-plugin:make-block --type=view
@@ -128,7 +126,6 @@ class Description extends BaseBlock
 }
 ```
 - now you can add new block that we just created to the page builder field like this:
-- 
 ```php
 <?php
 
@@ -140,9 +137,9 @@ $form->schema([
 ]);
 ```
 
-that its it, now you can add/edit/delete blocks to the page builder field.
+that's it, now you can add, edit and delete blocks to the page builder field.
 
-## command for generating blocks
+## Command for generating blocks
 
 since in most project there will be many blocks, we decided to write command for generating blocks, this command will create block class and view file if you specify type as an view, otherwise it will create only block class.
 
@@ -156,11 +153,11 @@ if you wish to customize any of the files that are created by the command you ca
 php artisan vendor:publish --tag="page-builder-plugin-stubs"
 ```
 
-and modify them to your heart content.
+and modify them to your heart's content.
 
-## additional configuration options
+## Additional configuration options
 
-### enable reorders
+### Enable reorders
 you can enable reordering of blocks by adding `reorderable()` method to the page builder field like this:
 
 ```php
@@ -172,7 +169,7 @@ $form->schema([
 ]);
 ```
 
-### previewing in real time with iframe
+### Previewing in real time with iframe
 
 by default components in preview are rendered using normal views, but sometimes you might want to preview them in iframe, in cases which components are located in another repository. 
 
@@ -207,7 +204,7 @@ window.addEventListener("message", (event) => console.log(event.data));
 
 and that it. now website rendered via iframe will receive data from filament in real time.
 
-### formatting page builder data for preview
+### Formatting page builder data for preview
 
 sometimes there might be a case where you will have the need to format  the data before sending it to frontend for example retrieving full url for the image, this can be done by declaring `formatForSinglePreview` or `formatForListing`  on a block like this:
 
@@ -231,7 +228,8 @@ class Description extends BaseBlock
 `formatForListing` also calls this function so no need to duplicate the code, data is the same.
 
 Note that I'm using getUrlForFile. This is done because sometimes the image can be a temporary upload. This is just a helper for properly parsing the URL and returning it, so I would recommend using it.
-### formatting block label
+
+### Formatting block label
 
 there are multiple ways to change label of the block on on page builder.
 if you just want to auto generate label based on one of the block attributes you can do so by declaring `getBlockTitleAttribute` and returning name of the attribute you want to use as a label, like this:
@@ -317,7 +315,7 @@ PageBuilder::make('...')
 })
 ```
 
-1. considering above solution is not the best, we provide ability to auto resize iframe height based  on frontend events, to do this first configure backend to track auto resize
+considering above solution is not the best, we provide ability to auto resize iframe height based  on frontend events, to do this first configure backend to track auto resize
    
 for `PageBuilder` field:
 ```php
@@ -340,7 +338,25 @@ for `PageBuilderPreview` and `PageBuilderPreviewEntry` simply add `autoResizeIfr
     ->autoResizeIframe();
 ```
 
-### conditional schemas
+after configuring backend website that is rendered in iframe also needs some extra configuration. 
+whenever height of the page changes you will need to send event to FilamentPHP like so:
+
+```js
+// replace * with the url of your filament admin panel
+window.parent.postMessage(
+    {
+        height: document.body.scrollHeight,
+        type: 'previewResized',
+    },
+    '*'
+);
+```
+
+we recommend doing this on page load and on height change of the document, you can do this by using mutation observer.
+
+whenever this event is received by filament it will resize iframe height to the height that is provided in the message.
+
+### Conditional schemas
 there will be cases where you will need to change schema of the block based on some condition, of course this can be done normally by using closures and their own parameters, but for sake of convenience we provide same parameter injection for `blockSchema` function on a block class, this function gets injected with following parameters: `$record`, `$action`, `$component`, `$livewire`. value of parameters work the same as they do in filament forms. 
 
 example of how to use this feature:
@@ -361,7 +377,7 @@ class Description extends BaseBlock
 ```
 all of this parameters are optional and you can use only the ones you need. 
 
-### rendering page builder items on infolist
+### Rendering page builder items on infolist
 outside of form you might want to render page builder items on infolist, for this we provide two prebuilt entries:
 `PageBuilderEntry` and `PageBuilderPreviewEntry`
 
@@ -388,7 +404,7 @@ $infolist
 ]);
 ```
 
-### rendering page builder item previews on forms
+### Rendering page builder item previews on forms
 
 by default preview is rendered for create and edit. the same component that is used in create and edit actions can be used for listing as well, all you have to do is add `PageBuilderPreview` to the schema  and provide name of `PageBuilder` field like so:
 
@@ -403,7 +419,7 @@ PageBuilderPreview::make('website_content_preview')
 
 this will render preview of items selected in `PageBuilder` field and it will update in real time.
 
-### customizing actions and button rendering
+### Customizing actions and button rendering
 
 only component which has actions is `PageBuilder`, all of this actions have their own modifier functions and are moved to the own class, so you can easily customize them, here is the list of actions, functions to modify them and their classes:
 
@@ -415,7 +431,7 @@ only component which has actions is `PageBuilder`, all of this actions have thei
 | Reorder     | `ReorderPageBuilderBlockAction`| `reorderAction`   |
 | Select block| `SelectBlockAction`            | `selectBlockAction`  |
 
-#### customizing buttons for actions
+#### Customizing buttons for actions
 one strange thing about this package is how buttons are customized, because of how filamentphp actions are structured each button render comes with lot baggage to say so, multiple views, many checks and etc. while this is not too much of a problem if you are using couple of actions but due to nature of components for building a page there will be need for many many actions, 3 actions per component, its hard to quanitify exactly how much performance disadvantage this causes but in large project we first used this package in it became a massive problem to a point where removing those actions increase paged speeding 2-3 times, same numbers are replicable in this package on smaller scale as well, for example page which was rendering 65 components took around 500ms on local machine with using normal actions and no additional logic on their part while using simple buttons took around 150ms on average because of this drastic performance deference we decided to opt into using simple button rather than action. most buttons are rendered like this:
 
 ```php
