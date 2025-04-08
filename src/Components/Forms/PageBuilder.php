@@ -326,7 +326,6 @@ class PageBuilder extends Field
         $this->loadStateFromRelationshipsUsing(function ($record, PageBuilder $component) {
             /** @var Collection */
             $blocks = $this->getConstrainAppliedQuery($record)
-                ->orderBy('order')
                 ->get();
 
             $component->state($blocks->toArray());
