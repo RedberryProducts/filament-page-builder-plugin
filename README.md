@@ -365,7 +365,8 @@ there will be cases when you will need to modify data, schema, label based on so
 
 class Description extends BaseBlock
 {
-    public static function getBlockSchema($record): array
+    // make sure that injecting parameter is nullable
+    public static function getBlockSchema(?Model $record = null): array
     {
         return [
             RichEditor::make('text')
