@@ -1,5 +1,10 @@
 <?php
 
-it('will not use debugging functions')
+arch('will not use debugging functions')
     ->expect(['dd', 'dump', 'ray'])
     ->each->not->toBeUsed();
+
+arch('ensure `env` is only used in config files')
+    ->expect('env')
+    ->not->toBeUsed()
+    ->ignoring('config');
