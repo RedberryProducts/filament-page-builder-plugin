@@ -18,11 +18,14 @@ jobs:
         stability: [prefer-stable]
         include:
           - laravel: 10.*
+            php: 8.1
             carbon: 2.*
           - laravel: 11.*
             carbon: 2.*
+            php: 8.2
           - laravel: 12.*
             carbon: 2.*
+            php: 8.3
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
