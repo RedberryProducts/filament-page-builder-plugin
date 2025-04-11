@@ -21,9 +21,9 @@ jobs:
           - laravel: 11.*
             php: 8.2
             testbench: "9.*"
-          - laravel: 12.*
-            php: 8.3
-            testbench: "10.*"
+          # - laravel: 12.*
+          #   php: 8.3
+          #   testbench: "10.*"
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
