@@ -4,7 +4,6 @@ namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Select;
-use Filament\Pages\Page;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 
 class SelectBlockAction extends Action
@@ -29,18 +28,19 @@ class SelectBlockAction extends Action
                 Select::make('block_type')
                     ->native(false)
                     ->translateLabel()
+                    ->required()
                     ->translateLabel()
                     ->options($this->formatBlocksForSelect($component)),
             ]);
         });
 
-        $this->action(function ($data, Page $livewire, Action $action, PageBuilder $component) {
+        $this->action(function ($data, $livewire, Action $action, PageBuilder $component) {
             $livewire->mountFormComponentAction(
                 $component->getStatePath(),
                 $component->getCreateActionName(),
                 $data
             );
-            $action->halt();
+            $this->halt();
         });
     }
 

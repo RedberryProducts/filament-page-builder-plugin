@@ -65,7 +65,7 @@ class PageBuilderPreview extends Field
 
         if ($this->singleItemPreview) {
             $blockType = $data['block_type'] ?? null;
-            $id = $data['block_id'];
+            $id = $data['block_id'] ?? null;
 
             if ($blockType) {
                 $closure = Closure::fromCallable([$blockType, 'formatForSingleView']);
@@ -76,6 +76,7 @@ class PageBuilderPreview extends Field
                 return [
                     'id' => $id,
                     'block_name' => $blockType::getBlockName(),
+                    'block_type' => $blockType,
                     'data' => $formatted,
                 ];
             }
@@ -97,9 +98,11 @@ class PageBuilderPreview extends Field
                 return [
                     ...$item,
                     'block_name' => $blockType::getBlockName(),
+                    'block_type' => $blockType,
                     'data' => $formatted,
                 ];
             }
         }, $data);
+
     }
 }

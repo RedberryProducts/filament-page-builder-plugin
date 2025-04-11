@@ -6,23 +6,21 @@
     $autoResizeIframe = $getAutoResizeIframe();
 @endphp
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
-    @if (!$shouldRenderWithIframe)
-        @if ($singleItemPreview)
-            @component($getViewForBlock($pageBuilderData['block_type']), ['block' => $pageBuilderData])
-            @endcomponent
-        @else
-            @foreach ($pageBuilderData as $block)
-                @component($getViewForBlock($block['block_type']), ['block' => $block])
+    @if (count($pageBuilderData))
+        @if (!$shouldRenderWithIframe)
+            @if ($singleItemPreview)
+                @component($getViewForBlock($pageBuilderData['block_type']), ['block' => $pageBuilderData])
                 @endcomponent
-            @endforeach
+            @else
+                @foreach ($pageBuilderData as $block)
+                    @component($getViewForBlock($block['block_type']), ['block' => $block])
+                    @endcomponent
+                @endforeach
+            @endif
+        @else
+            <x-page-builder-plugin::iframe url="{{ $getIframeUrl() }}" :data=$pageBuilderData
+                statePath="{{ $getStatePath() }}" autoResizeIframe="{{ $autoResizeIframe }}"
+                :attributes=$iframeAttributes />
         @endif
-    @else
-        <x-page-builder-plugin::iframe
-            url="{{ $getIframeUrl() }}"
-            :data=$pageBuilderData
-            statePath="{{ $getStatePath() }}"
-            autoResizeIframe="{{ $autoResizeIframe }}"
-            :attributes=$iframeAttributes
-        />
     @endif
 </x-dynamic-component>

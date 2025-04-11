@@ -26,7 +26,7 @@ class CreatePageBuilderBlockAction extends Action
 
         $this->successNotificationTitle(__('filament-panels::resources/pages/create-record.notifications.created.title'));
 
-        $this->form(function ($arguments, Form $form, PageBuilder $component, $livewire) {
+        $this->form(function ($arguments, Form $form, PageBuilder $component) {
             $blockType = $arguments['block_type'];
 
             $preview = PageBuilderPreview::make('preview')
@@ -62,7 +62,7 @@ class CreatePageBuilderBlockAction extends Action
 
         $this->modalWidth(MaxWidth::Screen);
 
-        $this->action(function ($arguments, $data, $action, PageBuilder $component) {
+        $this->action(function ($arguments, $data, PageBuilder $component) {
             $blockType = $arguments['block_type'];
             $state = $component->getState() ?? [];
 
@@ -79,9 +79,11 @@ class CreatePageBuilderBlockAction extends Action
                 $block->toArray(),
             ]);
 
-            $action->sendSuccessNotification();
+            $this->sendSuccessNotification();
 
             $component->callAfterStateUpdated();
+
+            $this->success();
         });
     }
 }

@@ -6,7 +6,6 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Form;
-use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
@@ -27,7 +26,7 @@ class EditPageBuilderBlockAction extends Action
 
         $this->successNotificationTitle(__('filament-panels::resources/pages/edit-record.notifications.saved.title'));
 
-        $this->form(function ($arguments, Form $form, PageBuilder $component, Page $livewire) {
+        $this->form(function ($arguments, Form $form, PageBuilder $component) {
             $block = $component->getState()[$arguments['index']];
 
             $preview = PageBuilderPreview::make('preview')
