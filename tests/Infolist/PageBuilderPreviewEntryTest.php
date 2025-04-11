@@ -25,7 +25,7 @@ it('only valid blocks will be rendered in list', function () {
                     'url' => 'https://example.com',
                 ],
             ],
-            'order' => 0
+            'order' => 0,
         ],
         [
             'block_type' => 'InvalidBlock',
@@ -46,7 +46,7 @@ it('only valid blocks will be rendered in list', function () {
                     'url' => 'https://example.com',
                 ],
             ],
-            'order' => 3
+            'order' => 3,
         ]
     )->create([
         'page_builder_blockable_id' => $this->page->id,
