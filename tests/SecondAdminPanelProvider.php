@@ -14,7 +14,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Redberry\PageBuilderPlugin\Tests\Fixtures\PageResource;
 
 class SecondAdminPanelProvider extends PanelProvider
 {

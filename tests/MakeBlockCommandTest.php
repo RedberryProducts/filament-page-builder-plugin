@@ -1,6 +1,5 @@
 <?php
 
-use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\PanelRegistry;
 use Redberry\PageBuilderPlugin\Tests\SecondAdminPanelProvider;
