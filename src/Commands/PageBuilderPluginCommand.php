@@ -105,6 +105,7 @@ class PageBuilderPluginCommand extends Command
                     '{{ class }}' => str($block)->afterLast('\\')->replace('\\', ''),
                     '{{ namespace }}' => str($blockClass)->beforeLast('\\'),
                     '{{ viewName }}' => $viewName,
+                    '{{ panelId }}' => $panel->getId(),
                 ]
             );
 
@@ -113,7 +114,7 @@ class PageBuilderPluginCommand extends Command
                 resource_path(
                     $viewName
                         ->replace('.', '/')
-                        ->prepend('views/blocks/')
+                        ->prepend("views/{$panel->getId()}/blocks/")
                         ->append('.blade.php')
                 ),
             );

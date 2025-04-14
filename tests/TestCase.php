@@ -14,6 +14,7 @@ use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\File;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Redberry\PageBuilderPlugin\PageBuilderPluginServiceProvider;
@@ -30,6 +31,11 @@ class TestCase extends Orchestra
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Redberry\\PageBuilderPlugin\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
+
+        $this->beforeApplicationDestroyed(function () {
+            File::cleanDirectory(app_path());
+            File::cleanDirectory(resource_path('views'));
+        });
     }
 
     protected function getPackageProviders($app)
@@ -48,6 +54,7 @@ class TestCase extends Orchestra
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
             PageBuilderPluginServiceProvider::class,
+            AdminPanelProvider::class,
         ];
     }
 
