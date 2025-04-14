@@ -3,17 +3,16 @@
 namespace Redberry\PageBuilderPlugin\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Redberry\PageBuilderPlugin\Tests\Fixtures\Models\Page;
 
-/*
-class ModelFactory extends Factory
+class PageFactory extends Factory
 {
-    protected $model = YourModel::class;
+    protected $model = Page::class;
 
     public function definition()
     {
         return [
-
+            'name' => $this->faker->word(),
         ];
     }
 }
-*/

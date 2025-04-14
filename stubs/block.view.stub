@@ -15,6 +15,6 @@ class {{ class }} extends BaseBlock
 
     public static function getView(): ?string
     {
-        return 'blocks.{{ viewName }}';
+        return '{{ panelId }}blocks.{{ viewName }}';
     }
 }

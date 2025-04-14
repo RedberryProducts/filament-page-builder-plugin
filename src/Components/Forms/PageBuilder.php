@@ -10,6 +10,7 @@ use Filament\Support\Exceptions\Halt;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\ComponentAttributeBag;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockAction;
@@ -144,7 +145,7 @@ class PageBuilder extends Field
             'icon' => 'heroicon-o-trash',
             'color' => 'danger',
             'disabled' => $deleteAction->isDisabled(),
-            'attributes' => collect([
+            'attributes' => new ComponentAttributeBag([
                 'wire:click' => "mountFormComponentAction('$statePath', '{$this->getDeleteActionName()}', { item: '$item', index: '$index' } )",
             ]),
         ];
@@ -172,7 +173,7 @@ class PageBuilder extends Field
             'icon' => 'heroicon-o-pencil-square',
             'disabled' => $editAction->isDisabled(),
             'color' => 'primary',
-            'attributes' => collect([
+            'attributes' => new ComponentAttributeBag([
                 'wire:click' => "mountFormComponentAction('$statePath', '{$this->getEditActionName()}', { item: '$item', index: '$index' } )",
             ]),
         ];
@@ -197,7 +198,7 @@ class PageBuilder extends Field
             'icon' => 'heroicon-o-arrows-up-down',
             'disabled' => $reorderAction->isDisabled(),
             'color' => 'gray',
-            'attributes' => collect([
+            'attributes' => new ComponentAttributeBag([
                 'x-sortable-handle' => 'x-sortable-handle',
                 'x-on:click.stop' => 'x-on:click.stop',
             ]),
