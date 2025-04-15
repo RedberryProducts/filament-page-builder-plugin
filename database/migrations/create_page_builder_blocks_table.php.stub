@@ -12,7 +12,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('block_type');
             $table->unsignedTinyInteger('order');
-            $table->morphs('page_builder_blockable');
+            $table->morphs('page_builder_blockable', indexName: 'page_builder_blockable_index');
             $table->json('data')->nullable();
             $table->timestamps();
         });
