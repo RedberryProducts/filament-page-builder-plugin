@@ -336,6 +336,7 @@ class PageBuilder extends Field
             $existingIds = $query->clone()->pluck('id');
 
             $recordsNeedingDeletion = $existingIds->diff(collect($state)->pluck('id'));
+
             try {
                 DB::beginTransaction();
                 $query->clone()->whereIn('id', $recordsNeedingDeletion)->delete();
@@ -343,6 +344,7 @@ class PageBuilder extends Field
                 $record->{$this->relationship}()->upsert(array_map(function ($item) {
                     $item['updated_at'] = now()->format('Y-m-d H:i:s');
                     $item['created_at'] = (new Carbon($item['created_at'] ?? null))->format('Y-m-d H:i:s');
+
                     return [
                         ...$item,
                         'data' => json_encode($item['data'] ?? []),
