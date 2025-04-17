@@ -336,7 +336,6 @@ class PageBuilder extends Field
             $existingIds = $query->clone()->pluck('id');
 
             $recordsNeedingDeletion = $existingIds->diff(collect($state)->pluck('id'));
-            ray()->showQueries();
             try {
                 DB::beginTransaction();
                 $query->clone()->whereIn('id', $recordsNeedingDeletion)->delete();
@@ -363,7 +362,6 @@ class PageBuilder extends Field
 
                 throw new Halt;
             }
-            ray()->stopShowingQueries();
 
         });
 
