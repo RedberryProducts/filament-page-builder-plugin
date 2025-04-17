@@ -355,7 +355,7 @@ class PageBuilder extends Field
 
             } catch (\Throwable $th) {
                 DB::rollBack();
-                info($th->getMessage());
+
                 Notification::make()
                     ->title('failed saving page builder blocks')
                     ->body($th->getMessage())
