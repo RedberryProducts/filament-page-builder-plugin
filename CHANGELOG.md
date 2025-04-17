@@ -2,6 +2,15 @@
 
 All notable changes to `page-builder-plugin` will be documented in this file.
 
+## v1.0.2 - 2025-04-17
+
+### What's Changed
+
+* fix/sql error and wrong stub by @GigaGiorgadze in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/6
+* ci: update testing matrix by @GigaGiorgadze in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/7
+
+**Full Changelog**: https://github.com/RedberryProducts/filament-page-builder-plugin/compare/v1.0.1...v1.0.2
+
 ## v1.0.1 - 2025-04-15
 
 ### What's Changed
