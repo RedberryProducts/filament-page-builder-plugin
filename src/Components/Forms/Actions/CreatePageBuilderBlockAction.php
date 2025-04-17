@@ -79,8 +79,6 @@ class CreatePageBuilderBlockAction extends Action
                 $block->toArray(),
             ]);
 
-            $this->sendSuccessNotification();
-
             $component->callAfterStateUpdated();
 
             $this->success();
