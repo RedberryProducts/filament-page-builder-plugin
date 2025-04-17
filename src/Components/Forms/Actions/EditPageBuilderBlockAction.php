@@ -78,7 +78,7 @@ class EditPageBuilderBlockAction extends Action
 
             $component->callAfterStateUpdated();
 
-            $action->sendSuccessNotification();
+            $this->success();
         });
     }
 }

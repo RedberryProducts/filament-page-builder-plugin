@@ -2,6 +2,7 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms;
 
+use Carbon\Carbon;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Field;
@@ -341,16 +342,20 @@ class PageBuilder extends Field
                 $query->clone()->whereIn('id', $recordsNeedingDeletion)->delete();
 
                 $record->{$this->relationship}()->upsert(array_map(function ($item) {
+                    $item['updated_at'] = now()->format('Y-m-d H:i:s');
+                    $item['created_at'] = (new Carbon($item['created_at'] ?? null))->format('Y-m-d H:i:s');
+
                     return [
                         ...$item,
                         'data' => json_encode($item['data'] ?? []),
                     ];
-                }, $state), uniqueBy: ['id'], update: ['data', 'order']);
+                }, $state), uniqueBy: ['id'], update: ['data', 'order', 'updated_at']);
 
                 DB::commit();
 
             } catch (\Throwable $th) {
                 DB::rollBack();
+
                 Notification::make()
                     ->title('failed saving page builder blocks')
                     ->body($th->getMessage())
