@@ -13,7 +13,7 @@ use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -22,7 +22,7 @@ use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 
 class TestCase extends Orchestra
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
 
     protected function setUp(): void
     {
@@ -67,12 +67,26 @@ class TestCase extends Orchestra
         ]);
         config()->set('app.key', 'base64:TqTuAGK5LPb3IS6meAR6adhPMY4DLdgvm5geIQnDrZU=');
 
-        $migration = include __DIR__ . '/../database/migrations/create_page_builder_blocks_table.php.stub';
-        $migration->up();
     }
 
     protected function defineDatabaseMigrations()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+
+        File::copy(
+            __DIR__ . '/../database/migrations/create_page_builder_blocks_table.php.stub',
+            database_path('migrations/create_page_builder_blocks_table.php')
+        );
+
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations', database_path('migrations'));
+
+        $this->beforeApplicationDestroyed(function () {
+            File::delete(
+                database_path('migrations/create_page_builder_blocks_table.php')
+            );
+        });
+
+        // $migration = include __DIR__ . '/../database/migrations/create_page_builder_blocks_table.php.stub';
+        // $migration->up();
+        // copy migration stubs to the database/migrations folder
     }
 }

@@ -42,18 +42,19 @@ it('can create new block', function () {
         ])
         ->callMountedFormComponentAction()
         ->assertFormComponentActionNotMounted('website_content', ['select-block', 'create'])
-        ->assertFormSet(function (array $state) {
-            expect($state)
-                ->toBeArray()
-                ->toHaveKey('website_content');
-            expect($state['website_content'])
-                ->toBeArray()
-                ->toHaveCount(1);
-            expect($state['website_content'][0])
-                ->toBeArray()
-                ->toHaveKey('block_type')
-                ->toHaveKey('data.hero_button');
-        });
+        ->assertFormSet([
+            'website_content' => [
+                [
+                    'block_type' => ViewBlock::class,
+                    'data' => [
+                        'hero_button' => [
+                            'text' => 'Test 123',
+                            'url' => 'https://example.com',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
 });
 
 it('can edit existing block', function () {
@@ -80,18 +81,21 @@ it('can edit existing block', function () {
             ],
         ])
         ->callMountedFormComponentAction()
-        ->assertFormSet(function (array $state) {
-            expect($state['website_content'])
-                ->toBeArray()
-                ->toHaveCount(1);
-            expect($state['website_content'][0])
-                ->toBeArray()
-                ->toHaveKey('block_type')
-                ->toHaveKey('data.hero_button');
-            expect($state['website_content'][0]['data']['hero_button'])
-                ->toBeArray()
-                ->toHaveKey('text', 'Test 123');
-        });
+        ->assertFormSet([
+            'website_content' => [
+                [
+                    'id' => $block->id,
+                    'block_type' => ViewBlock::class,
+                    'data' => [
+                        'image' => 'https://example.com/image.jpg',
+                        'hero_button' => [
+                            'text' => 'Test 123',
+                            'url' => 'https://example.com',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
 });
 
 it('can delete existing block', function () {
@@ -110,11 +114,10 @@ it('can delete existing block', function () {
     livewire(TestComponentWithPageBuilderRenderedUsingViews::class)
         ->mountFormComponentAction('website_content', 'delete', ['index' => 0, 'item' => $block->id])
         ->callMountedFormComponentAction()
-        ->assertFormSet(function (array $state) {
-            expect($state['website_content'])
-                ->toBeArray()
-                ->toHaveCount(0);
-        });
+        ->assertFormSet([
+            'website_content' => [
+            ],
+        ]);
 });
 
 it('can reorder existing blocks', function () {
@@ -141,14 +144,13 @@ it('can reorder existing blocks', function () {
         ],
     ]);
     livewire(TestComponentWithPageBuilderRenderedUsingViews::class)
-        ->assertFormSet(function ($state) use ($blocks) {
-            expect($state['website_content'])
-                ->toBeArray()
-                ->toHaveCount(3);
-
-            $ids = array_column($state['website_content'], 'id');
-            expect($ids)->toEqual($blocks->pluck('id')->toArray());
-        })
+        ->assertFormSet([
+            'website_content' => $blocks->map(function ($block) {
+                return [
+                    'id' => $block->id,
+                ];
+            })->toArray(),
+        ])
         ->mountFormComponentAction('website_content', 'reorder', [
             'items' => [
                 $blocks->get(2)->id,
@@ -157,18 +159,19 @@ it('can reorder existing blocks', function () {
             ],
         ])
         ->callMountedFormComponentAction()
-        ->assertFormSet(function ($state) use ($blocks) {
-            expect($state['website_content'])
-                ->toBeArray()
-                ->toHaveCount(3);
-
-            $ids = array_column($state['website_content'], 'id');
-            expect($ids)->toEqual([
-                $blocks->get(2)->id,
-                $blocks->get(0)->id,
-                $blocks->get(1)->id,
-            ]);
-        });
+        ->assertFormSet([
+            'website_content' => [
+                [
+                    'id' => $blocks->get(2)->id,
+                ],
+                [
+                    'id' => $blocks->get(0)->id,
+                ],
+                [
+                    'id' => $blocks->get(1)->id,
+                ],
+            ],
+        ]);
 });
 
 class TestComponentWithPageBuilderRenderedUsingViews extends FormComponent

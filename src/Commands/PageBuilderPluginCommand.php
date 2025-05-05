@@ -37,7 +37,7 @@ class PageBuilderPluginCommand extends Command
         $panel = $this->option('panel');
 
         if ($panel) {
-            $panel = Filament::getPanel($panel, isStrict: false);
+            $panel = Filament::getPanel($panel);
         }
 
         if (! $panel) {
