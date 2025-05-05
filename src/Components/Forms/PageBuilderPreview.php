@@ -57,7 +57,7 @@ class PageBuilderPreview extends Field
 
     public function getPageBuilderData(): array
     {
-        if (! $this->pageBuilderField) {
+        if (is_null($this->pageBuilderField)) {
             throw new \Exception('Page builder field not set');
         }
 

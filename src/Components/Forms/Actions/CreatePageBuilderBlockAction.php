@@ -31,7 +31,7 @@ class CreatePageBuilderBlockAction extends Action
 
             $preview = PageBuilderPreview::make('preview')
                 ->singleItemPreview()
-                ->pageBuilderField('data');
+                ->pageBuilderField('');
 
             $preview = $this->getModifiedPreviewField($preview, $blockType);
 
