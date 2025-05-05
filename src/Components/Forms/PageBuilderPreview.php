@@ -61,7 +61,7 @@ class PageBuilderPreview extends Field
             throw new \Exception('Page builder field not set');
         }
 
-        $data = $this->getGetCallback()("");
+        $data = $this->getGetCallback()('');
 
         if ($this->singleItemPreview) {
             $blockType = $data['block_type'] ?? null;
