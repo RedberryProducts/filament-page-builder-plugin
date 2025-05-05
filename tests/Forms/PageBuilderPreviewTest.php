@@ -30,26 +30,30 @@ it('data will change and all valid blocks will be previewed', function () {
             'image' => 'https://example.com/image.jpg',
             'hero_button' => [
                 'text' => 'hero button text',
-                'url' => 'https://example.com',
             ],
         ],
     ]);
 
     livewire(TestComponentWithPageBuilderAndPreview::class)
-        ->assertFormSet(function (array $state) {
-            expect($state['website_content'])
-                ->toBeArray()
-                ->toHaveCount(1);
-            expect($state['website_content'][0])
-                ->toBeArray()
-                ->toHaveKey('block_type')
-                ->toHaveKey('data.hero_button');
-        })
+        ->assertFormSet([
+            'website_content' => [
+                [
+                    'block_type' => ViewBlock::class,
+                    'data' => [
+                        'image' => 'https://example.com/image.jpg',
+                        'hero_button' => [
+                            'text' => 'hero button text',
+                        ],
+                    ],
+                ],
+            ],
+        ])
         ->assertSeeHtml('hero button text')
         ->mountFormComponentAction('website_content', 'edit', [
             'index' => 0,
             'item' => $blocks->get(0)->id,
         ])
+        ->assertFormComponentActionMounted('website_content', ['edit'])
         ->setFormComponentActionData([
             'data' => [
                 'hero_button' => [
@@ -59,6 +63,7 @@ it('data will change and all valid blocks will be previewed', function () {
             ],
         ])
         ->callMountedFormComponentAction()
+        ->assertHasNoFormComponentActionErrors()
         ->assertDontSeeHtml('hero button text')
         ->assertSeeHtml('Test 123');
 });
