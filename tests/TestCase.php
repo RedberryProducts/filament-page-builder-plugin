@@ -13,7 +13,6 @@ use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Livewire\LivewireServiceProvider;
@@ -67,7 +66,6 @@ class TestCase extends Orchestra
             __DIR__ . '/resources/views',
         ]);
         config()->set('app.key', 'base64:TqTuAGK5LPb3IS6meAR6adhPMY4DLdgvm5geIQnDrZU=');
-
 
     }
 

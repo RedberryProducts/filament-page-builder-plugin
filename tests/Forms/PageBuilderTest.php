@@ -1,8 +1,6 @@
 <?php
 
 use Filament\Forms\Form;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Models\PageBuilderBlock;
@@ -55,7 +53,7 @@ it('can create new block', function () {
                         ],
                     ],
                 ],
-            ]
+            ],
         ]);
 });
 
