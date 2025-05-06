@@ -350,7 +350,7 @@ class PageBuilder extends Field
                     return [
                         ...$item,
                         'data' => json_encode($item['data'] ?? []),
-                        "{$relationshipName}_id" => $record->id,
+                        "{$relationshipName}_id" => $record->getKey(),
                         "{$relationshipName}_type" => $record->getMorphClass(),
                     ];
                 }, $state), uniqueBy: ['id'], update: ['data', 'order', 'updated_at']);
