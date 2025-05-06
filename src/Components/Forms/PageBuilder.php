@@ -341,7 +341,7 @@ class PageBuilder extends Field
                 DB::beginTransaction();
                 $query->clone()->whereIn('id', $recordsNeedingDeletion)->delete();
 
-                $record->{$this->relationship}()->upsert(array_map(function ($item) use($record) {
+                $record->{$this->relationship}()->upsert(array_map(function ($item) use ($record) {
                     $item['updated_at'] = now()->format('Y-m-d H:i:s');
                     $item['created_at'] = (new Carbon($item['created_at'] ?? null))->format('Y-m-d H:i:s');
 
