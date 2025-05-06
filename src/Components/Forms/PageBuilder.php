@@ -341,13 +341,17 @@ class PageBuilder extends Field
                 DB::beginTransaction();
                 $query->clone()->whereIn('id', $recordsNeedingDeletion)->delete();
 
-                $record->{$this->relationship}()->upsert(array_map(function ($item) {
+                $record->{$this->relationship}()->upsert(array_map(function ($item) use ($record) {
                     $item['updated_at'] = now()->format('Y-m-d H:i:s');
                     $item['created_at'] = (new Carbon($item['created_at'] ?? null))->format('Y-m-d H:i:s');
+
+                    $relationshipName = config('page-builder-plugin.polymorphic_relationship_name', 'page_builder_block');
 
                     return [
                         ...$item,
                         'data' => json_encode($item['data'] ?? []),
+                        "{$relationshipName}_id" => $record->getKey(),
+                        "{$relationshipName}_type" => $record->getMorphClass(),
                     ];
                 }, $state), uniqueBy: ['id'], update: ['data', 'order', 'updated_at']);
 
