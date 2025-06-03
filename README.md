@@ -309,9 +309,6 @@ class Description extends BaseBlock
 }
 ```
 
-w
-
-
 ### grouping blocks
 
 many times you will have too many blocks and will have the need to group them, this can be done by declaring 
