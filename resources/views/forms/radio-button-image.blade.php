@@ -64,6 +64,8 @@
                                     class="border-gray-200 cursor-pointer px-2 pb-2 peer-checked:bg-gray-100
                                     dark:peer-checked:bg-white/10 peer-checked:border-primary-500
                                      transition-all rounded-lg text-center border w-full bg-white
+                                     peer-disabled:bg-gray-100 peer-disabled:cursor-not-allowed
+                                     dark:peer-disabled:bg-gray-800 dark:border-gray-700
                                      dark:bg-gray-900 dark:border-white/10  dark:hover:bg-white/5 hover:bg-gray-50">
                                     <span
                                         class="text-sm font-medium leading-6 text-gray-950 dark:text-white">{{ $label }}</span>
