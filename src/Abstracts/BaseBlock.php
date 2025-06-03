@@ -68,7 +68,7 @@ abstract class BaseBlock
         return null;
     }
 
-    public static function getThumbnail(): string|Htmlable|null
+    public static function getThumbnail(): string | Htmlable | null
     {
         return null;
     }

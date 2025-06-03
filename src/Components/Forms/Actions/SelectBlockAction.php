@@ -37,22 +37,21 @@ class SelectBlockAction extends Action
                     RadioButtonImage::make('block_type')
                         ->translateLabel()
                         ->disableOptionWhen(
-                            fn ($value) => (bool)  $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled']))
+                            fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled']))
                         )
                         ->required()
                         ->columns(3)
                         ->columnSpanFull()
-                        ->options($this->formatBlocksForSelect($component))
+                        ->options($this->formatBlocksForSelect($component)),
                 ]);
             }
-
 
             return $form->schema([
                 Select::make('block_type')
                     ->native(false)
                     ->translateLabel()
                     ->disableOptionWhen(
-                        fn ($value) =>  (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled'])),
+                        fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled'])),
                     )
                     ->required()
                     ->translateLabel()

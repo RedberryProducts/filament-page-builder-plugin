@@ -13,20 +13,20 @@ use Redberry\PageBuilderPlugin\Abstracts\BaseBlock;
 
 class RadioButtonImage extends Field
 {
-    use HasOptions;
     use CanDisableOptions;
-    use HasGridDirection;
     use HasExtraInputAttributes;
+    use HasGridDirection;
+    use HasOptions;
 
     public string $view = 'page-builder-plugin::forms.radio-button-image';
 
     /**
      * Returns the thumbnail for the given block type.
      *
-     * @param class-string<BaseBlock> $blockType
+     * @param  class-string<BaseBlock>  $blockType
      * @return string|null
      */
-    public function getBlockThumbnail(string $blockType): string|Htmlable|null
+    public function getBlockThumbnail(string $blockType): string | Htmlable | null
     {
         $closure = Closure::fromCallable([$blockType, 'getThumbnail']);
 

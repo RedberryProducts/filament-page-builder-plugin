@@ -23,9 +23,9 @@ use Redberry\PageBuilderPlugin\Traits\FormatsBlockLabelWithContext;
 
 class PageBuilder extends Field
 {
+    use CanRenderWithThumbnails;
     use ComponentLoadsPageBuilderBlocks;
     use FormatsBlockLabelWithContext;
-    use CanRenderWithThumbnails;
 
     public bool | Closure $reorderable = false;
 
@@ -369,7 +369,7 @@ class PageBuilder extends Field
                     ->danger()
                     ->send();
 
-                throw new Halt();
+                throw new Halt;
             }
 
         });

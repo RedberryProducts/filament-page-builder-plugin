@@ -4,7 +4,6 @@ namespace Redberry\PageBuilderPlugin\Traits;
 
 use Closure;
 
-
 trait CanRenderWithThumbnails
 {
     protected bool | Closure $renderWithThumbnails = false;
