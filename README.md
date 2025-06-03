@@ -16,6 +16,7 @@
     - [Formatting page builder data for preview](#formatting-page-builder-data-for-preview)
     - [Formatting block label](#formatting-block-label)
     - [Showing thumbnail preview for a block](#showing-thumbnail-preview-for-a-block)
+    - [disabling block in select block](#disabling-block-in-select-block)
     - [grouping blocks](#grouping-blocks)
     - [iframe resizing](#iframe-resizing)
     - [Parameter injection](#parameter-injection)
@@ -292,6 +293,24 @@ $form->schema([
 
 which will render components like this:
 ![thumbnails preview](./assets/thumbnails.png)
+
+### disabling block in select block
+if you want to disable block without removing it from the page builder you can do so by declaring `getIsSelectionDisabled` method on a block class like this:
+
+```php
+<?php
+
+class Description extends BaseBlock
+{
+    public static function getIsSelectionDisabled(): bool
+    {
+        return true;
+    }
+}
+```
+
+w
+
 
 ### grouping blocks
 
