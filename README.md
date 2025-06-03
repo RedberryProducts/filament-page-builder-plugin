@@ -454,7 +454,7 @@ $infolist
 ]);
 ```
 
-### Rendering page builder ite previews on fomrms
+### Rendering page builder item previews on forms
 
 by default preview is rendered for create and edit. the same component that is used in create and edit actions can be used for listing as well, all you have to do is add `PageBuilderPreview` to the schema  and provide name of `PageBuilder` field like so:
 
