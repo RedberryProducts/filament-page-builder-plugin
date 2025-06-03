@@ -15,11 +15,12 @@
     - [Previewing in real time with iframe](#previewing-in-real-time-with-iframe)
     - [Formatting page builder data for preview](#formatting-page-builder-data-for-preview)
     - [Formatting block label](#formatting-block-label)
+    - [Showing thumbnail preview for a block](#showing-thumbnail-preview-for-a-block)
     - [grouping blocks](#grouping-blocks)
     - [iframe resizing](#iframe-resizing)
     - [Parameter injection](#parameter-injection)
     - [Rendering page builder items on infolist](#rendering-page-builder-items-on-infolist)
-    - [Rendering page builder item previews on forms](#rendering-page-builder-item-previews-on-forms)
+    - [Rendering page builder ite previews on fomrms](#rendering-page-builder-ite-previews-on-fomrms)
     - [Customizing actions and button rendering](#customizing-actions-and-button-rendering)
       - [Customizing buttons for actions](#customizing-buttons-for-actions)
 - [Credits](#credits)
@@ -265,6 +266,33 @@ class Description extends BaseBlock
 }
 ```
 
+### Showing thumbnail preview for a block
+
+if you want to show thumbnail preview of a block using an image it can be done by declaring `getThumbnail` method on a block class and calling `renderWithThumbnails` method on the page builder field like this:
+
+```php
+<?php
+
+class Description extends BaseBlock
+{
+    public static function getThumbnail(): string|Htmlable|null
+    {
+        return 'https://placehold.co/600x400/png';
+    }
+}
+
+// in form schema
+
+$form->schema([
+    PageBuilder::make('website_content')
+        ->blocks([Description::class])
+        ->renderWithThumbnails(),
+]);
+```
+
+which will render components like this:
+![thumbnails preview](./assets/thumbnails.png)
+
 ### grouping blocks
 
 many times you will have too many blocks and will have the need to group them, this can be done by declaring 
@@ -358,7 +386,7 @@ we recommend doing this on page load and on height change of the document, you c
 whenever this event is received by filament it will resize iframe height to the height that is provided in the message.
 
 ### Parameter injection
-there will be cases when you will need to modify data, schema, label based on some condition, because of this we provide parameter injection for `getBlockSchema`, `formatForListingView`, `formatForSingleView` and `getBlockLabel` methods. parameter injection refers to declaring `$record` parameter for function and it getting injected with record that is being used on page similar to how filament works, for example:
+there will be cases when you will need to modify data, schema, label based on some condition, because of this we provide parameter injection for methods declared on block class. parameter injection refers to declaring `$record` parameter for function and it getting injected with record that is being used on page similar to how filament works, for example:
 
 ```php
 <?php
@@ -410,7 +438,7 @@ $infolist
 ]);
 ```
 
-### Rendering page builder item previews on forms
+### Rendering page builder ite previews on fomrms
 
 by default preview is rendered for create and edit. the same component that is used in create and edit actions can be used for listing as well, all you have to do is add `PageBuilderPreview` to the schema  and provide name of `PageBuilder` field like so:
 
