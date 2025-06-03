@@ -2,6 +2,7 @@
 
 namespace Redberry\PageBuilderPlugin\Abstracts;
 
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
@@ -65,6 +66,16 @@ abstract class BaseBlock
     public static function getView(): ?string
     {
         return null;
+    }
+
+    public static function getThumbnail(): string|Htmlable|null
+    {
+        return null;
+    }
+
+    public static function getIsSelectionDisabled(): bool
+    {
+        return false;
     }
 
     public static function getBlockLabel(array $state, ?int $index = null): mixed

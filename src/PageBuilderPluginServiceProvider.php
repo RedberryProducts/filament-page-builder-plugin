@@ -3,6 +3,7 @@
 namespace Redberry\PageBuilderPlugin;
 
 use Filament\Support\Assets\Asset;
+use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
@@ -50,7 +51,9 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
         }
     }
 
-    public function packageRegistered(): void {}
+    public function packageRegistered(): void
+    {
+    }
 
     public function packageBooted(): void
     {
@@ -78,7 +81,7 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
         }
 
         // Testing
-        Testable::mixin(new TestsPageBuilderPlugin);
+        Testable::mixin(new TestsPageBuilderPlugin());
     }
 
     protected function getAssetPackageName(): ?string
@@ -92,6 +95,7 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
+            Css::make('page-builder-plugin-styles', __DIR__ . '/../resources/dist/page-builder-plugin.css'),
         ];
     }
 

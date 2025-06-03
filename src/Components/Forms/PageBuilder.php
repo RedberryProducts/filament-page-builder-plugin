@@ -17,6 +17,7 @@ use Redberry\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAc
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\EditPageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\ReorderPageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
+use Redberry\PageBuilderPlugin\Traits\CanRenderWithThumbnails;
 use Redberry\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 use Redberry\PageBuilderPlugin\Traits\FormatsBlockLabelWithContext;
 
@@ -24,6 +25,7 @@ class PageBuilder extends Field
 {
     use ComponentLoadsPageBuilderBlocks;
     use FormatsBlockLabelWithContext;
+    use CanRenderWithThumbnails;
 
     public bool | Closure $reorderable = false;
 
@@ -96,6 +98,7 @@ class PageBuilder extends Field
         $action = SelectBlockAction::make($this->getSelectBlockActionName())
             ->label('Add block')
             ->translateLabel()
+            ->renderWithThumbnails($this->getRenderWithThumbnails())
             ->disabled($this->isDisabled());
 
         if ($this->modifySelectBlockActionUsing) {
@@ -366,7 +369,7 @@ class PageBuilder extends Field
                     ->danger()
                     ->send();
 
-                throw new Halt;
+                throw new Halt();
             }
 
         });
