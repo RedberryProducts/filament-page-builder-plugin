@@ -51,7 +51,7 @@ class SelectBlockAction extends Action
                         'icon' => 'heroicon-o-rectangle-stack',
                     ]))
                     ->columnSpanFull()
-                    ->options($this->formatBlocksForSelect($component));
+                    ->options($this->formatBlocksForRadio($component));
             } else {
                 $field = Select::make('block_type')
                     ->native(false)
