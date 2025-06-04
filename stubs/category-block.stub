@@ -1,0 +1,13 @@
+<?php
+
+namespace {{ namespace }};
+
+use Redberry\PageBuilderPlugin\Abstracts\BaseBlockCategory;
+
+class {{ class }} extends BaseBlockCategory
+{
+    public static function getCategoryName(): string
+    {
+        return '{{ class }}';
+    }
+}

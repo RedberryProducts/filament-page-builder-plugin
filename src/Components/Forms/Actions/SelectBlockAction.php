@@ -6,6 +6,7 @@ use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Support\Enums\MaxWidth;
+use Illuminate\View\ComponentAttributeBag;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Components\Forms\RadioButtonImage;
 use Redberry\PageBuilderPlugin\Traits\CanRenderWithThumbnails;
@@ -13,6 +14,8 @@ use Redberry\PageBuilderPlugin\Traits\CanRenderWithThumbnails;
 class SelectBlockAction extends Action
 {
     use CanRenderWithThumbnails;
+
+    public ?Closure $modifySelectionFieldUsing = null;
 
     public static function getDefaultName(): ?string
     {
@@ -33,29 +36,41 @@ class SelectBlockAction extends Action
 
         $this->form(function ($form, PageBuilder $component) {
             if ($this->getRenderWithThumbnails()) {
-                return $form->schema([
-                    RadioButtonImage::make('block_type')
-                        ->translateLabel()
-                        ->disableOptionWhen(
-                            fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled']))
-                        )
-                        ->required()
-                        ->columns(3)
-                        ->columnSpanFull()
-                        ->options($this->formatBlocksForSelect($component)),
+                $field = RadioButtonImage::make('block_type')
+                    ->translateLabel()
+                    ->disableOptionWhen(
+                        fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled']))
+                    )
+                    ->required()
+                    ->columns([
+                        'default' => 3,
+                    ])
+                    ->allTabAttributes(new ComponentAttributeBag([
+                        'icon' => 'heroicon-o-rectangle-stack',
+                    ]))
+                    ->columnSpanFull()
+                    ->options($this->formatBlocksForSelect($component));
+            } else {
+                $field = Select::make('block_type')
+                 ->native(false)
+                 ->translateLabel()
+                 ->disableOptionWhen(
+                     fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled'])),
+                 )
+                 ->required()
+                 ->translateLabel()
+                 ->options($this->formatBlocksForSelect($component));
+            }
+
+            if ($this->modifySelectionFieldUsing) {
+                $field = $this->evaluate($this->modifySelectionFieldUsing, [
+                    'field' => $field,
+                    'component' => $component,
                 ]);
             }
 
             return $form->schema([
-                Select::make('block_type')
-                    ->native(false)
-                    ->translateLabel()
-                    ->disableOptionWhen(
-                        fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled'])),
-                    )
-                    ->required()
-                    ->translateLabel()
-                    ->options($this->formatBlocksForSelect($component)),
+                $field
             ]);
         });
 

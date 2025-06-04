@@ -9,11 +9,11 @@ trait ListPreviewRendersWithIframe
 {
     public bool $renderWithIframe = false;
 
-    public array | Closure $iframeAttributes = [];
+    public array|Closure $iframeAttributes = [];
 
-    public string | Closure $iframeUrl = '';
+    public string|Closure $iframeUrl = '';
 
-    public bool | Closure $autoResizeIframe = false;
+    public bool|Closure $autoResizeIframe = false;
 
     public function renderWithIframe(bool $renderWithIframe = true): static
     {
@@ -22,7 +22,7 @@ trait ListPreviewRendersWithIframe
         return $this;
     }
 
-    public function iframeAttributes(array | Closure $iframeAttributes): static
+    public function iframeAttributes(array|Closure $iframeAttributes): static
     {
         $this->iframeAttributes = $iframeAttributes;
 
@@ -34,7 +34,7 @@ trait ListPreviewRendersWithIframe
         return new ComponentAttributeBag((array) $this->evaluate($this->iframeAttributes));
     }
 
-    public function autoResizeIframe(bool | Closure $autoResizeIframe = true): static
+    public function autoResizeIframe(bool|Closure $autoResizeIframe = true): static
     {
         $this->autoResizeIframe = $autoResizeIframe;
 
@@ -46,7 +46,7 @@ trait ListPreviewRendersWithIframe
         return (bool) $this->evaluate($this->autoResizeIframe);
     }
 
-    public function iframeUrl(string | Closure $iframeUrl): static
+    public function iframeUrl(string|Closure $iframeUrl): static
     {
         $this->iframeUrl = $iframeUrl;
         $this->renderWithIframe();

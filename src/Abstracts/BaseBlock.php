@@ -15,6 +15,9 @@ abstract class BaseBlock
 
     abstract public static function getBlockSchema(): array;
 
+    /**
+     * @return class-string<BaseCategory>|string
+     */
     public static function getCategory(): string
     {
         return '';
@@ -35,7 +38,7 @@ abstract class BaseBlock
         return Storage::url($path);
     }
 
-    public static function getUrlForFile(array | string | null $path = null): ?string
+    public static function getUrlForFile(array|string|null $path = null): ?string
     {
         if (! $path) {
             return null;
@@ -68,7 +71,7 @@ abstract class BaseBlock
         return null;
     }
 
-    public static function getThumbnail(): string | Htmlable | null
+    public static function getThumbnail(): string|Htmlable|null
     {
         return null;
     }
@@ -85,7 +88,7 @@ abstract class BaseBlock
         if ($key) {
             $label = data_get($state, $key);
             if ($label) {
-                return static::getBlockName() . ' - ' . $label . ':';
+                return static::getBlockName().' - '.$label.':';
             }
         }
 
@@ -93,6 +96,6 @@ abstract class BaseBlock
             return static::getBlockName();
         }
 
-        return static::getBlockName() . ' - ' . ($index + 1);
+        return static::getBlockName().' - '.($index + 1);
     }
 }
