@@ -26,7 +26,7 @@ class AdminPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             ->discoverResources(
-                in: __DIR__.'/Fixtures/Resources',
+                in: __DIR__ . '/Fixtures/Resources',
                 for: 'App\\Filament\\Admin\\Resources',
             )
             ->emailVerification()

@@ -72,7 +72,7 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
 
         // Handle Stubs
         if (app()->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__.'/../stubs/') as $file) {
+            foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
                 $this->publishes([
                     $file->getRealPath() => base_path("stubs/page-builder-plugin/{$file->getFilename()}"),
                 ], 'page-builder-plugin-stubs');
@@ -94,7 +94,7 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            Css::make('page-builder-plugin-styles', __DIR__.'/../resources/dist/page-builder-plugin.css'),
+            Css::make('page-builder-plugin-styles', __DIR__ . '/../resources/dist/page-builder-plugin.css'),
         ];
     }
 

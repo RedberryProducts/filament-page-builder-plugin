@@ -22,7 +22,7 @@ class SecondAdminPanelProvider extends PanelProvider
         return $panel
             ->id('second-admin')
             ->discoverResources(
-                in: __DIR__.'/Fixtures/Resources',
+                in: __DIR__ . '/Fixtures/Resources',
                 for: 'App\\Filament\\SecondAdmin\\Resources',
             )
             ->emailVerification()

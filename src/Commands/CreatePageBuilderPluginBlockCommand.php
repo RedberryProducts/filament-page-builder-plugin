@@ -39,7 +39,7 @@ class CreatePageBuilderPluginBlockCommand extends Command
 
         $blocksNamespace = $this->getClassNameSpaces('Blocks');
 
-        $blockClass = $blocksNamespace.'\\'.$block;
+        $blockClass = $blocksNamespace . '\\' . $block;
 
         try {
             if (class_exists($blockClass)) {

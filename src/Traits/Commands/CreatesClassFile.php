@@ -20,7 +20,7 @@ trait CreatesClassFile
         $filesystem = app(Filesystem::class);
 
         if (! file_exists($stubPath = base_path("stubs/page-builder-plugin/{$stub}.stub"))) {
-            $stubPath = __DIR__."/../../../stubs/{$stub}.stub";
+            $stubPath = __DIR__ . "/../../../stubs/{$stub}.stub";
         }
 
         $contents = strtr(file_get_contents($stubPath), $replacements);
@@ -38,7 +38,7 @@ trait CreatesClassFile
         $relativePath = Str::replaceFirst($appNamespace, '', $class);
 
         return app_path(
-            str_replace('\\', '/', $relativePath).'.php'
+            str_replace('\\', '/', $relativePath) . '.php'
         );
     }
 

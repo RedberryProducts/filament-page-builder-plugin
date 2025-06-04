@@ -54,14 +54,14 @@ class SelectBlockAction extends Action
                     ->options($this->formatBlocksForSelect($component));
             } else {
                 $field = Select::make('block_type')
-                 ->native(false)
-                 ->translateLabel()
-                 ->disableOptionWhen(
-                     fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled'])),
-                 )
-                 ->required()
-                 ->translateLabel()
-                 ->options($this->formatBlocksForSelect($component));
+                    ->native(false)
+                    ->translateLabel()
+                    ->disableOptionWhen(
+                        fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled'])),
+                    )
+                    ->required()
+                    ->translateLabel()
+                    ->options($this->formatBlocksForSelect($component));
             }
 
             if ($this->modifySelectionFieldUsing) {
@@ -72,7 +72,7 @@ class SelectBlockAction extends Action
             }
 
             return $form->schema([
-                $field
+                $field,
             ]);
         });
 

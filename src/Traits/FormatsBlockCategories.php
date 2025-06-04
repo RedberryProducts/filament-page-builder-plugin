@@ -18,5 +18,4 @@ trait FormatsBlockCategories
             ? (string) $this->evaluate(Closure::fromCallable([$category, 'getCategoryName']))
             : $category;
     }
-
 }

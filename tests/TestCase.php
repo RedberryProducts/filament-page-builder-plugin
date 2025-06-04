@@ -29,7 +29,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Redberry\\PageBuilderPlugin\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Redberry\\PageBuilderPlugin\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
 
         $this->beforeApplicationDestroyed(function () {
@@ -63,7 +63,7 @@ class TestCase extends Orchestra
         config()->set('database.default', 'testing');
         config()->set('view.paths', [
             ...config('view.paths'),
-            __DIR__.'/resources/views',
+            __DIR__ . '/resources/views',
         ]);
         config()->set('app.key', 'base64:TqTuAGK5LPb3IS6meAR6adhPMY4DLdgvm5geIQnDrZU=');
 
@@ -73,11 +73,11 @@ class TestCase extends Orchestra
     {
 
         File::copy(
-            __DIR__.'/../database/migrations/create_page_builder_blocks_table.php.stub',
+            __DIR__ . '/../database/migrations/create_page_builder_blocks_table.php.stub',
             database_path('migrations/create_page_builder_blocks_table.php')
         );
 
-        $this->loadMigrationsFrom(__DIR__.'/database/migrations', database_path('migrations'));
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations', database_path('migrations'));
 
         $this->beforeApplicationDestroyed(function () {
             File::delete(

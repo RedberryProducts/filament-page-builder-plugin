@@ -35,7 +35,7 @@ class CreatePageBuilderPluginBlockCategoryCommand extends Command
 
         $namespace = $this->getClassNameSpaces('BlockCategories');
 
-        $categoryClass = $namespace.'\\'.$categoryName;
+        $categoryClass = $namespace . '\\' . $categoryName;
 
         try {
             if (class_exists($categoryClass)) {

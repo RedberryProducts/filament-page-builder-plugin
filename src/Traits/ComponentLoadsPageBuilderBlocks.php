@@ -13,7 +13,7 @@ trait ComponentLoadsPageBuilderBlocks
 
     public ?Closure $modifyRelationshipQueryUsing = null;
 
-    public array|Closure $blocks = [];
+    public array | Closure $blocks = [];
 
     public function getConstrainAppliedQuery(Model $record): Relation
     {
@@ -31,7 +31,7 @@ trait ComponentLoadsPageBuilderBlocks
     }
 
     public function blocks(
-        array|Closure $blocks,
+        array | Closure $blocks,
     ) {
         $this->blocks = $blocks;
 

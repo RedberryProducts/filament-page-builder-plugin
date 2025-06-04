@@ -16,14 +16,14 @@ use Redberry\PageBuilderPlugin\Traits\FormatsBlockCategories;
 class RadioButtonImage extends Field
 {
     use CanDisableOptions;
+    use FormatsBlockCategories;
     use HasExtraInputAttributes;
     use HasGridDirection;
     use HasOptions;
-    use FormatsBlockCategories;
 
     public string $view = 'page-builder-plugin::forms.radio-button-image';
 
-    public ComponentAttributeBag|Closure|null $allTabAttributes = null;
+    public ComponentAttributeBag | Closure | null $allTabAttributes = null;
 
     /**
      * Returns the thumbnail for the given block type.
@@ -31,7 +31,7 @@ class RadioButtonImage extends Field
      * @param  class-string<BaseBlock>  $blockType
      * @return string|null
      */
-    public function getBlockThumbnail(string $blockType): string|Htmlable|null
+    public function getBlockThumbnail(string $blockType): string | Htmlable | null
     {
         $closure = Closure::fromCallable([$blockType, 'getThumbnail']);
 
@@ -39,7 +39,7 @@ class RadioButtonImage extends Field
     }
 
     public function allTabAttributes(
-        ComponentAttributeBag|Closure $attributes = new ComponentAttributeBag()
+        ComponentAttributeBag | Closure $attributes = new ComponentAttributeBag
     ): static {
         $this->allTabAttributes = $attributes;
 
@@ -48,7 +48,7 @@ class RadioButtonImage extends Field
 
     public function getAllTabAttributes(): ComponentAttributeBag
     {
-        return $this->evaluate($this->allTabAttributes) ?? new ComponentAttributeBag();
+        return $this->evaluate($this->allTabAttributes) ?? new ComponentAttributeBag;
     }
 
     public function getFormattedOptions(): array

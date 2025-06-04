@@ -6,10 +6,10 @@ use Closure;
 
 trait CanRenderWithThumbnails
 {
-    protected bool|Closure $renderWithThumbnails = false;
+    protected bool | Closure $renderWithThumbnails = false;
 
     public function renderWithThumbnails(
-        bool|Closure $renderWithThumbnails = true,
+        bool | Closure $renderWithThumbnails = true,
     ) {
         $this->renderWithThumbnails = $renderWithThumbnails;
 
