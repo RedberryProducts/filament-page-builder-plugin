@@ -11,7 +11,7 @@ use Filament\Forms\Components\Field;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\View\ComponentAttributeBag;
 use Redberry\PageBuilderPlugin\Abstracts\BaseBlock;
-use Redberry\PageBuilderPlugin\Abstracts\BaseBlockCategory;
+use Redberry\PageBuilderPlugin\Traits\FormatsBlockCategories;
 
 class RadioButtonImage extends Field
 {
@@ -19,6 +19,7 @@ class RadioButtonImage extends Field
     use HasExtraInputAttributes;
     use HasGridDirection;
     use HasOptions;
+    use FormatsBlockCategories;
 
     public string $view = 'page-builder-plugin::forms.radio-button-image';
 
@@ -48,18 +49,6 @@ class RadioButtonImage extends Field
     public function getAllTabAttributes(): ComponentAttributeBag
     {
         return $this->evaluate($this->allTabAttributes) ?? new ComponentAttributeBag();
-    }
-
-    public function isCategoryClass(string $category): bool
-    {
-        return class_exists($category) && is_subclass_of($category, BaseBlockCategory::class);
-    }
-
-    public function getCategoryTitle(string $category): string
-    {
-        return class_exists($category) && method_exists($category, 'getCategoryName')
-            ? (string) $this->evaluate(Closure::fromCallable([$category, 'getCategoryName']))
-            : $category;
     }
 
     public function getFormattedOptions(): array

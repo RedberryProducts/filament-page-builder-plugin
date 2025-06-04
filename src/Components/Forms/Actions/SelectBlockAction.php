@@ -10,10 +10,12 @@ use Illuminate\View\ComponentAttributeBag;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Components\Forms\RadioButtonImage;
 use Redberry\PageBuilderPlugin\Traits\CanRenderWithThumbnails;
+use Redberry\PageBuilderPlugin\Traits\FormatsBlockCategories;
 
 class SelectBlockAction extends Action
 {
     use CanRenderWithThumbnails;
+    use FormatsBlockCategories;
 
     public ?Closure $modifySelectionFieldUsing = null;
 
@@ -86,7 +88,7 @@ class SelectBlockAction extends Action
         });
     }
 
-    private function formatBlocksForSelect(PageBuilder $component): array
+    private function formatBlocksForRadio(PageBuilder $component): array
     {
         $blocks = $component->getBlocks();
 
@@ -94,6 +96,21 @@ class SelectBlockAction extends Action
 
         foreach ($blocks as $block) {
             $category = $block::getCategory();
+
+            $formatted[$category][$block] = $block::getBlockName();
+        }
+
+        return $formatted;
+    }
+
+    private function formatBlocksForSelect(PageBuilder $component): array
+    {
+        $blocks = $component->getBlocks();
+
+        $formatted = [];
+
+        foreach ($blocks as $block) {
+            $category = $this->getCategoryTitle($block::getCategory());
 
             $formatted[$category][$block] = $block::getBlockName();
         }
