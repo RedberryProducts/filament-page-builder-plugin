@@ -15,9 +15,10 @@
     - [Previewing in real time with iframe](#previewing-in-real-time-with-iframe)
     - [Formatting page builder data for preview](#formatting-page-builder-data-for-preview)
     - [Formatting block label](#formatting-block-label)
+    - [grouping blocks](#grouping-blocks)
+    - [Block categories](#block-categories)
     - [Showing thumbnail preview for a block](#showing-thumbnail-preview-for-a-block)
     - [disabling block in select block](#disabling-block-in-select-block)
-    - [grouping blocks](#grouping-blocks)
     - [iframe resizing](#iframe-resizing)
     - [Parameter injection](#parameter-injection)
     - [Rendering page builder items on infolist](#rendering-page-builder-items-on-infolist)
@@ -267,6 +268,118 @@ class Description extends BaseBlock
 }
 ```
 
+
+### grouping blocks
+
+many times you will have too many blocks and will have the need to group them, this can be done by declaring 
+`getCategory` method on BaseBlock class like so:
+
+```php
+class Description extends BaseBlock
+{
+    public static function getCategory(): string
+    {
+        return 'About';
+    }
+}
+```
+
+or you can use category class instead of just name to group them easier, you can create category class by running command:
+
+```bash
+php artisan page-builder-plugin:make-block-category
+```
+
+this will create a category class in `app/Filament/{id of admin panel}/BlockCategories` directory, you can then use this class to group blocks like this:
+
+```php
+<?php
+
+namespace App\Filament\Admin\BlockCategories;
+
+use Redberry\PageBuilderPlugin\Abstracts\BaseBlockCategory;
+
+class Buttons extends BaseBlockCategory
+{
+    public static function getCategoryName(): string
+    {
+        return 'Buttons';
+    }
+}
+```
+
+this classes come more in play when using thumbnail mode of select block, you can read more about it in [Showing thumbnail preview for a block](#showing-thumbnail-preview-for-a-block) section.
+
+result look will like this:
+![block grouping demo](./assets/block-grouping-demo.png)
+ 
+### Block categories
+
+blocks can be categorized visually by adding `getCategory` function on a block class, return value of `getCategory` can be either normal string or class that extends `BaseBlockCategory` class, this class can be created by running command:
+
+```bash
+php artisan page-builder-plugin:make-block-category
+```
+
+this will create a category class in `app/Filament/{id of admin panel}/BlockCategories` directory, you can then use this class to group blocks like this:
+
+```php
+<?php
+
+class Description extends BaseBlock
+{
+    public static function getCategory(): string
+    {
+        return TextFields::class;
+    }
+}
+```
+
+benefit of using category class is that there is lower chance of a typo on top of this category classes allow more customization when using [thumbnail previews](#showing-thumbnail-preview-for-a-block) for blocks by allowing you to add icons and customized other attributes for a filter tab.
+
+you can customize category icon by adding `getCategoryIcon` method to the category class like this:
+
+```php
+<?php
+
+namespace App\Filament\Admin\BlockCategories;
+
+use Redberry\PageBuilderPlugin\Abstracts\BaseBlockCategory;
+
+class Buttons extends BaseBlockCategory
+{
+    // ...
+
+    public static function getCategoryIcon(): string
+    {
+        return 'heroicon-o-hand-raised';
+    }
+}
+```
+
+and you can customize other tab attributes by overriding `getCategoryAttributes` method like this:
+
+```php
+<?php
+
+namespace App\Filament\Admin\BlockCategories;
+
+use Redberry\PageBuilderPlugin\Abstracts\BaseBlockCategory;
+
+class Buttons extends BaseBlockCategory
+{
+    // ...
+
+    public static function getCategoryAttributes(): ComponentAttributeBag
+    {
+        return new ComponentAttributeBag([
+            'class' => 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200',
+        ]);
+    }
+}
+```
+
+
 ### Showing thumbnail preview for a block
 
 if you want to show thumbnail preview of a block using an image it can be done by declaring `getThumbnail` method on a block class and calling `renderWithThumbnails` method on the page builder field like this:
@@ -292,7 +405,13 @@ $form->schema([
 ```
 
 which will render components like this:
-![thumbnails preview](./assets/thumbnails.png)
+![thumbnails preview](./assets/thumbnails-without-category.png)
+
+if you are using categories for blocks it will look like this:
+
+![thumbnails preview with category](./assets/thumbnails.png)
+
+you can customized tabs by using [Block categories](#block-categories).
 
 ### disabling block in select block
 if you want to disable block without removing it from the page builder you can do so by declaring `getIsSelectionDisabled` method on a block class like this:
@@ -309,24 +428,6 @@ class Description extends BaseBlock
 }
 ```
 
-### grouping blocks
-
-many times you will have too many blocks and will have the need to group them, this can be done by declaring 
-`getCategory` method on BaseBlock class like so:
-
-```php
-class Description extends BaseBlock
-{
-    public static function getCategory(): string
-    {
-        return 'About';
-    }
-}
-```
-
-result look will like this:
-![block grouping demo](./assets/block-grouping-demo.png)
- 
 ### iframe resizing
 
 iframe height can not be adjusted based on content of iframe because of CORS issues, because of this there are two ways to size iframe height to not cause components to hide.
@@ -473,13 +574,13 @@ this will render preview of items selected in `PageBuilder` field and it will up
 
 only component which has actions is `PageBuilder`, all of this actions have their own modifier functions and are moved to the own class, so you can easily customize them, here is the list of actions, functions to modify them and their classes:
 
-| Action name | Class                          | Modifier function |
-|-------------|--------------------------------|-------------------|
-| Create      | `CreatePageBuilderBlockAction` | `createAction`    |
-| Edit        | `EditPageBuilderBlockAction`   | `editAction`      |
-| Delete      | `DeletePageBuilderBlockAction` | `deleteAction`    |
-| Reorder     | `ReorderPageBuilderBlockAction`| `reorderAction`   |
-| Select block| `SelectBlockAction`            | `selectBlockAction`  |
+| Action name  | Class                           | Modifier function   |
+| ------------ | ------------------------------- | ------------------- |
+| Create       | `CreatePageBuilderBlockAction`  | `createAction`      |
+| Edit         | `EditPageBuilderBlockAction`    | `editAction`        |
+| Delete       | `DeletePageBuilderBlockAction`  | `deleteAction`      |
+| Reorder      | `ReorderPageBuilderBlockAction` | `reorderAction`     |
+| Select block | `SelectBlockAction`             | `selectBlockAction` |
 
 #### Customizing buttons for actions
 one strange thing about this package is how buttons are customized, because of how filamentphp actions are structured each button render comes with lot baggage to say so, multiple views, many checks and etc. while this is not too much of a problem if you are using couple of actions but due to nature of components for building a page there will be need for many many actions, 3 actions per component, its hard to quanitify exactly how much performance disadvantage this causes but in large project we first used this package in it became a massive problem to a point where removing those actions increase paged speeding 2-3 times, same numbers are replicable in this package on smaller scale as well, for example page which was rendering 65 components took around 500ms on local machine with using normal actions and no additional logic on their part while using simple buttons took around 150ms on average because of this drastic performance deference we decided to opt into using simple button rather than action. most buttons are rendered like this:
@@ -504,11 +605,11 @@ as you can see we are using filament button to render our buttons, this gives us
 this buttons can also be easily change, even the component view itself using modifier functions provided on `PageBuilder` component, this functions are injected with: `$action` `$item` `$index` and `$attributes` which can be injected via passing a closure to the modifier function,
 this is a list of modifier functions and their corresponding actions:
 
-| Action name | Modifier function       |
-|-------------|-------------------------|
-| Delete      | `deleteActionButton`    |
-| Edit        | `editActionButton`      |
-| Reorder     | `reorderActionButton`   |
+| Action name | Modifier function     |
+| ----------- | --------------------- |
+| Delete      | `deleteActionButton`  |
+| Edit        | `editActionButton`    |
+| Reorder     | `reorderActionButton` |
 
 here is example on how to use this modifier functions:
 
