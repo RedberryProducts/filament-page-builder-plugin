@@ -3,11 +3,13 @@
 namespace Redberry\PageBuilderPlugin;
 
 use Filament\Support\Assets\Asset;
+use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
-use Redberry\PageBuilderPlugin\Commands\PageBuilderPluginCommand;
+use Redberry\PageBuilderPlugin\Commands\CreatePageBuilderPluginBlockCategoryCommand;
+use Redberry\PageBuilderPlugin\Commands\CreatePageBuilderPluginBlockCommand;
 use Redberry\PageBuilderPlugin\Testing\TestsPageBuilderPlugin;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
@@ -92,6 +94,7 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
+            Css::make('page-builder-plugin-styles', __DIR__ . '/../resources/dist/page-builder-plugin.css'),
         ];
     }
 
@@ -101,7 +104,8 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
     protected function getCommands(): array
     {
         return [
-            PageBuilderPluginCommand::class,
+            CreatePageBuilderPluginBlockCommand::class,
+            CreatePageBuilderPluginBlockCategoryCommand::class,
         ];
     }
 
