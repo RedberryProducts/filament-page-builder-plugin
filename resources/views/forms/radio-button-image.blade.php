@@ -84,48 +84,6 @@
                     </div>
                 </template>
             @endforeach
-            {{-- @foreach ($categoryOptions as $value => $option['label'])
-                        @php
-                            $thumbnail = $getBlockThumbnail($value);
-                        @endphp
-                        <div @class([
-                            'break-inside-avoid' => $gridDirection === 'column',
-                        ])>
-                            <label for="{{ $id . '-' . $value }}" class="flex w-full h-full group">
-                                <x-filament::input.radio :valid="!$errors->has($statePath)" :attributes="\Filament\Support\prepare_inherited_attributes($getExtraInputAttributeBag())
-                                    ->merge(
-                                        [
-                                            'disabled' => $isDisabled || $isOptionDisabled($value, $option['label']),
-                                            'id' => $id . '-' . $value,
-                                            'name' => $id,
-                                            'value' => $value,
-                                            'wire:loading.attr' => 'disabled',
-                                            $applyStateBindingModifiers('wire:model') => $statePath,
-                                        ],
-                                        escape: false,
-                                    )
-                                    ->class(['peer hidden'])" />
-                                <div
-                                    class="border-gray-200 cursor-pointer px-2 pb-2 peer-checked:bg-gray-100
-                                    dark:peer-checked:bg-white/10 peer-checked:border-primary-500
-                                     transition-all rounded-lg text-center border w-full bg-white
-                                     peer-disabled:bg-gray-100 peer-disabled:cursor-not-allowed
-                                     dark:peer-disabled:bg-gray-800 dark:border-gray-700
-                                     dark:bg-gray-900 dark:border-white/10  dark:hover:bg-white/5 hover:bg-gray-50">
-                                    <span
-                                        class="text-sm font-medium leading-6 text-gray-950 dark:text-white">{{ $option['label'] }}</span>
-                                    @if ((bool) $thumbnail)
-                                        @if ($thumbnail instanceof \Illuminate\Contracts\Support\Htmlable)
-                                            {!! $thumbnail !!}
-                                        @else
-                                            <img src="{{ $thumbnail }}" alt="{{ $option['label'] }}"
-                                                class="w-full h-32 object-cover rounded-lg mt-2">
-                                        @endif
-                                    @endif
-                                </div>
-                            </label>
-                        </div>
-                    @endforeach --}}
             </template>
         </x-filament::grid>
     </div>
