@@ -47,7 +47,7 @@
                     <div @class([
                         'break-inside-avoid' => $gridDirection === 'column',
                     ])>
-                        <label for="{{ $id . '-' . $option['class'] }}" class="flex w-full h-full group">
+                        <label for="{{ $id . '-' . $option['class'] }}" class="flex w-full group">
                             <x-filament::input.radio :valid="!$errors->has($statePath)" :attributes="\Filament\Support\prepare_inherited_attributes($getExtraInputAttributeBag())
                                 ->merge(
                                     [
