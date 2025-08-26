@@ -379,6 +379,18 @@ class Buttons extends BaseBlockCategory
 }
 ```
 
+default category type is 'all' it can be changed to class of the Category or the value, default can be changed like this:
+```php
+<?php
+
+PageBuilder::make('website_content')
+    ->selectBlockAction(function ( SelectBlockAction $action) {
+        return $action->selectField(function (RadioButtonImage $field) {
+                return $field->defaultCategory(Navigations::class);
+            });
+    });
+```
+
 
 ### Showing thumbnail preview for a block
 

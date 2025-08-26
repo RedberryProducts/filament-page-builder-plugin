@@ -73,7 +73,7 @@ class PageBuilder extends Field
         if ($this->modifyReorderActionUsing) {
             $action = $this->evaluate($this->modifyReorderActionUsing, [
                 'action' => $action,
-            ]);
+            ]) ?? $action;
         }
 
         return $action;
@@ -87,7 +87,7 @@ class PageBuilder extends Field
         if ($this->modifyCreateActionUsing) {
             $action = $this->evaluate($this->modifyCreateActionUsing, [
                 'action' => $action,
-            ]);
+            ]) ?? $action;
         }
 
         return $action;
@@ -104,7 +104,7 @@ class PageBuilder extends Field
         if ($this->modifySelectBlockActionUsing) {
             $action = $this->evaluate($this->modifySelectBlockActionUsing, [
                 'action' => $action,
-            ]);
+            ]) ?? $action;
         }
 
         return $action;
@@ -118,7 +118,7 @@ class PageBuilder extends Field
         if ($this->modifyEditActionUsing) {
             $action = $this->evaluate($this->modifyEditActionUsing, [
                 'action' => $action,
-            ]);
+            ]) ?? $action;
         }
 
         return $action;
@@ -132,7 +132,7 @@ class PageBuilder extends Field
         if ($this->modifyDeleteActionUsing) {
             $action = $this->evaluate($this->modifyDeleteActionUsing, [
                 'action' => $action,
-            ]);
+            ]) ?? $action;
         }
 
         return $action;
@@ -286,6 +286,14 @@ class PageBuilder extends Field
         Closure $modifyCreateActionUsing,
     ) {
         $this->modifyCreateActionUsing = $modifyCreateActionUsing;
+
+        return $this;
+    }
+
+    public function selectBlockAction(
+        Closure $modifySelectBlockActionUsing,
+    ) {
+        $this->modifySelectBlockActionUsing = $modifySelectBlockActionUsing;
 
         return $this;
     }

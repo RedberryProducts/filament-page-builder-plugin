@@ -17,11 +17,18 @@ class SelectBlockAction extends Action
     use CanRenderWithThumbnails;
     use FormatsBlockCategories;
 
-    public ?Closure $modifySelectionFieldUsing = null;
+    protected ?Closure $modifySelectionFieldUsing = null;
 
     public static function getDefaultName(): ?string
     {
         return 'select-page-builder-block';
+    }
+
+    public function selectField(Closure $modifySelectionFieldUsing): static
+    {
+        $this->modifySelectionFieldUsing = $modifySelectionFieldUsing;
+
+        return $this;
     }
 
     protected function setUp(): void
@@ -68,7 +75,7 @@ class SelectBlockAction extends Action
                 $field = $this->evaluate($this->modifySelectionFieldUsing, [
                     'field' => $field,
                     'component' => $component,
-                ]);
+                ]) ?? $field;
             }
 
             return $form->schema([

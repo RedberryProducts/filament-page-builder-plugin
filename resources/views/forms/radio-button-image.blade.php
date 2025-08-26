@@ -6,10 +6,10 @@
     $options = $getOptions();
     $idSanitized = str_replace(['-', '.'], '_', $id);
     $hasNoCategories = count($options) === 1;
-    $firstCategory = array_key_first($options);
+    $defaultCategory = $getDefaultCategory();
     $formattedOptions = $getFormattedOptions();
 @endphp
-<div x-data="{ activeTab: @js($firstCategory), options: @js($formattedOptions) }" class="">
+<div x-data="{ activeTab: @js($defaultCategory), options: @js($formattedOptions) }" class="">
     @if (!$hasNoCategories)
         <x-filament::tabs contained="true">
             @foreach ($options as $category => $_)
