@@ -7,10 +7,12 @@ use Redberry\PageBuilderPlugin\Tests\Fixtures\Blocks\ViewBlock;
 use Redberry\PageBuilderPlugin\Tests\Fixtures\InfolistComponent;
 use Redberry\PageBuilderPlugin\Tests\Fixtures\Models\Page;
 
+use function Pest\Laravel\startSession;
 use function Pest\Livewire\livewire;
 
 beforeEach(function () {
     $this->page = Page::factory()->create();
+    startSession();
 });
 
 it('only valid blocks will be rendered in list', function () {
