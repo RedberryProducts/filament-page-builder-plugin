@@ -8,10 +8,12 @@ use Redberry\PageBuilderPlugin\Tests\Fixtures\Blocks\ViewBlock;
 use Redberry\PageBuilderPlugin\Tests\Fixtures\FormComponent;
 use Redberry\PageBuilderPlugin\Tests\Fixtures\Models\Page;
 
+use function Pest\Laravel\startSession;
 use function Pest\Livewire\livewire;
 
 beforeEach(function () {
     $this->page = Page::factory()->create();
+    startSession();
 });
 
 it('can create new block', function () {

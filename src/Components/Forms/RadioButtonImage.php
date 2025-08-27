@@ -25,6 +25,8 @@ class RadioButtonImage extends Field
 
     public ComponentAttributeBag | Closure | null $allTabAttributes = null;
 
+    protected string $defaultCategory = 'all';
+
     /**
      * Returns the thumbnail for the given block type.
      *
@@ -44,6 +46,18 @@ class RadioButtonImage extends Field
         $this->allTabAttributes = $attributes;
 
         return $this;
+    }
+
+    public function defaultCategory(string $category): static
+    {
+        $this->defaultCategory = $category;
+
+        return $this;
+    }
+
+    public function getDefaultCategory(): string
+    {
+        return $this->defaultCategory;
     }
 
     public function getAllTabAttributes(): ComponentAttributeBag
