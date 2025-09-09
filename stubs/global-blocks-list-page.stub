@@ -1,0 +1,35 @@
+<?php
+
+namespace {{ namespace }};
+
+use Filament\Actions;
+use Filament\Resources\Pages\ListRecords;
+use {{ resourceNamespace }}\{{ resourceClass }};
+
+class {{ class }} extends ListRecords
+{
+    protected static string $resource = {{ resourceClass }}::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\Action::make('refresh_blocks')
+                ->label('Refresh Global Blocks')
+                ->icon('heroicon-o-arrow-path')
+                ->action('refreshGlobalBlocks')
+                ->color('gray'),
+        ];
+    }
+
+    public function refreshGlobalBlocks(): void
+    {
+        $this->getResource()::getModel()::refreshGlobalBlocks();
+
+        \Filament\Notifications\Notification::make()
+            ->title('Global blocks refreshed successfully')
+            ->success()
+            ->send();
+
+        $this->redirect($this->getResource()::getUrl('index'));
+    }
+}

@@ -4,14 +4,24 @@ namespace {{ namespace }};
 
 use {{ globalsNamespace }}\Globals;
 use Redberry\PageBuilderPlugin\Abstracts\BaseBlock;
+use Redberry\PageBuilderPlugin\Traits\IsGlobalBlock;
 
 class {{ class }} extends BaseBlock
 {
-    public static function getBlockSchema(): array
+    use IsGlobalBlock;
+
+    public static function getBaseBlockSchema(?object $record = null): array
     {
         return [
             // schema
         ];
+    }
+
+    public static function getBlockSchema(?object $record = null): array
+    {
+        $schema = static::getBaseBlockSchema($record);
+
+        return static::applyGlobalConfiguration($schema);
     }
 
     public static function getCategory(): string
