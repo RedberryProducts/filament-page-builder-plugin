@@ -153,11 +153,12 @@ class CreatePageBuilderPluginBlockCommand extends Command
     {
         $globalBlocksPath = app_path("Filament/{$this->panel->getId()}/Blocks/Globals");
 
-        if (!is_dir($globalBlocksPath)) {
+        if (! is_dir($globalBlocksPath)) {
             return true;
         }
 
         $existingBlocks = glob($globalBlocksPath . '/*.php');
+
         return empty($existingBlocks);
     }
 
@@ -202,13 +203,13 @@ class CreatePageBuilderPluginBlockCommand extends Command
         );
 
         $this->info("Created Global Blocks resource at: {$resourceFullClass}");
-        $this->info("The resource has been automatically registered and will appear in your Filament panel navigation.");
+        $this->info('The resource has been automatically registered and will appear in your Filament panel navigation.');
     }
 
     protected function publishGlobalBlockMigration(): void
     {
         $timestamp = now()->format('Y_m_d_His');
-        $migrationName = "create_global_block_configs_table";
+        $migrationName = 'create_global_block_configs_table';
         $migrationFile = database_path("migrations/{$timestamp}_{$migrationName}.php");
 
         $this->createFileFromStub(

@@ -39,6 +39,7 @@ trait IsGlobalBlock
     public static function getGlobalBlockData(): array
     {
         $config = static::getGlobalConfig();
+
         return $config ? ($config->configuration ?? []) : [];
     }
 
@@ -48,7 +49,7 @@ trait IsGlobalBlock
     public static function updateGlobalConfig(array $configuration): void
     {
         $config = static::getGlobalConfig();
-        
+
         if ($config) {
             $config->update(['configuration' => $configuration]);
         } else {
@@ -66,6 +67,7 @@ trait IsGlobalBlock
     public static function getBlockDisplayName(): string
     {
         $shortName = class_basename(static::class);
+
         return str($shortName)->headline()->toString();
     }
 
@@ -76,11 +78,11 @@ trait IsGlobalBlock
     {
         $globalData = static::getGlobalBlockData();
         $mergedData = array_merge($data, $globalData);
-        
+
         if (method_exists(parent::class, 'formatForSingleView')) {
             return parent::formatForSingleView($mergedData, $record);
         }
-        
+
         return $mergedData;
     }
 

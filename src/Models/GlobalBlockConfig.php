@@ -43,7 +43,7 @@ class GlobalBlockConfig extends Model
      */
     public static function getForClass(string $className): ?self
     {
-        if (!static::tableExists()) {
+        if (! static::tableExists()) {
             return null;
         }
 
@@ -55,7 +55,7 @@ class GlobalBlockConfig extends Model
      */
     public static function refreshGlobalBlocks(): void
     {
-        if (!static::tableExists()) {
+        if (! static::tableExists()) {
             return;
         }
 
@@ -91,7 +91,7 @@ class GlobalBlockConfig extends Model
 
                 if (class_exists($className)) {
                     $reflection = new ReflectionClass($className);
-                    if (!$reflection->isAbstract() && $reflection->isSubclassOf('Redberry\\PageBuilderPlugin\\Abstracts\\BaseBlock')) {
+                    if (! $reflection->isAbstract() && $reflection->isSubclassOf('Redberry\\PageBuilderPlugin\\Abstracts\\BaseBlock')) {
                         $globalBlocks[] = $className;
                     }
                 }
@@ -107,6 +107,7 @@ class GlobalBlockConfig extends Model
     protected static function getBlockDisplayName(string $className): string
     {
         $shortName = class_basename($className);
+
         return str($shortName)->headline()->toString();
     }
 
@@ -115,7 +116,7 @@ class GlobalBlockConfig extends Model
      */
     protected static function getDefaultConfiguration(string $className): array
     {
-        if (!class_exists($className)) {
+        if (! class_exists($className)) {
             return [];
         }
 
