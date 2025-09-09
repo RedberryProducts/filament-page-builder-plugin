@@ -1,0 +1,21 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ globalsNamespace }}\Globals;
+use Redberry\PageBuilderPlugin\Abstracts\BaseBlock;
+
+class {{ class }} extends BaseBlock
+{
+    public static function getBlockSchema(): array
+    {
+        return [
+            // schema
+        ];
+    }
+
+    public static function getCategory(): string
+    {
+        return Globals::class;
+    }
+}
