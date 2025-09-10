@@ -8,26 +8,23 @@ use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource;
 
 class GlobalBlocksPlugin implements Plugin
 {
-    protected bool $enabled = true;
-
-    protected string $resourceClass = GlobalBlockConfigResource::class;
+    protected bool $enableGlobalBlocksResource = true;
+    protected string $globalResourceClass = GlobalBlockConfigResource::class;
 
     public static function make(): static
     {
         return app(static::class);
     }
 
-    public function enabled(bool $enabled = true): static
+    public function enableGlobalBlocks(bool $enable = true): static
     {
-        $this->enabled = $enabled;
-
+        $this->enableGlobalBlocksResource = $enable;
         return $this;
     }
 
     public function resource(string $resourceClass): static
     {
-        $this->resourceClass = $resourceClass;
-
+        $this->globalResourceClass = $resourceClass;
         return $this;
     }
 
@@ -38,16 +35,16 @@ class GlobalBlocksPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        if (! $this->enabled) {
+        if (!$this->enableGlobalBlocksResource) {
             return;
         }
 
-        if (! class_exists($this->resourceClass)) {
+        if (!class_exists($this->globalResourceClass)) {
             return;
         }
 
         $panel->resources([
-            $this->resourceClass,
+            $this->globalResourceClass,
         ]);
     }
 

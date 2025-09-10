@@ -589,20 +589,20 @@ You can configure the plugin directly when registering it:
 
 ->plugins([
     \Redberry\PageBuilderPlugin\GlobalBlocksPlugin::make()
-        ->enabled(true) // Enable/disable the plugin for this panel
+        ->enableGlobalBlocks(true) // Enable/disable the Global Blocks resource
         ->resource(\App\Filament\Resources\CustomGlobalBlocksResource::class), // Use custom resource
     // ... other plugins
 ])
 ```
 
 **Configuration options:**
-- `enabled(bool)`: Enable or disable the Global Blocks resource (default: `true`)
+- `enableGlobalBlocks(bool)`: Enable or disable the Global Blocks resource (default: `true`)
 - `resource(string)`: Specify a custom resource class that extends the package's resource
 
 This approach allows you to:
 - **Enable Global Blocks on specific panels only** - Perfect for multi-panel applications
 - **Use different resource configurations per panel** - Each panel can have its own customized resource
-- **Disable the feature entirely** by not registering the plugin or using `->enabled(false)`
+- **Disable the feature entirely** by not registering the plugin or using `->enableGlobalBlocks(false)`
 
 #### How global blocks work
 

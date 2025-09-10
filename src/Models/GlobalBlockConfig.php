@@ -2,12 +2,15 @@
 
 namespace Redberry\PageBuilderPlugin\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use ReflectionClass;
 
 class GlobalBlockConfig extends Model
 {
+    use HasFactory;
+
     protected $table = 'global_block_configs';
 
     protected $fillable = [
