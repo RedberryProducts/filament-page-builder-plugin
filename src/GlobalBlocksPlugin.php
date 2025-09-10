@@ -9,6 +9,7 @@ use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource;
 class GlobalBlocksPlugin implements Plugin
 {
     protected bool $enabled = true;
+
     protected string $resourceClass = GlobalBlockConfigResource::class;
 
     public static function make(): static
@@ -19,12 +20,14 @@ class GlobalBlocksPlugin implements Plugin
     public function enabled(bool $enabled = true): static
     {
         $this->enabled = $enabled;
+
         return $this;
     }
 
     public function resource(string $resourceClass): static
     {
         $this->resourceClass = $resourceClass;
+
         return $this;
     }
 
@@ -35,11 +38,11 @@ class GlobalBlocksPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return;
         }
 
-        if (!class_exists($this->resourceClass)) {
+        if (! class_exists($this->resourceClass)) {
             return;
         }
 
