@@ -121,7 +121,7 @@ class CreatePageBuilderPluginBlockCommand extends Command
         }
 
         if ($isGlobal && isset($isFirstGlobalBlock) && $isFirstGlobalBlock) {
-            $this->info("To manage global blocks in Filament, add the GlobalBlocksPlugin to your panel:");
+            $this->info('To manage global blocks in Filament, add the GlobalBlocksPlugin to your panel:');
         }
 
         return self::SUCCESS;

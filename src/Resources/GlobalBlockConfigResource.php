@@ -36,7 +36,7 @@ class GlobalBlockConfigResource extends Resource
 
                 Forms\Components\Section::make('Block Configuration')
                     ->schema(function (?GlobalBlockConfig $record) {
-                        if (!$record || !class_exists($record->class_name)) {
+                        if (! $record || ! class_exists($record->class_name)) {
                             return [];
                         }
 

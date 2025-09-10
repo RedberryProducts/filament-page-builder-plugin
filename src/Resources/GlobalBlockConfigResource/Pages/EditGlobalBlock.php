@@ -27,7 +27,7 @@ class EditGlobalBlock extends EditRecord
     protected function mutateFormDataBeforeFill(array $data): array
     {
         $blockClass = $this->record->class_name;
-        
+
         if (class_exists($blockClass) && $this->record->configuration) {
             try {
                 if (method_exists($blockClass, 'getBaseBlockSchema')) {
@@ -56,7 +56,7 @@ class EditGlobalBlock extends EditRecord
     {
         $configuration = [];
         $blockClass = $this->record->class_name;
-        
+
         if (class_exists($blockClass)) {
             try {
                 if (method_exists($blockClass, 'getBaseBlockSchema')) {
@@ -78,7 +78,7 @@ class EditGlobalBlock extends EditRecord
         }
 
         $data['configuration'] = $configuration;
-        
+
         if (class_exists($blockClass)) {
             try {
                 if (method_exists($blockClass, 'getBaseBlockSchema')) {

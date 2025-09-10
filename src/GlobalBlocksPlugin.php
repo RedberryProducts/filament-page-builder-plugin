@@ -20,7 +20,7 @@ class GlobalBlocksPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        if (!config('page-builder-plugin.global_blocks.enabled', true)) {
+        if (! config('page-builder-plugin.global_blocks.enabled', true)) {
             return;
         }
 
@@ -29,7 +29,7 @@ class GlobalBlocksPlugin implements Plugin
             GlobalBlockConfigResource::class
         );
 
-        if (!class_exists($resourceClass)) {
+        if (! class_exists($resourceClass)) {
             return;
         }
 
