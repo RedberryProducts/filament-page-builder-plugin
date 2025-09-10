@@ -52,7 +52,10 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
         }
     }
 
-    public function packageRegistered(): void {}
+    public function packageRegistered(): void
+    {
+        $this->app->singleton(GlobalBlocksPlugin::class);
+    }
 
     public function packageBooted(): void
     {
@@ -140,6 +143,7 @@ class PageBuilderPluginServiceProvider extends PackageServiceProvider
     {
         return [
             'create_page_builder_blocks_table',
+            'create_global_block_configs_table',
         ];
     }
 }

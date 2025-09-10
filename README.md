@@ -555,8 +555,51 @@ php artisan page-builder-plugin:make-block ContactForm --type=view --global
 
 This will:
 - Create a global block class in `app/Filament/{panel}/Blocks/Globals/` directory
-- Automatically generate a Global Blocks resource for centralized management (on first global block creation)
-- Create the necessary database migration for storing global block configurations
+- Create a `Globals` block category for organization
+- Show instructions for enabling the Global Blocks resource
+
+#### Enabling the Global Blocks resource
+
+To manage global blocks in your Filament admin panel, you need to register the GlobalBlocksPlugin in your panel provider:
+
+```php
+<?php
+
+// In your AdminPanelProvider.php (or similar panel provider)
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ... other configurations
+        ->plugins([
+            \Redberry\PageBuilderPlugin\GlobalBlocksPlugin::make(),
+            // ... other plugins
+        ]);
+}
+```
+
+This will add a "Global Blocks" resource to your admin navigation under the "Content Management" group.
+
+#### Configuring the Global Blocks resource
+
+You can configure the Global Blocks resource behavior through the config file:
+
+```php
+<?php
+
+// config/page-builder-plugin.php
+
+return [
+    // ... other configurations
+    
+    'global_blocks' => [
+        'enabled' => true, // Set to false to disable the resource
+        'resource' => \Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource::class, // Custom resource class
+    ],
+];
+```
+
+To disable the Global Blocks resource completely, set `enabled` to `false`. To extend the resource with custom functionality, create your own resource class that extends the package's resource and specify it in the `resource` configuration.
 
 #### How global blocks work
 
@@ -592,7 +635,7 @@ class ContactForm extends BaseBlock
 
 #### Global Blocks resource
 
-When you create your first global block, a "Global Blocks" resource is automatically generated in your Filament admin panel. This resource allows you to:
+The "Global Blocks" resource is provided by the package and becomes available once you register the GlobalBlocksPlugin in your panel. This resource allows you to:
 
 - View all available global blocks
 - Configure each block's field values

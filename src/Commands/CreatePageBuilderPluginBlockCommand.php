@@ -121,8 +121,7 @@ class CreatePageBuilderPluginBlockCommand extends Command
         }
 
         if ($isGlobal && isset($isFirstGlobalBlock) && $isFirstGlobalBlock) {
-            $this->createGlobalBlocksResource();
-            $this->publishGlobalBlockMigration();
+            $this->info("To manage global blocks in Filament, add the GlobalBlocksPlugin to your panel:");
         }
 
         return self::SUCCESS;
@@ -160,65 +159,5 @@ class CreatePageBuilderPluginBlockCommand extends Command
         $existingBlocks = glob($globalBlocksPath . '/*.php');
 
         return empty($existingBlocks);
-    }
-
-    protected function createGlobalBlocksResource(): void
-    {
-        $resourceNamespace = $this->getClassNameSpaces('Resources');
-        $resourceClass = 'GlobalBlocksResource';
-        $resourceFullClass = $resourceNamespace . '\\' . $resourceClass;
-
-        $this->createFileFromStub(
-            'global-blocks-resource',
-            $this->appClassToPath($resourceFullClass),
-            [
-                '{{ class }}' => $resourceClass,
-                '{{ namespace }}' => $resourceNamespace,
-                '{{ resourceNamespace }}' => $resourceNamespace,
-            ]
-        );
-
-        $pagesNamespace = $resourceNamespace . '\\' . $resourceClass . '\\Pages';
-
-        $this->createFileFromStub(
-            'global-blocks-list-page',
-            $this->appClassToPath($pagesNamespace . '\\ListGlobalBlocks'),
-            [
-                '{{ class }}' => 'ListGlobalBlocks',
-                '{{ namespace }}' => $pagesNamespace,
-                '{{ resourceClass }}' => $resourceClass,
-                '{{ resourceNamespace }}' => $resourceNamespace,
-            ]
-        );
-
-        $this->createFileFromStub(
-            'global-blocks-edit-page',
-            $this->appClassToPath($pagesNamespace . '\\EditGlobalBlock'),
-            [
-                '{{ class }}' => 'EditGlobalBlock',
-                '{{ namespace }}' => $pagesNamespace,
-                '{{ resourceClass }}' => $resourceClass,
-                '{{ resourceNamespace }}' => $resourceNamespace,
-            ]
-        );
-
-        $this->info("Created Global Blocks resource at: {$resourceFullClass}");
-        $this->info('The resource has been automatically registered and will appear in your Filament panel navigation.');
-    }
-
-    protected function publishGlobalBlockMigration(): void
-    {
-        $timestamp = now()->format('Y_m_d_His');
-        $migrationName = 'create_global_block_configs_table';
-        $migrationFile = database_path("migrations/{$timestamp}_{$migrationName}.php");
-
-        $this->createFileFromStub(
-            'create_global_block_configs_table.php',
-            $migrationFile,
-            []
-        );
-
-        $this->info("Created migration: {$migrationFile}");
-        $this->warn("Don't forget to run 'php artisan migrate' to create the global_block_configs table.");
     }
 }

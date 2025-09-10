@@ -1,14 +1,14 @@
 <?php
 
-namespace {{ namespace }};
+namespace Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource\Pages;
 
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
-use {{ resourceNamespace }}\{{ resourceClass }};
+use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource;
 
-class {{ class }} extends EditRecord
+class EditGlobalBlock extends EditRecord
 {
-    protected static string $resource = {{ resourceClass }}::class;
+    protected static string $resource = GlobalBlockConfigResource::class;
 
     protected function getHeaderActions(): array
     {

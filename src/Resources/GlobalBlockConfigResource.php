@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ namespace }};
+namespace Redberry\PageBuilderPlugin\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -9,9 +9,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Redberry\PageBuilderPlugin\Models\GlobalBlockConfig;
-use {{ resourceNamespace }}\{{ class }}\Pages;
+use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource\Pages;
 
-class {{ class }} extends Resource
+class GlobalBlockConfigResource extends Resource
 {
     protected static ?string $model = GlobalBlockConfig::class;
 
@@ -34,11 +34,6 @@ class {{ class }} extends Resource
                     ->required()
                     ->disabled(),
 
-                Forms\Components\TextInput::make('class_name')
-                    ->label('Class Name')
-                    ->required()
-                    ->disabled(),
-                    
                 Forms\Components\Section::make('Block Configuration')
                     ->schema(function (?GlobalBlockConfig $record) {
                         if (!$record || !class_exists($record->class_name)) {
