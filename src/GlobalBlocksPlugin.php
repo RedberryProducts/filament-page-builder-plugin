@@ -8,9 +8,24 @@ use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource;
 
 class GlobalBlocksPlugin implements Plugin
 {
+    protected bool $enabled = true;
+    protected string $resourceClass = GlobalBlockConfigResource::class;
+
     public static function make(): static
     {
         return app(static::class);
+    }
+
+    public function enabled(bool $enabled = true): static
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+
+    public function resource(string $resourceClass): static
+    {
+        $this->resourceClass = $resourceClass;
+        return $this;
     }
 
     public function getId(): string
@@ -20,21 +35,16 @@ class GlobalBlocksPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        if (! config('page-builder-plugin.global_blocks.enabled', true)) {
+        if (!$this->enabled) {
             return;
         }
 
-        $resourceClass = config(
-            'page-builder-plugin.global_blocks.resource',
-            GlobalBlockConfigResource::class
-        );
-
-        if (! class_exists($resourceClass)) {
+        if (!class_exists($this->resourceClass)) {
             return;
         }
 
         $panel->resources([
-            $resourceClass,
+            $this->resourceClass,
         ]);
     }
 

@@ -580,26 +580,29 @@ public function panel(Panel $panel): Panel
 
 This will add a "Global Blocks" resource to your admin navigation under the "Content Management" group.
 
-#### Configuring the Global Blocks resource
+#### Configuring the Global Blocks plugin
 
-You can configure the Global Blocks resource behavior through the config file:
+You can configure the plugin directly when registering it:
 
 ```php
 <?php
 
-// config/page-builder-plugin.php
-
-return [
-    // ... other configurations
-    
-    'global_blocks' => [
-        'enabled' => true, // Set to false to disable the resource
-        'resource' => \Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource::class, // Custom resource class
-    ],
-];
+->plugins([
+    \Redberry\PageBuilderPlugin\GlobalBlocksPlugin::make()
+        ->enabled(true) // Enable/disable the plugin for this panel
+        ->resource(\App\Filament\Resources\CustomGlobalBlocksResource::class), // Use custom resource
+    // ... other plugins
+])
 ```
 
-To disable the Global Blocks resource completely, set `enabled` to `false`. To extend the resource with custom functionality, create your own resource class that extends the package's resource and specify it in the `resource` configuration.
+**Configuration options:**
+- `enabled(bool)`: Enable or disable the Global Blocks resource (default: `true`)
+- `resource(string)`: Specify a custom resource class that extends the package's resource
+
+This approach allows you to:
+- **Enable Global Blocks on specific panels only** - Perfect for multi-panel applications
+- **Use different resource configurations per panel** - Each panel can have its own customized resource
+- **Disable the feature entirely** by not registering the plugin or using `->enabled(false)`
 
 #### How global blocks work
 
