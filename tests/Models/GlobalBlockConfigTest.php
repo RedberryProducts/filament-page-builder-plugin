@@ -66,7 +66,7 @@ it('returns empty array when no discovery paths configured', function () {
     $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
     $method->setAccessible(true);
 
-    $blocks = $method->invoke(new GlobalBlockConfig());
+    $blocks = $method->invoke(new GlobalBlockConfig);
 
     expect($blocks)->toBe([]);
 });
@@ -77,7 +77,7 @@ it('processes glob patterns correctly', function () {
     $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
     $method->setAccessible(true);
 
-    $blocks = $method->invoke(new GlobalBlockConfig());
+    $blocks = $method->invoke(new GlobalBlockConfig);
 
     expect($blocks)->toBe([]);
 });
@@ -88,7 +88,7 @@ it('processes direct paths correctly', function () {
     $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
     $method->setAccessible(true);
 
-    $blocks = $method->invoke(new GlobalBlockConfig());
+    $blocks = $method->invoke(new GlobalBlockConfig);
 
     expect($blocks)->toBe([]);
 });
@@ -96,13 +96,13 @@ it('processes direct paths correctly', function () {
 it('handles mixed path types in configuration', function () {
     config(['page-builder-plugin.global_blocks_discovery_paths' => [
         'non/existent/direct/path',
-        'non/existent/*/glob/path'
+        'non/existent/*/glob/path',
     ]]);
 
     $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
     $method->setAccessible(true);
 
-    $blocks = $method->invoke(new GlobalBlockConfig());
+    $blocks = $method->invoke(new GlobalBlockConfig);
 
     expect($blocks)->toBe([]);
 });
@@ -113,7 +113,7 @@ it('correctly identifies glob patterns by checking for asterisk', function () {
     $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
     $method->setAccessible(true);
 
-    $blocks = $method->invoke(new GlobalBlockConfig());
+    $blocks = $method->invoke(new GlobalBlockConfig);
 
     expect($blocks)->toBe([]);
 });
