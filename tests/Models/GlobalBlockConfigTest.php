@@ -59,3 +59,61 @@ it('handles missing configuration gracefully', function () {
 
     expect($config->getConfigValue('title'))->toBeNull();
 });
+
+it('returns empty array when no discovery paths configured', function () {
+    config(['page-builder-plugin.global_blocks_discovery_paths' => []]);
+
+    $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
+    $method->setAccessible(true);
+
+    $blocks = $method->invoke(new GlobalBlockConfig());
+
+    expect($blocks)->toBe([]);
+});
+
+it('processes glob patterns correctly', function () {
+    config(['page-builder-plugin.global_blocks_discovery_paths' => ['tests/non-existent/*/path']]);
+
+    $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
+    $method->setAccessible(true);
+
+    $blocks = $method->invoke(new GlobalBlockConfig());
+
+    expect($blocks)->toBe([]);
+});
+
+it('processes direct paths correctly', function () {
+    config(['page-builder-plugin.global_blocks_discovery_paths' => ['tests/non-existent/direct/path']]);
+
+    $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
+    $method->setAccessible(true);
+
+    $blocks = $method->invoke(new GlobalBlockConfig());
+
+    expect($blocks)->toBe([]);
+});
+
+it('handles mixed path types in configuration', function () {
+    config(['page-builder-plugin.global_blocks_discovery_paths' => [
+        'non/existent/direct/path',
+        'non/existent/*/glob/path'
+    ]]);
+
+    $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
+    $method->setAccessible(true);
+
+    $blocks = $method->invoke(new GlobalBlockConfig());
+
+    expect($blocks)->toBe([]);
+});
+
+it('correctly identifies glob patterns by checking for asterisk', function () {
+    config(['page-builder-plugin.global_blocks_discovery_paths' => ['test/path/without/asterisk']]);
+
+    $method = new ReflectionMethod(GlobalBlockConfig::class, 'discoverGlobalBlocks');
+    $method->setAccessible(true);
+
+    $blocks = $method->invoke(new GlobalBlockConfig());
+
+    expect($blocks)->toBe([]);
+});

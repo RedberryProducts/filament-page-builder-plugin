@@ -89,9 +89,7 @@ class GlobalBlockConfig extends Model
         $globalBlocks = [];
         $appPath = app_path();
 
-        $discoveryPaths = config('page-builder-plugin.global_blocks_discovery_paths', [
-            'app/Filament/*/Blocks/Globals',
-        ]);
+        $discoveryPaths = config('page-builder-plugin.global_blocks_discovery_paths', []);
 
         $globalsDirectories = [];
 
