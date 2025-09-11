@@ -3,6 +3,7 @@
 namespace Redberry\PageBuilderPlugin\Resources;
 
 use Filament\Forms;
+use Filament\Forms\Components\Field;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -49,6 +50,8 @@ class GlobalBlockConfigResource extends Resource
                             }
 
                             foreach ($schema as $field) {
+                                /** @var Field $field */
+                                $field = $field;
                                 if (method_exists($field, 'getName')) {
                                     $fieldName = $field->getName();
                                     $configValue = $record->getConfigValue($fieldName);

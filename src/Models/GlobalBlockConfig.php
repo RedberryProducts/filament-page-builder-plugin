@@ -5,8 +5,15 @@ namespace Redberry\PageBuilderPlugin\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
+use Redberry\PageBuilderPlugin\Abstracts\BaseBlock;
 use ReflectionClass;
 
+/**
+ * @property string $id
+ * @property string $name
+ * @property class-string<BaseBlock> $class_name
+ * @property array $configuration
+ */
 class GlobalBlockConfig extends Model
 {
     use HasFactory;

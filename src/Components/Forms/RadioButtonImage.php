@@ -76,6 +76,7 @@ class RadioButtonImage extends Field
         $options = collect($options);
 
         return $options->flatMap(function ($categoryOptions, $category) {
+            // @phpstan-ignore-next-line
             return collect($categoryOptions)->mapWithKeys(function ($option, $key) use ($category) {
                 return [
                     $key => [

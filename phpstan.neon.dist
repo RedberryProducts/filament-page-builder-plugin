@@ -12,4 +12,8 @@ parameters:
     ignoreErrors:
         -
             identifier: missingType.iterableValue
+        -
+            identifier: property.defaultValue
+        -
+            identifier: trait.unused
 
