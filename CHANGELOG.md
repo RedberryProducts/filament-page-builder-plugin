@@ -2,6 +2,14 @@
 
 All notable changes to `page-builder-plugin` will be documented in this file.
 
+## Package release - v1.1.4 - 2025-09-11
+
+### What's Changed
+
+* feat: add configurable discovery paths for global blocks by @mishatch in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/18
+
+**Full Changelog**: https://github.com/RedberryProducts/filament-page-builder-plugin/compare/v1.1.3...v1.1.4
+
 ## Package release - v1.1.3 - 2025-09-11
 
 ### What's Changed
