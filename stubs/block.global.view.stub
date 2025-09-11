@@ -1,0 +1,36 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ globalsNamespace }}\Globals;
+use Redberry\PageBuilderPlugin\Abstracts\BaseBlock;
+use Redberry\PageBuilderPlugin\Traits\IsGlobalBlock;
+
+class {{ class }} extends BaseBlock
+{
+    use IsGlobalBlock;
+
+    public static function getBaseBlockSchema(?object $record = null): array
+    {
+        return [
+            // schema
+        ];
+    }
+
+    public static function getBlockSchema(?object $record = null): array
+    {
+        $schema = static::getBaseBlockSchema($record);
+
+        return static::applyGlobalConfiguration($schema);
+    }
+
+    public static function getView(): ?string
+    {
+        return '{{ panelId }}.blocks.{{ viewName }}';
+    }
+
+    public static function getCategory(): string
+    {
+        return Globals::class;
+    }
+}

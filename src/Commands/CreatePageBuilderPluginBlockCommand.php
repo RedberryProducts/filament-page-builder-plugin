@@ -14,7 +14,7 @@ class CreatePageBuilderPluginBlockCommand extends Command
 {
     use CreatesClassFile;
 
-    public $signature = 'page-builder-plugin:make-block {name?} {--T|type=} {--panel=}';
+    public $signature = 'page-builder-plugin:make-block {name?} {--T|type=} {--panel=} {--global : Create a global block in Blocks/Globals directory}';
 
     public $description = 'create a new block';
 
@@ -37,7 +37,15 @@ class CreatePageBuilderPluginBlockCommand extends Command
 
         $this->panel = $this->getPanelToCreateIn();
 
+        $isGlobal = $this->option('global');
+
         $blocksNamespace = $this->getClassNameSpaces('Blocks');
+
+        if ($isGlobal) {
+            $this->createGlobalsCategoryIfNotExists();
+            $isFirstGlobalBlock = $this->isFirstGlobalBlock();
+            $blocksNamespace .= '\\Globals';
+        }
 
         $blockClass = $blocksNamespace . '\\' . $block;
 
@@ -60,40 +68,96 @@ class CreatePageBuilderPluginBlockCommand extends Command
         );
 
         if ($blockType === 'iframe') {
+            $stubName = $isGlobal ? 'block.global' : 'block';
+            $replacements = [
+                '{{ class }}' => str($blockClass)->afterLast('\\')->replace('\\', ''),
+                '{{ namespace }}' => str($blockClass)->beforeLast('\\'),
+            ];
+
+            if ($isGlobal) {
+                $replacements['{{ globalsNamespace }}'] = $this->getClassNameSpaces('BlockCategories');
+            }
+
             $this->createFileFromStub(
-                'block',
+                $stubName,
                 $this->appClassToPath($blockClass),
-                [
-                    '{{ class }}' => str($blockClass)->afterLast('\\')->replace('\\', ''),
-                    '{{ namespace }}' => str($blockClass)->beforeLast('\\'),
-                ]
+                $replacements
             );
         }
 
         if ($blockType === 'view') {
             $viewName = str($block)->replace('\\', '.')->kebab()->replace('.-', '.');
+            if ($isGlobal) {
+                $viewName = 'globals.' . $viewName;
+            }
+
+            $stubName = $isGlobal ? 'block.global.view' : 'block.view';
+            $replacements = [
+                '{{ class }}' => str($block)->afterLast('\\')->replace('\\', ''),
+                '{{ namespace }}' => str($blockClass)->beforeLast('\\'),
+                '{{ viewName }}' => $viewName,
+                '{{ panelId }}' => $this->panel->getId(),
+            ];
+
+            if ($isGlobal) {
+                $replacements['{{ globalsNamespace }}'] = $this->getClassNameSpaces('BlockCategories');
+            }
+
             $this->createFileFromStub(
-                'block.view',
+                $stubName,
                 $this->appClassToPath($blockClass),
-                [
-                    '{{ class }}' => str($block)->afterLast('\\')->replace('\\', ''),
-                    '{{ namespace }}' => str($blockClass)->beforeLast('\\'),
-                    '{{ viewName }}' => $viewName,
-                    '{{ panelId }}' => $this->panel->getId(),
-                ]
+                $replacements
             );
+
+            $viewPath = str($viewName)
+                ->replace('.', '/')
+                ->prepend("views/{$this->panel->getId()}/blocks/")
+                ->append('.blade.php');
 
             $this->createFileFromStub(
                 'block.blade',
-                resource_path(
-                    $viewName
-                        ->replace('.', '/')
-                        ->prepend("views/{$this->panel->getId()}/blocks/")
-                        ->append('.blade.php')
-                ),
+                resource_path($viewPath),
             );
         }
 
+        if ($isGlobal && isset($isFirstGlobalBlock) && $isFirstGlobalBlock) {
+            $this->info('To manage global blocks in Filament, add the GlobalBlocksPlugin to your panel:');
+        }
+
         return self::SUCCESS;
+    }
+
+    protected function createGlobalsCategoryIfNotExists(): void
+    {
+        $categoryNamespace = $this->getClassNameSpaces('BlockCategories');
+        $globalsClass = $categoryNamespace . '\\Globals';
+
+        if (class_exists($globalsClass)) {
+            return;
+        }
+
+        $this->createFileFromStub(
+            'category-block',
+            $this->appClassToPath($globalsClass),
+            [
+                '{{ class }}' => 'Globals',
+                '{{ namespace }}' => $categoryNamespace,
+            ]
+        );
+
+        $this->info("Created Globals category at: {$globalsClass}");
+    }
+
+    protected function isFirstGlobalBlock(): bool
+    {
+        $globalBlocksPath = app_path("Filament/{$this->panel->getId()}/Blocks/Globals");
+
+        if (! is_dir($globalBlocksPath)) {
+            return true;
+        }
+
+        $existingBlocks = glob($globalBlocksPath . '/*.php');
+
+        return empty($existingBlocks);
     }
 }

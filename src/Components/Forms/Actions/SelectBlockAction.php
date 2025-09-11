@@ -5,6 +5,7 @@ namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\View\ComponentAttributeBag;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
@@ -86,6 +87,36 @@ class SelectBlockAction extends Action
         $this->stickyModalFooter();
 
         $this->action(function ($data, $livewire, PageBuilder $component) {
+            $blockType = $data['block_type'];
+
+            $isGlobalBlock = class_exists($blockType) && method_exists($blockType, 'isGlobalBlock') && $blockType::isGlobalBlock();
+
+            if ($isGlobalBlock) {
+                $state = $component->getState() ?? [];
+
+                $block = app($component->getModel())->{$component->relationship}()->make([
+                    'block_type' => $blockType,
+                    'data' => [],
+                    'order' => count($state) + 1,
+                ]);
+
+                $block->id = $block->newUniqueId();
+
+                $component->state([
+                    ...$state,
+                    $block->toArray(),
+                ]);
+
+                $component->callAfterStateUpdated();
+
+                Notification::make()
+                    ->title('Block added successfully')
+                    ->success()
+                    ->send();
+
+                return;
+            }
+
             $livewire->mountFormComponentAction(
                 $component->getStatePath(),
                 $component->getCreateActionName(),

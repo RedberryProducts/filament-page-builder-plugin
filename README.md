@@ -21,6 +21,7 @@
     - [disabling block in select block](#disabling-block-in-select-block)
     - [iframe resizing](#iframe-resizing)
     - [Parameter injection](#parameter-injection)
+    - [Global blocks](#global-blocks)
     - [Rendering page builder items on infolist](#rendering-page-builder-items-on-infolist)
     - [Rendering page builder ite previews on fomrms](#rendering-page-builder-ite-previews-on-fomrms)
     - [Customizing actions and button rendering](#customizing-actions-and-button-rendering)
@@ -539,6 +540,136 @@ this will inject record that is being used on page into `getBlockSchema` functio
 injections that are provided depends on where this function is used, if this is used on infolist for example same parameters that can be injected in normal FilamentPHP can also be injected in one of the above functions, refer to FilamentPHP documentation about what parameters are available for injection.
 
 one thing to note is that because `formatForListingView` uses `formatForSingleView` internally if you wish to inject something in `formatForSingleView` you will need to inject it in `formatForListingView` as well, otherwise it will not work.
+
+### Global blocks
+
+Global blocks are special blocks that have centralized configuration management. Instead of configuring the same block repeatedly across different pages, you can set up the block configuration once and reuse it everywhere.
+
+#### Creating global blocks
+
+You can create a global block using the make-block command with the `--global` flag:
+
+```bash
+php artisan page-builder-plugin:make-block ContactForm --type=view --global
+```
+
+This will:
+- Create a global block class in `app/Filament/{panel}/Blocks/Globals/` directory
+- Create a `Globals` block category for organization
+- Show instructions for enabling the Global Blocks resource
+
+#### Enabling the Global Blocks resource
+
+To manage global blocks in your Filament admin panel, you need to register the GlobalBlocksPlugin in your panel provider:
+
+```php
+<?php
+
+// In your AdminPanelProvider.php (or similar panel provider)
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ... other configurations
+        ->plugins([
+            \Redberry\PageBuilderPlugin\GlobalBlocksPlugin::make(),
+            // ... other plugins
+        ]);
+}
+```
+
+This will add a "Global Blocks" resource to your admin navigation under the "Content Management" group.
+
+#### Configuring the Global Blocks plugin
+
+You can configure the plugin directly when registering it:
+
+```php
+<?php
+
+->plugins([
+    \Redberry\PageBuilderPlugin\GlobalBlocksPlugin::make()
+        ->enableGlobalBlocks(true) // Enable/disable the Global Blocks resource
+        ->resource(\App\Filament\Resources\CustomGlobalBlocksResource::class), // Use custom resource
+    // ... other plugins
+])
+```
+
+**Configuration options:**
+- `enableGlobalBlocks(bool)`: Enable or disable the Global Blocks resource (default: `true`)
+- `resource(string)`: Specify a custom resource class that extends the package's resource
+
+This approach allows you to:
+- **Enable Global Blocks on specific panels only** - Perfect for multi-panel applications
+- **Use different resource configurations per panel** - Each panel can have its own customized resource
+- **Disable the feature entirely** by not registering the plugin or using `->enableGlobalBlocks(false)`
+
+#### How global blocks work
+
+Global blocks use the `IsGlobalBlock` trait and have two key methods:
+
+```php
+<?php
+
+use Redberry\PageBuilderPlugin\Traits\IsGlobalBlock;
+
+class ContactForm extends BaseBlock
+{
+    use IsGlobalBlock;
+
+    // Define the block's schema - this will be used in the Global Blocks resource
+    public static function getBaseBlockSchema(?object $record = null): array
+    {
+        return [
+            TextInput::make('title')->required(),
+            Textarea::make('description'),
+            TextInput::make('email')->email(),
+        ];
+    }
+
+    // The schema returned to the page builder (empty for global blocks)
+    public static function getBlockSchema(?object $record = null): array
+    {
+        $schema = static::getBaseBlockSchema($record);
+        return static::applyGlobalConfiguration($schema);
+    }
+}
+```
+
+#### Global Blocks resource
+
+The "Global Blocks" resource is provided by the package and becomes available once you register the GlobalBlocksPlugin in your panel. This resource allows you to:
+
+- View all available global blocks
+- Configure each block's field values
+- Edit configurations using the actual Filament form fields defined in `getBaseBlockSchema()`
+
+
+#### Using global blocks on pages
+
+When adding global blocks to pages:
+- **No configuration modal appears** - blocks are added instantly
+- **No per-page configuration** - all configuration is managed centrally
+- **Consistent values everywhere** - the block uses the same configured values across all pages
+
+Simply add your global block to the page builder's blocks array:
+
+```php
+<?php
+
+PageBuilder::make('website_content')
+    ->blocks([
+        ContactForm::class,
+        // other blocks...
+    ]);
+```
+
+#### Key benefits
+
+- **Centralized management**: Configure once, use everywhere
+- **Consistency**: Same content and styling across all instances
+- **Efficiency**: No need to reconfigure the same block on multiple pages
+- **Maintainability**: Update global block configuration in one place
 
 ### Rendering page builder items on infolist
 outside of form you might want to render page builder items on infolist, for this we provide two prebuilt entries:
