@@ -4,6 +4,7 @@ namespace Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource\Pages;
 
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Redberry\PageBuilderPlugin\Models\GlobalBlockConfig;
 use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource;
 
 class EditGlobalBlock extends EditRecord
@@ -26,9 +27,11 @@ class EditGlobalBlock extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        $blockClass = $this->record->class_name;
+        /** @var GlobalBlockConfig $record */
+        $record = $this->record;
+        $blockClass = $record->class_name;
 
-        if (class_exists($blockClass) && $this->record->configuration) {
+        if (class_exists($blockClass) && $record->configuration) {
             try {
                 if (method_exists($blockClass, 'getBaseBlockSchema')) {
                     $schema = $blockClass::getBaseBlockSchema();
@@ -39,7 +42,7 @@ class EditGlobalBlock extends EditRecord
                 foreach ($schema as $field) {
                     if (method_exists($field, 'getName')) {
                         $fieldName = $field->getName();
-                        $configValue = $this->record->getConfigValue($fieldName);
+                        $configValue = $record->getConfigValue($fieldName);
                         if ($configValue !== null) {
                             $data[$fieldName] = $configValue;
                         }
@@ -55,7 +58,9 @@ class EditGlobalBlock extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $configuration = [];
-        $blockClass = $this->record->class_name;
+        /** @var GlobalBlockConfig $record */
+        $record = $this->record;
+        $blockClass = $record->class_name;
 
         if (class_exists($blockClass)) {
             try {

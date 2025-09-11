@@ -48,7 +48,7 @@ abstract class BaseBlock
             return static::generatedStorageUrl($path);
         }
 
-        if (is_array($path) && count($path) > 0) {
+        if (count($path) > 0) {
             $filePath = array_values($path)[0];
             if (is_string($filePath)) {
                 return static::generatedStorageUrl($filePath);
@@ -97,5 +97,12 @@ abstract class BaseBlock
         }
 
         return static::getBlockName() . ' - ' . ($index + 1);
+    }
+
+    public static function getBaseBlockSchema(?object $record = null): array
+    {
+        return [
+            // schema
+        ];
     }
 }
