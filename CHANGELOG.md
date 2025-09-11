@@ -2,6 +2,19 @@
 
 All notable changes to `page-builder-plugin` will be documented in this file.
 
+## Package release - v1.1.3 - 2025-09-11
+
+### What's Changed
+
+* Feat/global blocks by @mishatch in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/16
+* fix: phpstan errors by @GigaGiorgadze in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/17
+
+### New Contributors
+
+* @mishatch made their first contribution in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/16
+
+**Full Changelog**: https://github.com/RedberryProducts/filament-page-builder-plugin/compare/v1.1.2...v1.1.3
+
 ## v1.0.2 - 2025-04-17
 
 ### What's Changed
