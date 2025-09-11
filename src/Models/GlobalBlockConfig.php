@@ -89,7 +89,24 @@ class GlobalBlockConfig extends Model
         $globalBlocks = [];
         $appPath = app_path();
 
-        $globalsDirectories = File::glob($appPath . '/Filament/*/Blocks/Globals');
+        $discoveryPaths = config('page-builder-plugin.global_blocks_discovery_paths', [
+            'app/Filament/*/Blocks/Globals',
+        ]);
+
+        $globalsDirectories = [];
+
+        foreach ($discoveryPaths as $pattern) {
+            $fullPattern = $appPath . '/' . ltrim($pattern, 'app/');
+
+            if (str_contains($pattern, '*')) {
+                $directories = File::glob($fullPattern);
+                $globalsDirectories = array_merge($globalsDirectories, $directories);
+            } else {
+                if (File::isDirectory($fullPattern)) {
+                    $globalsDirectories[] = $fullPattern;
+                }
+            }
+        }
 
         foreach ($globalsDirectories as $directory) {
             $files = File::glob($directory . '/*.php');
