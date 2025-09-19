@@ -76,3 +76,57 @@ it('handles non-existent resource class gracefully', function () {
 
     expect($panel->getResources())->toBeEmpty();
 });
+
+it('can configure navigation group', function () {
+    $plugin = GlobalBlocksPlugin::make()
+        ->navigationGroup('Custom Group');
+
+    expect($plugin)->toBeInstanceOf(GlobalBlocksPlugin::class);
+});
+
+it('can configure navigation sort', function () {
+    $plugin = GlobalBlocksPlugin::make()
+        ->navigationSort(15);
+
+    expect($plugin)->toBeInstanceOf(GlobalBlocksPlugin::class);
+});
+
+it('can configure navigation icon', function () {
+    $plugin = GlobalBlocksPlugin::make()
+        ->navigationIcon('heroicon-o-document-text');
+
+    expect($plugin)->toBeInstanceOf(GlobalBlocksPlugin::class);
+});
+
+it('can remove navigation icon with empty string', function () {
+    $plugin = GlobalBlocksPlugin::make()
+        ->navigationIcon('');
+
+    expect($plugin)->toBeInstanceOf(GlobalBlocksPlugin::class);
+});
+
+it('applies navigation customizations to resource', function () {
+    $panel = Panel::make();
+
+    $plugin = GlobalBlocksPlugin::make()
+        ->navigationGroup('Custom Group')
+        ->navigationSort(25)
+        ->navigationIcon('heroicon-o-cog');
+
+    $plugin->register($panel);
+
+    expect(GlobalBlockConfigResource::getNavigationGroup())->toBe('Custom Group');
+    expect(GlobalBlockConfigResource::getNavigationSort())->toBe(25);
+    expect(GlobalBlockConfigResource::getNavigationIcon())->toBe('heroicon-o-cog');
+});
+
+it('applies empty icon to resource', function () {
+    $panel = Panel::make();
+
+    $plugin = GlobalBlocksPlugin::make()
+        ->navigationIcon('');
+
+    $plugin->register($panel);
+
+    expect(GlobalBlockConfigResource::getNavigationIcon())->toBe('');
+});
