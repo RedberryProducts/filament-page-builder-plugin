@@ -20,6 +20,8 @@ class GlobalBlockConfigResource extends Resource
 
     protected static ?string $navigationGroup = 'Content Management';
 
+    protected static ?int $navigationSort = null;
+
     protected static ?string $navigationLabel = 'Global Blocks';
 
     protected static ?string $modelLabel = 'Global Block';

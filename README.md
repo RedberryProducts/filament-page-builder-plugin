@@ -590,7 +590,10 @@ You can configure the plugin directly when registering it:
 ->plugins([
     \Redberry\PageBuilderPlugin\GlobalBlocksPlugin::make()
         ->enableGlobalBlocks(true) // Enable/disable the Global Blocks resource
-        ->resource(\App\Filament\Resources\CustomGlobalBlocksResource::class), // Use custom resource
+        ->resource(\App\Filament\Resources\CustomGlobalBlocksResource::class) // Use custom resource
+        ->navigationGroup('Content Management') // Customize navigation group
+        ->navigationSort(10) // Set navigation sort order
+        ->navigationIcon('heroicon-o-document-text'), // Set navigation icon (use empty string '' to remove icon)
     // ... other plugins
 ])
 ```
@@ -598,6 +601,9 @@ You can configure the plugin directly when registering it:
 **Configuration options:**
 - `enableGlobalBlocks(bool)`: Enable or disable the Global Blocks resource (default: `true`)
 - `resource(string)`: Specify a custom resource class that extends the package's resource
+- `navigationGroup(string)`: Set the navigation group for the Global Blocks resource (default: `'Content Management'`)
+- `navigationSort(int)`: Set the navigation sort order for the Global Blocks resource
+- `navigationIcon(string)`: Set the navigation icon for the Global Blocks resource (use empty string `''` to remove the icon)
 
 This approach allows you to:
 - **Enable Global Blocks on specific panels only** - Perfect for multi-panel applications
