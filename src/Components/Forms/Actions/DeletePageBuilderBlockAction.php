@@ -43,7 +43,7 @@ class DeletePageBuilderBlockAction extends Action
             $items = $component->getState();
             unset($items[$arguments['index']]);
 
-            $component->state($items);
+            $component->state(array_values($items));
 
             $action->sendSuccessNotification();
 
