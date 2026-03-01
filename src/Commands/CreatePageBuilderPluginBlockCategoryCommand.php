@@ -2,6 +2,7 @@
 
 namespace Redberry\PageBuilderPlugin\Commands;
 
+use Throwable;
 use Illuminate\Console\Command;
 use Redberry\PageBuilderPlugin\Traits\Commands\CreatesClassFile;
 
@@ -46,7 +47,7 @@ class CreatePageBuilderPluginBlockCategoryCommand extends Command
                     return self::FAILURE;
                 }
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
         }
 
         $this->createFileFromStub(

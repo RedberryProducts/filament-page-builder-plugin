@@ -2,6 +2,7 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms;
 
+use Exception;
 use Closure;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Hidden;
@@ -58,7 +59,7 @@ class PageBuilderPreview extends Field
     public function getPageBuilderData(): array
     {
         if (is_null($this->pageBuilderField)) {
-            throw new \Exception('Page builder field not set');
+            throw new Exception('Page builder field not set');
         }
 
         $data = $this->getGetCallback()($this->pageBuilderField);

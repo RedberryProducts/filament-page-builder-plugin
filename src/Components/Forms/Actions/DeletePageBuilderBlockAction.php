@@ -2,8 +2,8 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
+use Filament\Actions\Action;
 use Closure;
-use Filament\Forms\Components\Actions\Action;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 
 class DeletePageBuilderBlockAction extends Action
@@ -45,7 +45,6 @@ class DeletePageBuilderBlockAction extends Action
 
             $component->state($items);
 
-            $action->sendSuccessNotification();
 
             $component->callAfterStateUpdated();
         });

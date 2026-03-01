@@ -4,13 +4,13 @@ namespace Redberry\PageBuilderPlugin\Components\Forms;
 
 use Carbon\Carbon;
 use Closure;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
 use Filament\Notifications\Notification;
 use Filament\Support\Exceptions\Halt;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 use Illuminate\View\ComponentAttributeBag;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
@@ -20,6 +20,7 @@ use Redberry\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
 use Redberry\PageBuilderPlugin\Traits\CanRenderWithThumbnails;
 use Redberry\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 use Redberry\PageBuilderPlugin\Traits\FormatsBlockLabelWithContext;
+use Throwable;
 
 class PageBuilder extends Field
 {
@@ -27,7 +28,7 @@ class PageBuilder extends Field
     use ComponentLoadsPageBuilderBlocks;
     use FormatsBlockLabelWithContext;
 
-    public bool | Closure $reorderable = false;
+    public bool|Closure $reorderable = false;
 
     protected ?Closure $renderDeleteActionButtonUsing = null;
 
@@ -140,25 +141,25 @@ class PageBuilder extends Field
 
     public function renderDeleteActionButton(string $item, int $index)
     {
-        $statePath = $this->getStatePath();
+        $statePath    = $this->getStatePath();
         $deleteAction = $this->getDeleteAction();
 
         $attributes = [
-            'slot' => $deleteAction->getLabel(),
+            'slot'        => new HtmlString(e($deleteAction->getLabel())),
             'labelSrOnly' => true,
-            'icon' => 'heroicon-o-trash',
-            'color' => 'danger',
-            'disabled' => $deleteAction->isDisabled(),
-            'attributes' => new ComponentAttributeBag([
-                'wire:click' => "mountFormComponentAction('$statePath', '{$this->getDeleteActionName()}', { item: '$item', index: '$index' } )",
+            'icon'        => 'heroicon-o-trash',
+            'color'       => 'danger',
+            'disabled'    => $deleteAction->isDisabled(),
+            'attributes'  => new ComponentAttributeBag([
+                'wire:click' => "mountAction('{$this->getDeleteActionName()}', { item: '$item', index: '$index' }, { schemaComponent: '{$this->getKey()}' })",
             ]),
         ];
 
         if ($this->renderDeleteActionButtonUsing) {
             return $this->evaluate($this->renderDeleteActionButtonUsing, [
-                'action' => $deleteAction,
-                'item' => $item,
-                'index' => $index,
+                'action'     => $deleteAction,
+                'item'       => $item,
+                'index'      => $index,
                 'attributes' => $attributes,
             ]);
         }
@@ -168,25 +169,25 @@ class PageBuilder extends Field
 
     public function renderEditActionButton(string $item, $index)
     {
-        $statePath = $this->getStatePath();
+        $statePath  = $this->getStatePath();
         $editAction = $this->getEditAction();
 
         $attributes = [
-            'slot' => $editAction->getLabel(),
+            'slot'        => new HtmlString(e($editAction->getLabel())),
             'labelSrOnly' => true,
-            'icon' => 'heroicon-o-pencil-square',
-            'disabled' => $editAction->isDisabled(),
-            'color' => 'primary',
-            'attributes' => new ComponentAttributeBag([
-                'wire:click' => "mountFormComponentAction('$statePath', '{$this->getEditActionName()}', { item: '$item', index: '$index' } )",
+            'icon'        => 'heroicon-o-pencil-square',
+            'disabled'    => $editAction->isDisabled(),
+            'color'       => 'primary',
+            'attributes'  => new ComponentAttributeBag([
+                'wire:click' => "mountAction('{$this->getEditActionName()}', { item: '$item', index: '$index' }, { schemaComponent: '{$this->getKey()}' })",
             ]),
         ];
 
         if ($this->renderEditActionButtonUsing) {
             return $this->evaluate($this->renderEditActionButtonUsing, [
-                'action' => $editAction,
-                'item' => $item,
-                'index' => $index,
+                'action'     => $editAction,
+                'item'       => $item,
+                'index'      => $index,
                 'attributes' => $attributes,
             ]);
         }
@@ -199,20 +200,20 @@ class PageBuilder extends Field
         $reorderAction = $this->getReorderAction();
 
         $attributes = [
-            'icon' => 'heroicon-o-arrows-up-down',
-            'disabled' => $reorderAction->isDisabled(),
-            'color' => 'gray',
+            'icon'       => 'heroicon-o-arrows-up-down',
+            'disabled'   => $reorderAction->isDisabled(),
+            'color'      => 'gray',
             'attributes' => new ComponentAttributeBag([
                 'x-sortable-handle' => 'x-sortable-handle',
-                'x-on:click.stop' => 'x-on:click.stop',
+                'x-on:click.stop'   => 'x-on:click.stop',
             ]),
         ];
 
         if ($this->renderReorderActionButtonUsing) {
             return $this->evaluate($this->renderReorderActionButtonUsing, [
-                'action' => $reorderAction,
-                'item' => $item,
-                'index' => $index,
+                'action'     => $reorderAction,
+                'item'       => $item,
+                'index'      => $index,
                 'attributes' => $attributes,
             ]);
         }
@@ -268,7 +269,8 @@ class PageBuilder extends Field
 
     public function deleteAction(
         Closure $modifyDeleteActionUsing,
-    ) {
+    )
+    {
         $this->modifyDeleteActionUsing = $modifyDeleteActionUsing;
 
         return $this;
@@ -276,7 +278,8 @@ class PageBuilder extends Field
 
     public function editAction(
         Closure $modifyEditActionUsing,
-    ) {
+    )
+    {
         $this->modifyEditActionUsing = $modifyEditActionUsing;
 
         return $this;
@@ -284,7 +287,8 @@ class PageBuilder extends Field
 
     public function createAction(
         Closure $modifyCreateActionUsing,
-    ) {
+    )
+    {
         $this->modifyCreateActionUsing = $modifyCreateActionUsing;
 
         return $this;
@@ -292,7 +296,8 @@ class PageBuilder extends Field
 
     public function selectBlockAction(
         Closure $modifySelectBlockActionUsing,
-    ) {
+    )
+    {
         $this->modifySelectBlockActionUsing = $modifySelectBlockActionUsing;
 
         return $this;
@@ -300,15 +305,17 @@ class PageBuilder extends Field
 
     public function reorderAction(
         Closure $modifyReorderActionUsing,
-    ) {
+    )
+    {
         $this->modifyReorderActionUsing = $modifyReorderActionUsing;
 
         return $this;
     }
 
     public function reorderable(
-        bool | Closure $reorderable = true,
-    ) {
+        bool|Closure $reorderable = true,
+    )
+    {
         $this->reorderable = $reorderable;
 
         return $this;
@@ -316,34 +323,37 @@ class PageBuilder extends Field
 
     public function getReorderable(): bool
     {
-        return (bool) $this->evaluate($this->reorderable);
+        return (bool)$this->evaluate($this->reorderable);
     }
 
     public function getBlockSchema(string $blockType): array
     {
         $closure = Closure::fromCallable([$blockType, 'getBlockSchema']);
 
-        return (array) $this->evaluate($closure);
+        return (array)$this->evaluate($closure);
     }
 
     public function relationship(
-        string $relationship = 'pageBuilderBlocks',
+        string   $relationship = 'pageBuilderBlocks',
         ?Closure $modifyRelationshipQueryUsing = null,
-    ) {
-        $this->relationship = $relationship;
+    )
+    {
+        $this->relationship                 = $relationship;
         $this->modifyRelationshipQueryUsing = $modifyRelationshipQueryUsing;
 
-        $this->loadStateFromRelationshipsUsing(function ($record, PageBuilder $component) {
+        $this->loadStateFromRelationshipsUsing(function (PageBuilder $component) {
             /** @var Collection */
+            $record = $component->getRecord();
             $blocks = $this->getConstrainAppliedQuery($record)
                 ->get();
 
             $component->state($blocks->toArray());
         });
 
-        $this->saveRelationshipsUsing(function (Model $record, $state) {
-            $state = $state ?? [];
-            $query = $this->getConstrainAppliedQuery($record);
+        $this->saveRelationshipsUsing(function (PageBuilder $component, $state) {
+            $record      = $component->getRecord();
+            $state       = $state ?? [];
+            $query       = $this->getConstrainAppliedQuery($record);
             $existingIds = $query->clone()->pluck('id');
 
             $recordsNeedingDeletion = $existingIds->diff(collect($state)->pluck('id'));
@@ -360,15 +370,16 @@ class PageBuilder extends Field
 
                     return [
                         ...$item,
-                        'data' => json_encode($item['data'] ?? []),
-                        "{$relationshipName}_id" => $record->getKey(),
+                        'data'                     => json_encode($item['data'] ?? []),
+                        "{$relationshipName}_id"   => $record->getKey(),
                         "{$relationshipName}_type" => $record->getMorphClass(),
                     ];
                 }, $state), uniqueBy: ['id'], update: ['data', 'order', 'updated_at']);
 
                 DB::commit();
 
-            } catch (\Throwable $th) {
+            }
+            catch (Throwable $th) {
                 DB::rollBack();
 
                 Notification::make()
@@ -388,13 +399,14 @@ class PageBuilder extends Field
     }
 
     public function renderPreviewWithIframes(
-        bool | Closure $condition,
-        string | Closure $createUrl,
-        string | Closure | null $updateUrl = null,
-        bool | Closure $autoResize = true,
-    ) {
-        $condition = (bool) $this->evaluate($condition);
-        $autoResize = (bool) $this->evaluate($autoResize);
+        bool|Closure        $condition,
+        string|Closure      $createUrl,
+        string|Closure|null $updateUrl = null,
+        bool|Closure        $autoResize = true,
+    )
+    {
+        $condition  = (bool)$this->evaluate($condition);
+        $autoResize = (bool)$this->evaluate($autoResize);
 
         if (! $updateUrl) {
             $updateUrl = $createUrl;

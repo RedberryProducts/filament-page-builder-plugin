@@ -1,6 +1,6 @@
 <?php
 
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Illuminate\View\View;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
@@ -37,26 +37,25 @@ it('data will change and all valid blocks will be previewed', function () {
     ]);
 
     livewire(TestComponentWithPageBuilderAndPreview::class)
-        ->assertFormSet([
-            'website_content' => [
-                [
-                    'block_type' => ViewBlock::class,
-                    'data' => [
-                        'image' => 'https://example.com/image.jpg',
-                        'hero_button' => [
-                            'text' => 'hero button text',
-                        ],
-                    ],
-                ],
-            ],
-        ])
+        ->assertSet(
+            'data.website_content.0.block_type',
+            ViewBlock::class
+        )
+        ->assertSet(
+            'data.website_content.0.data.image',
+            'https://example.com/image.jpg'
+        )
+        ->assertSet(
+            'data.website_content.0.data.hero_button.text',
+            'hero button text'
+        )
         ->assertSeeHtml('hero button text')
         ->mountFormComponentAction('website_content', 'edit', [
             'index' => 0,
-            'item' => $blocks->get(0)->id,
+            'item' => $blocks->first()->id,
         ])
         ->assertFormComponentActionMounted('website_content', ['edit'])
-        ->setFormComponentActionData([
+        ->fillForm([
             'data' => [
                 'hero_button' => [
                     'text' => 'Test 123',
@@ -64,18 +63,18 @@ it('data will change and all valid blocks will be previewed', function () {
                 ],
             ],
         ])
-        ->callMountedFormComponentAction()
-        ->assertHasNoFormComponentActionErrors()
+        ->callMountedAction()
+        ->assertHasNoFormErrors()
         ->assertDontSeeHtml('hero button text')
         ->assertSeeHtml('Test 123');
 });
 
 class TestComponentWithPageBuilderAndPreview extends FormComponent
 {
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 PageBuilder::make('website_content')
                     ->reorderable()
                     ->blocks([

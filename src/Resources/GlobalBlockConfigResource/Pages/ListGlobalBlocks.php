@@ -2,7 +2,8 @@
 
 namespace Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource\Pages;
 
-use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource;
 
@@ -13,7 +14,7 @@ class ListGlobalBlocks extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('refresh_blocks')
+            Action::make('refresh_blocks')
                 ->label('Refresh Global Blocks')
                 ->icon('heroicon-o-arrow-path')
                 ->action('refreshGlobalBlocks')
@@ -25,7 +26,7 @@ class ListGlobalBlocks extends ListRecords
     {
         $this->getResource()::getModel()::refreshGlobalBlocks();
 
-        \Filament\Notifications\Notification::make()
+        Notification::make()
             ->title('Global blocks refreshed successfully')
             ->success()
             ->send();

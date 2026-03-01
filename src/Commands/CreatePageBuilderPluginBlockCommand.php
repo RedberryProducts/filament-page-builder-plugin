@@ -2,6 +2,7 @@
 
 namespace Redberry\PageBuilderPlugin\Commands;
 
+use Throwable;
 use Filament\Panel;
 use Illuminate\Console\Command;
 use Redberry\PageBuilderPlugin\Traits\Commands\CreatesClassFile;
@@ -58,7 +59,7 @@ class CreatePageBuilderPluginBlockCommand extends Command
                     return self::FAILURE;
                 }
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
         }
 
         $blockType = $this->option('type') ?? select(

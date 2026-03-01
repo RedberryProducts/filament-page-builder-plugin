@@ -2,7 +2,7 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
-use Filament\Forms\Components\Actions\Action;
+use Filament\Actions\Action;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 
 class ReorderPageBuilderBlockAction extends Action
@@ -31,6 +31,8 @@ class ReorderPageBuilderBlockAction extends Action
             }
 
             $component->state($newState);
+
+            $component->callAfterStateUpdated();
         });
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use Filament\Infolists\Infolist;
+use Filament\Schemas\Schema;
 use Redberry\PageBuilderPlugin\Components\Infolist\PageBuilderEntry;
 use Redberry\PageBuilderPlugin\Models\PageBuilderBlock;
 use Redberry\PageBuilderPlugin\Tests\Fixtures\Blocks\ViewBlock;
@@ -42,11 +42,11 @@ it('only valid blocks will be rendered in list', function () {
 
 class TestInfolistComponentWithPageBuilder extends InfolistComponent
 {
-    public function infolist(Infolist $infolist)
+    public function infolist(Schema $schema)
     {
-        return $infolist
+        return $schema
             ->record(Page::first())
-            ->schema([
+            ->components([
                 PageBuilderEntry::make('website_content')
                     ->blocks([
                         ViewBlock::class,

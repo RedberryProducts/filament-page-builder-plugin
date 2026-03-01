@@ -1,10 +1,3 @@
-const preset = require('./vendor/filament/filament/tailwind.config.preset')
-
-module.exports = {
-    presets: [preset],
-    content: [
-        './app/Filament/**/*.php',
-        './resources/views/**/*.blade.php',
-        './vendor/filament/**/*.blade.php',
-    ],
-}
+// Tailwind v4 uses CSS-based configuration (@theme in CSS files).
+ // This file is kept for reference only and is not used by the v4 CLI build.
+ module.exports = {}

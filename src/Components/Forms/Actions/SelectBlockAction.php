@@ -2,11 +2,11 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
+use Filament\Actions\Action;
+use Filament\Support\Enums\Width;
 use Closure;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
-use Filament\Support\Enums\MaxWidth;
 use Illuminate\View\ComponentAttributeBag;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Components\Forms\RadioButtonImage;
@@ -40,16 +40,16 @@ class SelectBlockAction extends Action
 
         $this->icon('heroicon-o-plus');
 
-        $this->modalWidth(MaxWidth::FiveExtraLarge);
+        $this->modalWidth(Width::FiveExtraLarge);
 
         $this->color('primary');
 
-        $this->form(function ($form, PageBuilder $component) {
+        $this->schema(function ($form, PageBuilder $component) {
             if ($this->getRenderWithThumbnails()) {
                 $field = RadioButtonImage::make('block_type')
                     ->translateLabel()
                     ->disableOptionWhen(
-                        fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled']))
+                        fn($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled']))
                     )
                     ->required()
                     ->columns([
@@ -65,7 +65,7 @@ class SelectBlockAction extends Action
                     ->native(false)
                     ->translateLabel()
                     ->disableOptionWhen(
-                        fn ($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled'])),
+                        fn($value) => (bool) $this->evaluate(Closure::fromCallable([$value, 'getIsSelectionDisabled'])),
                     )
                     ->required()
                     ->translateLabel()
@@ -117,12 +117,11 @@ class SelectBlockAction extends Action
                 return;
             }
 
-            $livewire->mountFormComponentAction(
-                $component->getStatePath(),
+            $livewire->replaceMountedAction(
                 $component->getCreateActionName(),
-                $data
+                $data,
+                ['schemaComponent' => $component->getKey()]
             );
-            $this->halt();
         });
     }
 

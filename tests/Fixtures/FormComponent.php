@@ -3,16 +3,13 @@
 namespace Redberry\PageBuilderPlugin\Tests\Fixtures;
 
 use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Concerns\HasFormComponentActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\BasePage;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 
-class FormComponent extends BasePage implements HasActions, HasForms
+class FormComponent extends BasePage implements HasForms
 {
-    use HasFormComponentActions;
     use InteractsWithActions;
     use InteractsWithFormActions;
     use InteractsWithForms;

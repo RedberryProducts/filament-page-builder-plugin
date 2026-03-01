@@ -2,7 +2,8 @@
 
 namespace Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource\Pages;
 
-use Filament\Actions;
+use Filament\Actions\Action;
+use Exception;
 use Filament\Resources\Pages\EditRecord;
 use Redberry\PageBuilderPlugin\Models\GlobalBlockConfig;
 use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource;
@@ -14,7 +15,7 @@ class EditGlobalBlock extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('preview')
+            Action::make('preview')
                 ->label('Preview Block')
                 ->icon('heroicon-o-eye')
                 ->color('gray')
@@ -48,7 +49,7 @@ class EditGlobalBlock extends EditRecord
                         }
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         }
 
@@ -78,7 +79,7 @@ class EditGlobalBlock extends EditRecord
                         }
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         }
 
@@ -98,7 +99,7 @@ class EditGlobalBlock extends EditRecord
                         unset($data[$fieldName]);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         }
 

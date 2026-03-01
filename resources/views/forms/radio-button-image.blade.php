@@ -1,5 +1,5 @@
 @php
-    $gridDirection = $getGridDirection() ?? 'row';
+    use Illuminate\Contracts\Support\Htmlable;use function Filament\Support\prepare_inherited_attributes;$gridDirection = $getGridDirection() ?? 'row';
     $id = $getId();
     $isDisabled = $isDisabled();
     $statePath = $getStatePath();
@@ -16,14 +16,14 @@
                 @continue(!$category)
                 @if (!$isCategoryClass($category))
                     <x-filament::tabs.item x-on:click="activeTab = '{{ addslashes($category) }}'"
-                        alpine-active="activeTab === '{{ addslashes($category) }}'">
+                                           alpine-active="activeTab === '{{ addslashes($category) }}'">
                         {{ $getCategoryTitle($category) }}
                     </x-filament::tabs.item>
                 @else
                     <x-filament::tabs.item :attributes="$category::getCategoryAttributes()->merge([
                         'icon' => $category::getCategoryIcon(),
                     ])" x-on:click="activeTab = '{{ addslashes($category) }}'"
-                        alpine-active="activeTab === '{{ addslashes($category) }}'">
+                                           alpine-active="activeTab === '{{ addslashes($category) }}'">
                         {{ $getCategoryTitle($category) }}
                     </x-filament::tabs.item>
                 @endif
@@ -38,7 +38,7 @@
         </x-filament::tabs>
     @endif
     <div class="flex-col mt-4 flex">
-        <x-filament::grid :default="$getColumns('default')" :sm="$getColumns('sm')" :md="$getColumns('md')" :lg="$getColumns('lg')" :xl="$getColumns('xl')"
+        <x-page-builder-plugin::grid :default="$getColumns('default')" :sm="$getColumns('sm')" :md="$getColumns('md')" :lg="$getColumns('lg')" :xl="$getColumns('xl')"
             :two-xl="$getColumns('2xl')" :direction="$gridDirection" :isGrid="true" :attributes="\Filament\Support\prepare_inherited_attributes($attributes)
                 ->merge($getExtraAttributes(), escape: false)
                 ->class(['gap-4 w-full'])">
@@ -72,11 +72,11 @@
                                 <span
                                     class="text-sm font-medium leading-6 text-gray-950 dark:text-white">{{ $option['label'] }}</span>
                                 @if ((bool) $option['thumbnail'] ?? false)
-                                    @if ($option['thumbnail'] instanceof \Illuminate\Contracts\Support\Htmlable)
+                                    @if ($option['thumbnail'] instanceof Htmlable)
                                         {!! $option['thumbnail'] !!}
                                     @else
                                         <img src="{{ $option['thumbnail'] }}" alt="{{ $option['label'] }}"
-                                            class="w-full h-32 object-cover rounded-lg mt-2">
+                                             class="w-full h-32 object-cover rounded-lg mt-2">
                                     @endif
                                 @endif
                             </div>
@@ -84,7 +84,6 @@
                     </div>
                 </template>
             @endforeach
-            </template>
-        </x-filament::grid>
+        </x-page-builder-plugin::grid>
     </div>
 </div>
