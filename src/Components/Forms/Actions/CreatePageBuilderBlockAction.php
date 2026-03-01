@@ -3,10 +3,10 @@
 namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
 use Filament\Actions\Action;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Grid;
-use Filament\Support\Enums\Width;
 use Filament\Forms\Components\Hidden;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
+use Filament\Support\Enums\Width;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
 use Redberry\PageBuilderPlugin\Traits\Actions\ModifiesPreviewField;

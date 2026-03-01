@@ -2,8 +2,8 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
-use Filament\Actions\Action;
 use Closure;
+use Filament\Actions\Action;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 
 class DeletePageBuilderBlockAction extends Action
@@ -44,7 +44,6 @@ class DeletePageBuilderBlockAction extends Action
             unset($items[$arguments['index']]);
 
             $component->state($items);
-
 
             $component->callAfterStateUpdated();
         });

@@ -2,8 +2,8 @@
 
 namespace Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource\Pages;
 
-use Filament\Actions\Action;
 use Exception;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 use Redberry\PageBuilderPlugin\Models\GlobalBlockConfig;
 use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource;

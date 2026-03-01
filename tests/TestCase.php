@@ -56,7 +56,7 @@ class TestCase extends Orchestra
             WidgetsServiceProvider::class,
             PageBuilderPluginServiceProvider::class,
             AdminPanelProvider::class,
-            LivewireServiceProvider::class
+            LivewireServiceProvider::class,
         ];
     }
 

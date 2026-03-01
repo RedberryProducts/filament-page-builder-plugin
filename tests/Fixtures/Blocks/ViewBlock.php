@@ -2,8 +2,8 @@
 
 namespace Redberry\PageBuilderPlugin\Tests\Fixtures\Blocks;
 
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Redberry\PageBuilderPlugin\Abstracts\BaseBlock;
 
 class ViewBlock extends BaseBlock

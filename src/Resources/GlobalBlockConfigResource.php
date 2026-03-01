@@ -23,9 +23,9 @@ class GlobalBlockConfigResource extends Resource
 {
     protected static ?string $model = GlobalBlockConfig::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-cube';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cube';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Content Management';
+    protected static string | UnitEnum | null $navigationGroup = 'Content Management';
 
     protected static ?int $navigationSort = null;
 
@@ -54,8 +54,7 @@ class GlobalBlockConfigResource extends Resource
                             $blockClass = $record->class_name;
                             if (method_exists($blockClass, 'getBaseBlockSchema')) {
                                 $schema = $blockClass::getBaseBlockSchema();
-                            }
-                            else {
+                            } else {
                                 $schema = $blockClass::getBlockSchema();
                             }
 
@@ -63,7 +62,7 @@ class GlobalBlockConfigResource extends Resource
                                 /** @var Field $field */
                                 $field = $field;
                                 if (method_exists($field, 'getName')) {
-                                    $fieldName   = $field->getName();
+                                    $fieldName = $field->getName();
                                     $configValue = $record->getConfigValue($fieldName);
                                     if ($configValue !== null) {
                                         $field->default($configValue);
@@ -72,8 +71,7 @@ class GlobalBlockConfigResource extends Resource
                             }
 
                             return $schema;
-                        }
-                        catch (Exception $e) {
+                        } catch (Exception $e) {
                             return [
                                 Placeholder::make('error')
                                     ->label('Error')
@@ -119,7 +117,7 @@ class GlobalBlockConfigResource extends Resource
     {
         return [
             'index' => ListGlobalBlocks::route('/'),
-            'edit'  => EditGlobalBlock::route('/{record}/edit'),
+            'edit' => EditGlobalBlock::route('/{record}/edit'),
         ];
     }
 }

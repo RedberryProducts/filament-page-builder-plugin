@@ -2,9 +2,9 @@
 
 namespace Redberry\PageBuilderPlugin\Commands;
 
-use Throwable;
 use Illuminate\Console\Command;
 use Redberry\PageBuilderPlugin\Traits\Commands\CreatesClassFile;
+use Throwable;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\text;

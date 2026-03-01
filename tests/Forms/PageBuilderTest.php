@@ -7,6 +7,7 @@ use Redberry\PageBuilderPlugin\Models\PageBuilderBlock;
 use Redberry\PageBuilderPlugin\Tests\Fixtures\Blocks\ViewBlock;
 use Redberry\PageBuilderPlugin\Tests\Fixtures\FormComponent;
 use Redberry\PageBuilderPlugin\Tests\Fixtures\Models\Page;
+
 use function Pest\Laravel\startSession;
 use function Pest\Livewire\livewire;
 
@@ -25,14 +26,13 @@ it('can create new block', function () {
             'data' => [
                 'hero_button' => [
                     'text' => 'Test 123',
-                    'url'  => 'https://example.com',
+                    'url' => 'https://example.com',
                 ],
             ],
         ])
         ->callMountedFormComponentAction()
         ->assertHasNoFormComponentActionErrors()
         ->assertFormComponentActionNotMounted('website_content', 'create');
-
 
     $state = $livewire->get('data.website_content');
 
@@ -41,7 +41,6 @@ it('can create new block', function () {
         ->and($state[0]['data']['hero_button']['text'])->toBe('Test 123')
         ->and($state[0]['data']['hero_button']['url'])->toBe('https://example.com');
 });
-
 
 it('can edit existing block', function () {
     $block = PageBuilderBlock::factory()->create([
@@ -56,13 +55,13 @@ it('can edit existing block', function () {
             ],
         ],
     ]);
-     livewire(TestComponentWithPageBuilderRenderedUsingViews::class)
+    livewire(TestComponentWithPageBuilderRenderedUsingViews::class)
         ->mountFormComponentAction('website_content', 'edit', ['index' => 0, 'item' => $block->id])
         ->setFormComponentActionData([
             'data' => [
                 'hero_button' => [
                     'text' => 'Test 123',
-                    'url'  => 'https://example.com',
+                    'url' => 'https://example.com',
                 ],
             ],
         ])
