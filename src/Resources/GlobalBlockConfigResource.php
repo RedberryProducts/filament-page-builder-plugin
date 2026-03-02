@@ -6,7 +6,6 @@ use BackedEnum;
 use Exception;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Field;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;

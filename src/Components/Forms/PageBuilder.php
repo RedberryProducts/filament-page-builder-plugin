@@ -8,7 +8,6 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
 use Filament\Notifications\Notification;
 use Filament\Support\Exceptions\Halt;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 use Illuminate\View\ComponentAttributeBag;
