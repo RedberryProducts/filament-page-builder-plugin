@@ -26,7 +26,7 @@ class CreatePageBuilderBlockAction extends Action
 
         $this->successNotificationTitle(__('filament-panels::resources/pages/create-record.notifications.created.title'));
 
-        $this->form(function ($arguments, Schema $schema, PageBuilder $component) {
+        $this->schema(function ($arguments, Schema $schema, PageBuilder $component) {
             $blockType = $arguments['block_type'];
 
             $preview = PageBuilderPreview::make('preview')

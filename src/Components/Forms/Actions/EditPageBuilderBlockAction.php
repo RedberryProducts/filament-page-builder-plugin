@@ -26,7 +26,7 @@ class EditPageBuilderBlockAction extends Action
 
         $this->successNotificationTitle(__('filament-panels::resources/pages/edit-record.notifications.saved.title'));
 
-        $this->form(function ($arguments, Schema $schema, PageBuilder $component) {
+        $this->schema(function ($arguments, Schema $schema, PageBuilder $component) {
             $block = $component->getState()[$arguments['index']];
 
             $preview = PageBuilderPreview::make('preview')

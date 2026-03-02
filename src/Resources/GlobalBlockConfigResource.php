@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -73,9 +74,9 @@ class GlobalBlockConfigResource extends Resource
                             return $schema;
                         } catch (Exception $e) {
                             return [
-                                Placeholder::make('error')
+                                TextEntry::make('error')
                                     ->label('Error')
-                                    ->content('Unable to load block schema: ' . $e->getMessage()),
+                                    ->state('Unable to load block schema: ' . $e->getMessage()),
                             ];
                         }
                     })

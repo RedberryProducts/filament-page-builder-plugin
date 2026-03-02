@@ -335,7 +335,6 @@ class PageBuilder extends Field
         $this->modifyRelationshipQueryUsing = $modifyRelationshipQueryUsing;
 
         $this->loadStateFromRelationshipsUsing(function (PageBuilder $component) {
-            /** @var Collection */
             $record = $component->getRecord();
             $blocks = $this->getConstrainAppliedQuery($record)
                 ->get();
