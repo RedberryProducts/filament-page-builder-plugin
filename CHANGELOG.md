@@ -2,6 +2,14 @@
 
 All notable changes to `page-builder-plugin` will be documented in this file.
 
+## Package release - v2.0.0 - 2026-03-02
+
+### What's Changed
+
+* upgrade to filament v4 by @GigaGiorgadze in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/22
+
+**Full Changelog**: https://github.com/RedberryProducts/filament-page-builder-plugin/compare/v1.1.5...v2.0.0
+
 ## Package release - v1.1.5 - 2026-03-02
 
 ### What's Changed
