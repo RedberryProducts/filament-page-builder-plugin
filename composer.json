@@ -24,13 +24,13 @@
     ],
     "require": {
         "php": "^8.1|^8.2|^8.3|^8.4",
-        "filament/actions": "^4.7",
-        "filament/filament": "^4.0",
-        "filament/forms": "^4.7",
-        "filament/infolists": "^4.7",
-        "filament/support": "^4.7",
-        "filament/tables": "^4.7",
-        "filament/widgets": "^4.7",
+        "filament/actions": "^5.0",
+        "filament/filament": "^5.0",
+        "filament/forms": "^5.0",
+        "filament/infolists": "^5.0",
+        "filament/support": "^5.0",
+        "filament/tables": "^5.0",
+        "filament/widgets": "^5.0",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
