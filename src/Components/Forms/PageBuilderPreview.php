@@ -3,6 +3,7 @@
 namespace Redberry\PageBuilderPlugin\Components\Forms;
 
 use Closure;
+use Exception;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Hidden;
 use Redberry\PageBuilderPlugin\Traits\ListPreviewRendersWithIframe;
@@ -58,10 +59,10 @@ class PageBuilderPreview extends Field
     public function getPageBuilderData(): array
     {
         if (is_null($this->pageBuilderField)) {
-            throw new \Exception('Page builder field not set');
+            throw new Exception('Page builder field not set');
         }
 
-        $data = $this->getGetCallback()($this->pageBuilderField);
+        $data = $this->makeGetUtility()($this->pageBuilderField);
 
         if ($this->singleItemPreview) {
             $blockType = $data['block_type'] ?? null;

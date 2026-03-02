@@ -4,13 +4,12 @@ namespace Redberry\PageBuilderPlugin\Components\Forms;
 
 use Carbon\Carbon;
 use Closure;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
 use Filament\Notifications\Notification;
 use Filament\Support\Exceptions\Halt;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 use Illuminate\View\ComponentAttributeBag;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\CreatePageBuilderBlockAction;
 use Redberry\PageBuilderPlugin\Components\Forms\Actions\DeletePageBuilderBlockAction;
@@ -20,6 +19,7 @@ use Redberry\PageBuilderPlugin\Components\Forms\Actions\SelectBlockAction;
 use Redberry\PageBuilderPlugin\Traits\CanRenderWithThumbnails;
 use Redberry\PageBuilderPlugin\Traits\ComponentLoadsPageBuilderBlocks;
 use Redberry\PageBuilderPlugin\Traits\FormatsBlockLabelWithContext;
+use Throwable;
 
 class PageBuilder extends Field
 {
@@ -144,13 +144,13 @@ class PageBuilder extends Field
         $deleteAction = $this->getDeleteAction();
 
         $attributes = [
-            'slot' => $deleteAction->getLabel(),
+            'slot' => new HtmlString(e($deleteAction->getLabel())),
             'labelSrOnly' => true,
             'icon' => 'heroicon-o-trash',
             'color' => 'danger',
             'disabled' => $deleteAction->isDisabled(),
             'attributes' => new ComponentAttributeBag([
-                'wire:click' => "mountFormComponentAction('$statePath', '{$this->getDeleteActionName()}', { item: '$item', index: '$index' } )",
+                'wire:click' => "mountAction('{$this->getDeleteActionName()}', { item: '$item', index: '$index' }, { schemaComponent: '{$this->getKey()}' })",
             ]),
         ];
 
@@ -172,13 +172,13 @@ class PageBuilder extends Field
         $editAction = $this->getEditAction();
 
         $attributes = [
-            'slot' => $editAction->getLabel(),
+            'slot' => new HtmlString(e($editAction->getLabel())),
             'labelSrOnly' => true,
             'icon' => 'heroicon-o-pencil-square',
             'disabled' => $editAction->isDisabled(),
             'color' => 'primary',
             'attributes' => new ComponentAttributeBag([
-                'wire:click' => "mountFormComponentAction('$statePath', '{$this->getEditActionName()}', { item: '$item', index: '$index' } )",
+                'wire:click' => "mountAction('{$this->getEditActionName()}', { item: '$item', index: '$index' }, { schemaComponent: '{$this->getKey()}' })",
             ]),
         ];
 
@@ -333,15 +333,16 @@ class PageBuilder extends Field
         $this->relationship = $relationship;
         $this->modifyRelationshipQueryUsing = $modifyRelationshipQueryUsing;
 
-        $this->loadStateFromRelationshipsUsing(function ($record, PageBuilder $component) {
-            /** @var Collection */
+        $this->loadStateFromRelationshipsUsing(function (PageBuilder $component) {
+            $record = $component->getRecord();
             $blocks = $this->getConstrainAppliedQuery($record)
                 ->get();
 
             $component->state($blocks->toArray());
         });
 
-        $this->saveRelationshipsUsing(function (Model $record, $state) {
+        $this->saveRelationshipsUsing(function (PageBuilder $component, $state) {
+            $record = $component->getRecord();
             $state = $state ?? [];
             $query = $this->getConstrainAppliedQuery($record);
             $existingIds = $query->clone()->pluck('id');
@@ -368,7 +369,7 @@ class PageBuilder extends Field
 
                 DB::commit();
 
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 DB::rollBack();
 
                 Notification::make()

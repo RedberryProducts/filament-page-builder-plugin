@@ -1,6 +1,6 @@
 <?php
 
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Illuminate\View\View;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Models\PageBuilderBlock;
@@ -17,46 +17,29 @@ beforeEach(function () {
 });
 
 it('can create new block', function () {
-    livewire(TestcomponentWithPageBuilderRenderedUsingViews::class)
-        ->mountFormComponentAction('website_content', 'select-block')
-        ->setFormComponentActionData([
+    $livewire = livewire(TestcomponentWithPageBuilderRenderedUsingViews::class)
+        ->mountFormComponentAction('website_content', 'create', arguments: [
             'block_type' => ViewBlock::class,
+        ])
+        ->assertFormComponentActionMounted('website_content', 'create')
+        ->setFormComponentActionData([
+            'data' => [
+                'hero_button' => [
+                    'text' => 'Test 123',
+                    'url' => 'https://example.com',
+                ],
+            ],
         ])
         ->callMountedFormComponentAction()
         ->assertHasNoFormComponentActionErrors()
-        ->callMountedFormComponentAction()
-        ->assertFormComponentActionMounted('website_content', ['select-block', 'create'])
-        ->setFormComponentActionData([
-            'data' => [
-                'hero_button' => [
-                    'text' => 'Test 123',
-                    'url' => 'https://example.com',
-                ],
-            ],
-        ])
-        ->assertFormComponentActionDataSet([
-            'data' => [
-                'hero_button' => [
-                    'text' => 'Test 123',
-                    'url' => 'https://example.com',
-                ],
-            ],
-        ])
-        ->callMountedFormComponentAction()
-        ->assertFormComponentActionNotMounted('website_content', ['select-block', 'create'])
-        ->assertFormSet([
-            'website_content' => [
-                [
-                    'block_type' => ViewBlock::class,
-                    'data' => [
-                        'hero_button' => [
-                            'text' => 'Test 123',
-                            'url' => 'https://example.com',
-                        ],
-                    ],
-                ],
-            ],
-        ]);
+        ->assertFormComponentActionNotMounted('website_content', 'create');
+
+    $state = $livewire->get('data.website_content');
+
+    expect($state)->toHaveCount(1)
+        ->and($state[0]['block_type'])->toBe(ViewBlock::class)
+        ->and($state[0]['data']['hero_button']['text'])->toBe('Test 123')
+        ->and($state[0]['data']['hero_button']['url'])->toBe('https://example.com');
 });
 
 it('can edit existing block', function () {
@@ -83,21 +66,11 @@ it('can edit existing block', function () {
             ],
         ])
         ->callMountedFormComponentAction()
-        ->assertFormSet([
-            'website_content' => [
-                [
-                    'id' => $block->id,
-                    'block_type' => ViewBlock::class,
-                    'data' => [
-                        'image' => 'https://example.com/image.jpg',
-                        'hero_button' => [
-                            'text' => 'Test 123',
-                            'url' => 'https://example.com',
-                        ],
-                    ],
-                ],
-            ],
-        ]);
+        ->assertSet('data.website_content.0.id', $block->id)
+        ->assertSet('data.website_content.0.block_type', ViewBlock::class)
+        ->assertSet('data.website_content.0.data.image', 'https://example.com/image.jpg')
+        ->assertSet('data.website_content.0.data.hero_button.text', 'Test 123')
+        ->assertSet('data.website_content.0.data.hero_button.url', 'https://example.com');
 });
 
 it('can delete existing block', function () {
@@ -146,36 +119,25 @@ it('can delete multiple blocks sequentially without undefined array key error', 
         ->mountFormComponentAction('website_content', 'delete', ['index' => 0, 'item' => $blocks->get(0)->id])
         ->callMountedFormComponentAction()
         ->assertHasNoErrors()
-        ->assertFormSet([
-            'website_content' => [
-                [
-                    'id' => $blocks->get(1)->id,
-                ],
-            ],
-        ]);
+        ->assertSet('data.website_content.0.id', $blocks->get(1)->id);
+
+    expect($component->get('data.website_content'))->toHaveCount(1);
 
     // Delete the second block — now also at index 0 after re-indexing.
     // This used to throw "Undefined array key 0".
     $component
         ->mountFormComponentAction('website_content', 'delete', ['index' => 0, 'item' => $blocks->get(1)->id])
         ->callMountedFormComponentAction()
-        ->assertHasNoErrors()
-        ->assertFormSet([
-            'website_content' => [],
-        ]);
+        ->assertHasNoErrors();
+
+    expect($component->get('data.website_content'))->toBeEmpty();
 });
 
 it('can reorder existing blocks', function () {
     $blocks = PageBuilderBlock::factory()->count(3)->sequence(
-        [
-            'order' => 0,
-        ],
-        [
-            'order' => 1,
-        ],
-        [
-            'order' => 2,
-        ],
+        ['order' => 0],
+        ['order' => 1],
+        ['order' => 2],
     )->create([
         'block_type' => ViewBlock::class,
         'page_builder_blockable_id' => $this->page->id,
@@ -188,14 +150,8 @@ it('can reorder existing blocks', function () {
             ],
         ],
     ]);
-    livewire(TestComponentWithPageBuilderRenderedUsingViews::class)
-        ->assertFormSet([
-            'website_content' => $blocks->map(function ($block) {
-                return [
-                    'id' => $block->id,
-                ];
-            })->toArray(),
-        ])
+
+    $livewire = livewire(TestComponentWithPageBuilderRenderedUsingViews::class)
         ->mountFormComponentAction('website_content', 'reorder', [
             'items' => [
                 $blocks->get(2)->id,
@@ -203,28 +159,20 @@ it('can reorder existing blocks', function () {
                 $blocks->get(1)->id,
             ],
         ])
-        ->callMountedFormComponentAction()
-        ->assertFormSet([
-            'website_content' => [
-                [
-                    'id' => $blocks->get(2)->id,
-                ],
-                [
-                    'id' => $blocks->get(0)->id,
-                ],
-                [
-                    'id' => $blocks->get(1)->id,
-                ],
-            ],
-        ]);
+        ->callMountedFormComponentAction();
+
+    $livewire
+        ->assertSet('data.website_content.0.id', $blocks->get(2)->id)
+        ->assertSet('data.website_content.1.id', $blocks->get(0)->id)
+        ->assertSet('data.website_content.2.id', $blocks->get(1)->id);
 });
 
 class TestComponentWithPageBuilderRenderedUsingViews extends FormComponent
 {
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 PageBuilder::make('website_content')
                     ->reorderable()
                     ->blocks([

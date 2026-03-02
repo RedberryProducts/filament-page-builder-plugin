@@ -2,11 +2,11 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Grid;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Form;
-use Filament\Support\Enums\MaxWidth;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
+use Filament\Support\Enums\Width;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
 use Redberry\PageBuilderPlugin\Traits\Actions\ModifiesPreviewField;
@@ -26,7 +26,7 @@ class EditPageBuilderBlockAction extends Action
 
         $this->successNotificationTitle(__('filament-panels::resources/pages/edit-record.notifications.saved.title'));
 
-        $this->form(function ($arguments, Form $form, PageBuilder $component) {
+        $this->schema(function ($arguments, Schema $schema, PageBuilder $component) {
             $block = $component->getState()[$arguments['index']];
 
             $preview = PageBuilderPreview::make('preview')
@@ -41,7 +41,7 @@ class EditPageBuilderBlockAction extends Action
                 'block_id' => $block['id'],
             ]);
 
-            return $form->schema(
+            return $schema->components(
                 [
                     Grid::make(1)
                         ->statePath('data')
@@ -64,14 +64,17 @@ class EditPageBuilderBlockAction extends Action
 
         $this->slideOver();
 
-        $this->modalWidth(MaxWidth::Screen);
+        $this->modalWidth(Width::Screen);
 
         $this->action(function ($arguments, $data, $action, PageBuilder $component) {
             $newState = $component->getState();
 
+            $existingData = $newState[$arguments['index']]['data'] ?? [];
+            $mergedData = array_merge($existingData, $data['data'] ?? []);
+
             $newState[$arguments['index']] = [
                 ...$newState[$arguments['index']],
-                'data' => $data['data'],
+                'data' => $mergedData,
             ];
 
             $component->state($newState);

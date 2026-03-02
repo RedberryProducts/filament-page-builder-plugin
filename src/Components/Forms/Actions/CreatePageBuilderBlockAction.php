@@ -2,11 +2,11 @@
 
 namespace Redberry\PageBuilderPlugin\Components\Forms\Actions;
 
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Grid;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Form;
-use Filament\Support\Enums\MaxWidth;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
+use Filament\Support\Enums\Width;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilder;
 use Redberry\PageBuilderPlugin\Components\Forms\PageBuilderPreview;
 use Redberry\PageBuilderPlugin\Traits\Actions\ModifiesPreviewField;
@@ -26,7 +26,7 @@ class CreatePageBuilderBlockAction extends Action
 
         $this->successNotificationTitle(__('filament-panels::resources/pages/create-record.notifications.created.title'));
 
-        $this->form(function ($arguments, Form $form, PageBuilder $component) {
+        $this->schema(function ($arguments, Schema $schema, PageBuilder $component) {
             $blockType = $arguments['block_type'];
 
             $preview = PageBuilderPreview::make('preview')
@@ -35,7 +35,7 @@ class CreatePageBuilderBlockAction extends Action
 
             $preview = $this->getModifiedPreviewField($preview, $blockType);
 
-            return $form->schema(
+            return $schema->components(
                 [
                     Grid::make(1)
                         ->statePath('data')
@@ -60,7 +60,7 @@ class CreatePageBuilderBlockAction extends Action
 
         $this->cancelParentActions();
 
-        $this->modalWidth(MaxWidth::Screen);
+        $this->modalWidth(Width::Screen);
 
         $this->action(function ($arguments, $data, PageBuilder $component) {
             $blockType = $arguments['block_type'];

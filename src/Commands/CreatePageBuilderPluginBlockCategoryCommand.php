@@ -4,6 +4,7 @@ namespace Redberry\PageBuilderPlugin\Commands;
 
 use Illuminate\Console\Command;
 use Redberry\PageBuilderPlugin\Traits\Commands\CreatesClassFile;
+use Throwable;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\text;
@@ -46,7 +47,7 @@ class CreatePageBuilderPluginBlockCategoryCommand extends Command
                     return self::FAILURE;
                 }
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
         }
 
         $this->createFileFromStub(

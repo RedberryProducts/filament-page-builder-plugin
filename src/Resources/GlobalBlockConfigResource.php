@@ -2,23 +2,30 @@
 
 namespace Redberry\PageBuilderPlugin\Resources;
 
-use Filament\Forms;
+use BackedEnum;
+use Exception;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Field;
-use Filament\Forms\Form;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Redberry\PageBuilderPlugin\Models\GlobalBlockConfig;
-use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource\Pages;
+use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource\Pages\EditGlobalBlock;
+use Redberry\PageBuilderPlugin\Resources\GlobalBlockConfigResource\Pages\ListGlobalBlocks;
+use UnitEnum;
 
 class GlobalBlockConfigResource extends Resource
 {
     protected static ?string $model = GlobalBlockConfig::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cube';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cube';
 
-    protected static ?string $navigationGroup = 'Content Management';
+    protected static string | UnitEnum | null $navigationGroup = 'Content Management';
 
     protected static ?int $navigationSort = null;
 
@@ -28,16 +35,16 @@ class GlobalBlockConfigResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Global Blocks';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+            ->components([
+                TextInput::make('name')
                     ->label('Block Name')
                     ->required()
                     ->disabled(),
 
-                Forms\Components\Section::make('Block Configuration')
+                Section::make('Block Configuration')
                     ->schema(function (?GlobalBlockConfig $record) {
                         if (! $record || ! class_exists($record->class_name)) {
                             return [];
@@ -64,11 +71,11 @@ class GlobalBlockConfigResource extends Resource
                             }
 
                             return $schema;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             return [
-                                Forms\Components\Placeholder::make('error')
+                                TextEntry::make('error')
                                     ->label('Error')
-                                    ->content('Unable to load block schema: ' . $e->getMessage()),
+                                    ->state('Unable to load block schema: ' . $e->getMessage()),
                             ];
                         }
                     })
@@ -80,16 +87,16 @@ class GlobalBlockConfigResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('Block Name')
                     ->searchable()
                     ->sortable(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
+            ->recordActions([
+                EditAction::make()
                     ->label('Configure'),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 //
             ]);
     }
@@ -109,8 +116,8 @@ class GlobalBlockConfigResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGlobalBlocks::route('/'),
-            'edit' => Pages\EditGlobalBlock::route('/{record}/edit'),
+            'index' => ListGlobalBlocks::route('/'),
+            'edit' => EditGlobalBlock::route('/{record}/edit'),
         ];
     }
 }
