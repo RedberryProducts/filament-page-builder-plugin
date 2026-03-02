@@ -122,6 +122,49 @@ it('can delete existing block', function () {
         ]);
 });
 
+it('can delete multiple blocks sequentially without undefined array key error', function () {
+    $blocks = PageBuilderBlock::factory()->count(2)->sequence(
+        ['order' => 0],
+        ['order' => 1],
+    )->create([
+        'block_type' => ViewBlock::class,
+        'page_builder_blockable_id' => $this->page->id,
+        'page_builder_blockable_type' => Page::class,
+        'data' => [
+            'image' => 'https://example.com/image.jpg',
+            'hero_button' => [
+                'text' => 'Test',
+                'url' => 'https://example.com',
+            ],
+        ],
+    ]);
+
+    $component = livewire(TestComponentWithPageBuilderRenderedUsingViews::class);
+
+    // Delete the first block (index 0)
+    $component
+        ->mountFormComponentAction('website_content', 'delete', ['index' => 0, 'item' => $blocks->get(0)->id])
+        ->callMountedFormComponentAction()
+        ->assertHasNoErrors()
+        ->assertFormSet([
+            'website_content' => [
+                [
+                    'id' => $blocks->get(1)->id,
+                ],
+            ],
+        ]);
+
+    // Delete the second block — now also at index 0 after re-indexing.
+    // This used to throw "Undefined array key 0".
+    $component
+        ->mountFormComponentAction('website_content', 'delete', ['index' => 0, 'item' => $blocks->get(1)->id])
+        ->callMountedFormComponentAction()
+        ->assertHasNoErrors()
+        ->assertFormSet([
+            'website_content' => [],
+        ]);
+});
+
 it('can reorder existing blocks', function () {
     $blocks = PageBuilderBlock::factory()->count(3)->sequence(
         [
