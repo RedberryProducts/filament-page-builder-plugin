@@ -2,6 +2,19 @@
 
 All notable changes to `page-builder-plugin` will be documented in this file.
 
+## Package release - v1.1.5 - 2026-03-02
+
+### What's Changed
+
+* feat: add configuration options to global block resource by @mishatch in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/19
+* fix: re-index state array after block deletion to prevent undefined k… by @Davitamgl in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/21
+
+### New Contributors
+
+* @Davitamgl made their first contribution in https://github.com/RedberryProducts/filament-page-builder-plugin/pull/21
+
+**Full Changelog**: https://github.com/RedberryProducts/filament-page-builder-plugin/compare/v1.1.4...v1.1.5
+
 ## Package release - v1.1.4 - 2025-09-11
 
 ### What's Changed
