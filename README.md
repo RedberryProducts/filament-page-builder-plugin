@@ -50,9 +50,18 @@ This FilamentPHP plugin is aimed at allowing you to seamlessly integrate page bu
 
 ## Pre-requisites
 
-- PHP 8.1 or higher
-- Laravel 10.x or higher
-- Filament 3.x
+- PHP 8.2 or higher
+- Laravel 11.28 or higher
+- Filament 5.x
+
+## Other versions
+
+if you have filament version 3 or 4 check out older versions of this package:
+
+- (for filament v3) [v1.0](https://github.com/RedberryProducts/filament-page-builder-plugin/tree/1.x)
+- (for filament v4) [v2.0](https://github.com/RedberryProducts/filament-page-builder-plugin/tree/2.x)
+
+## Installation
 
 You can install the package via composer:
 
