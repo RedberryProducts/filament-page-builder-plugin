@@ -790,6 +790,10 @@ PageBuilder::make('website_content')
 - [Redberry](https://github.com/RedberryProducts)
 - [GigaGiorgadze](https://github.com/GigaGiorgadze)
 
+# About Redberry
+
+This package is built and maintained by [Redberry](https://redberry.international/?utm_source=github&utm_medium=github_page_builder_readme&utm_campaign=laravel_service_campaign), one of the few Official Premier Laravel Partner agencies worldwide. With 250+ Laravel projects shipped across 20+ countries, a 200-person team, and over a decade in the Laravel ecosystem, Redberry has helped startups, SMEs, and publicly traded enterprises in regulated industries build SaaS platforms, custom web applications, APIs, and more. [Learn about our Laravel development services](https://redberry.international/laravel-development/?utm_source=github&utm_medium=github_page_builder_readme&utm_campaign=laravel_service_campaign).
+
 # License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
